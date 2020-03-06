@@ -14,58 +14,56 @@ import java.util.Map;
 
 public class ConsumerServiceImpl implements ConsumerService {
 
-    private KafkaConsumer<String, String> consumer;
-    private Vertx vertx;
+  private KafkaConsumer<String, String> consumer;
+  private final Vertx vertx;
 
-    //Creating boolean to track whether consumer has already been instantiated and is paused.
-    private boolean paused = false;
-    private String eventBusId;
+  //Creating boolean to track whether consumer has already been instantiated and is paused.
+  private boolean paused = false;
+  private String eventBusId;
 
-    private static final Logger logger = LoggerFactory.getLogger(ConsumerServiceImpl.class);
+  private static final Logger logger = LoggerFactory.getLogger(ConsumerServiceImpl.class);
 
-    public ConsumerServiceImpl(Vertx vertx, Map<String, String> config) {
-        this.vertx = vertx;
-        consumer = KafkaConsumer.create(vertx, config);
-        consumer.exceptionHandler(t -> logger.error("KafkaConsumer Exception", t));
-    }
+  public ConsumerServiceImpl(Vertx vertx, Map<String, String> config) {
+    this.vertx = vertx;
+    consumer = KafkaConsumer.create(vertx, config);
+    consumer.exceptionHandler(t -> logger.error("KafkaConsumer Exception", t));
+  }
 
-    @Override
-    public void subscribe(String topicName, String id, Handler<AsyncResult<Void>> resultHandler) {
-        eventBusId = id;
-        //if statement to determine whether to instantiate a new consumer or unpause the one that already exists
-        if (paused) {
-            TopicPartition topicPartition = new TopicPartition()
-                    .setTopic(topicName);
-            consumer.resume(topicPartition, res -> res.map(result -> {
-                paused = false;
-                resultHandler.handle(Future.succeededFuture());
-                return null;
-            }).otherwise(t -> {
-                resultHandler.handle(Future.failedFuture(t));
-                return null;
-            }));
+  @Override
+  public void subscribe(String topicName, String id, Handler<AsyncResult<Void>> resultHandler) {
+    eventBusId = id;
+    //if statement to determine whether to instantiate a new consumer or unpause the one that already exists
+    if (paused) {
+      TopicPartition topicPartition = new TopicPartition().setTopic(topicName);
+      consumer.resume(topicPartition, res -> {
+        if (res.succeeded()) {
+          paused = false;
+          resultHandler.handle(Future.succeededFuture());
         } else {
-            consumer.handler(result -> {
-                DemoConsumedRecord consumedRecord = new DemoConsumedRecord(result.topic(), result.partition(), result.offset(), result.value(), result.timestamp());
-                JsonObject jsonObject = JsonObject.mapFrom(consumedRecord);
-                vertx.eventBus().send(eventBusId, jsonObject.encode());
-            });
-            consumer.subscribe(topicName, resultHandler);
+          resultHandler.handle(Future.failedFuture(res.cause()));
         }
+      });
+    } else {
+      consumer.handler(result -> {
+        DemoConsumedRecord consumedRecord = new DemoConsumedRecord(result.topic(), result.partition(), result.offset(), result.value(), result.timestamp());
+        JsonObject jsonObject = JsonObject.mapFrom(consumedRecord);
+        vertx.eventBus().send(eventBusId, jsonObject.encode());
+      });
+      consumer.subscribe(topicName, resultHandler);
     }
+  }
 
-    @Override
-    //Pause used instead of stop in order to be able to unpause and reuse the same consumer and it pick up where it left off
-    public void pause(String topicName, Handler<AsyncResult<Void>> resultHandler) {
-        TopicPartition topicPartition = new TopicPartition()
-                .setTopic(topicName);
-        consumer.pause(topicPartition, res -> res.map(result -> {
-            paused = true;
-            resultHandler.handle(Future.succeededFuture());
-            return null;
-        }).otherwise(t -> {
-            resultHandler.handle(Future.failedFuture(t));
-            return null;
-        }));
-    }
+  @Override
+  //Pause used instead of stop in order to be able to unpause and reuse the same consumer and it pick up where it left off
+  public void pause(String topicName, Handler<AsyncResult<Void>> resultHandler) {
+    TopicPartition topicPartition = new TopicPartition().setTopic(topicName);
+    consumer.pause(topicPartition, res -> {
+      if (res.succeeded()) {
+        paused = true;
+        resultHandler.handle(Future.succeededFuture());
+      } else {
+        resultHandler.handle(Future.failedFuture(res.cause()));
+      }
+    });
+  }
 }

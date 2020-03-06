@@ -13,36 +13,34 @@ import java.util.Map;
 
 public class ConsumerVerticle extends AbstractVerticle {
 
-    public static final String ADDRESS = "kafka-consumer-service-address";
+  public static final String ADDRESS = "kafka-consumer-service-address";
 
-    private ServiceBinder binder;
-    private MessageConsumer<JsonObject> consumer;
+  private ServiceBinder binder;
+  private MessageConsumer<JsonObject> consumer;
 
-    @Override
-    public void start(Promise<Void> done) {
-        binder = new ServiceBinder(vertx);
-        ConfigRetriever retriever = ConfigRetriever.create(vertx,
-                new ConfigRetrieverOptions().addStore(
-                        new ConfigStoreOptions()
-                                .setType("file")
-                                .setFormat("properties")
-                                .setConfig(new JsonObject().put("path", "kafka.properties").put("raw-data", true))
-                ));
-        retriever.getConfig(res -> res.map(config -> {
-            Map<String, String> configMap = config.mapTo(Map.class);
-            ConsumerService service = new ConsumerServiceImpl(vertx, configMap);
-            consumer = binder.setAddress(ADDRESS)
-                    .register(ConsumerService.class, service);
-            done.complete();
-            return null;
-        }).otherwise(t -> {
-            done.fail(t);
-            return null;
-        }));
-    }
+  @Override
+  public void start(Promise<Void> done) {
+    binder = new ServiceBinder(vertx);
+    ConfigRetriever retriever = ConfigRetriever.create(vertx,
+      new ConfigRetrieverOptions().addStore(
+        new ConfigStoreOptions()
+          .setType("file")
+          .setFormat("properties")
+          .setConfig(new JsonObject().put("path", "kafka.properties").put("raw-data", true))
+      ));
+    retriever.getConfig()
+      .onSuccess(config -> {
+        Map<String, String> configMap = config.mapTo(Map.class);
+        ConsumerService service = new ConsumerServiceImpl(vertx, configMap);
+        consumer = binder.setAddress(ADDRESS)
+          .register(ConsumerService.class, service);
+        done.complete();
+      })
+      .onFailure(done::fail);
+  }
 
-    @Override
-    public void stop() {
-        binder.unregister(consumer);
-    }
+  @Override
+  public void stop() {
+    binder.unregister(consumer);
+  }
 }

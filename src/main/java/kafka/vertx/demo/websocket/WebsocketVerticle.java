@@ -15,113 +15,111 @@ import org.slf4j.LoggerFactory;
 
 public class WebsocketVerticle extends AbstractVerticle {
 
-    private boolean consuming = false;
-    private String topic = "test";
-    private String periodicProducerVerticleId = "";
+  private static final String TOPIC = "test";
+  private static final String PRODUCE_PATH = "/demoproduce";
+  private static final String CONSUME_PATH = "/democonsume";
 
-    private static final String PRODUCE_PATH = "/demoproduce";
-    private static final String CONSUME_PATH = "/democonsume";
+  private static final Logger logger = LoggerFactory.getLogger(WebsocketVerticle.class);
 
-    private static final Logger logger = LoggerFactory.getLogger(WebsocketVerticle.class);
+  private boolean consuming = false;
+  private String periodicProducerVerticleId = "";
 
-    @Override
-    public void start(Promise<Void> done) {
-        HttpServer server = vertx.createHttpServer();
-        Router router = Router.router(vertx);
-        router.get().handler(StaticHandler.create());
-        server.webSocketHandler(websocket -> {
-            String path = websocket.path();
-            if (PRODUCE_PATH.equals(path)) {
-                handleProduceSocket(websocket);
-            } else if (CONSUME_PATH.equals(path)) {
-                handleConsumeSocket(websocket);
-            } else {
-                websocket.reject();
-            }
-        }).requestHandler(router).listen(8080, "localhost", res -> res.map(v -> {
-            logger.info("WebSocket is now listening");
-            done.complete();
-            return null;
-        }).otherwise(t -> {
-            logger.error("WebSocket failed to listen", t);
-            done.fail(res.cause());
-            return null;
-        }));
+  @Override
+  public void start(Promise<Void> done) {
+    HttpServer server = vertx.createHttpServer();
+    Router router = Router.router(vertx);
+    router.get().handler(StaticHandler.create());
+    server
+      .requestHandler(router)
+      .webSocketHandler(this::handleWebSocket)
+      .listen(8080, "localhost")
+      .onSuccess(ok -> {
+        logger.info("WebSocket is now listening");
+        done.complete();
+      })
+      .onFailure(err -> {
+        logger.error("WebSocket failed to listen", err);
+        done.fail(err);
+      });
+  }
+
+  private void handleWebSocket(ServerWebSocket websocket) {
+    String path = websocket.path();
+    if (PRODUCE_PATH.equals(path)) {
+      handleProduceSocket(websocket);
+    } else if (CONSUME_PATH.equals(path)) {
+      handleConsumeSocket(websocket);
+    } else {
+      websocket.reject();
     }
+  }
 
-    private void handleProduceSocket(ServerWebSocket websocket) {
-        websocket.handler(buffer -> {
-            String websocketMessage = buffer.getString(0, buffer.length());
-            JsonObject messageObject = new JsonObject(websocketMessage);
-            String action = messageObject.getString("action");
+  private void handleProduceSocket(ServerWebSocket websocket) {
+    websocket.handler(buffer -> {
+      JsonObject messageObject = buffer.toJsonObject();
+      String action = messageObject.getString("action");
 
-            if (action.equals("start") && periodicProducerVerticleId.isEmpty()) {
-                String custom = messageObject.getString("custom");
-                String message = custom == null ? "" : custom;
+      if ("start".equals(action) && periodicProducerVerticleId.isEmpty()) {
+        String message = messageObject.getString("custom", "");
+        PeriodicProducer periodicProducer = new PeriodicProducer(TOPIC, message, websocket.textHandlerID());
 
-                PeriodicProducer periodicProducer = new PeriodicProducer(topic, message, websocket.textHandlerID());
+        vertx.deployVerticle(periodicProducer)
+          .onSuccess(id -> {
+            periodicProducerVerticleId = id;
+            logger.info("Producing records...");
+          })
+          .onFailure(err -> logger.error("Failed to deploy periodicProducer verticle", err));
+      }
 
-                vertx.deployVerticle(periodicProducer, res -> res.map(id -> {
-                    periodicProducerVerticleId = id;
-                    logger.info("Producing records...");
-                    return null;
-                }).otherwise(t -> {
-                    logger.error("Failed to deploy periodicProducer verticle", t);
-                    return null;
-                }));
-            }
-            if (action.equals("stop")) {
-                undeployPeriodicProducer();
-            }
+      if ("stop".equals(action)) {
+        undeployPeriodicProducer();
+      }
+    });
+  }
+
+  private void undeployPeriodicProducer() {
+    logger.info("Current producer id: {}", periodicProducerVerticleId);
+    if (!periodicProducerVerticleId.isEmpty()) {
+      vertx.undeploy(periodicProducerVerticleId)
+        .onSuccess(v -> {
+          periodicProducerVerticleId = "";
+          logger.info("Periodic producer verticle undeployed");
+        })
+        .onFailure(err -> logger.error("Failed to undeploy periodicProducer verticle", err));
+    }
+  }
+
+  private void handleConsumeSocket(ServerWebSocket websocket) {
+    ConsumerService consumerService = ConsumerService.createProxy(vertx, ConsumerVerticle.ADDRESS);
+    websocket.handler(buffer -> {
+      JsonObject messageObject = buffer.toJsonObject();
+      String action = messageObject.getString("action");
+      if ("start".equals(action) && !consuming) {
+        consumerService.subscribe(TOPIC, websocket.textHandlerID(), res -> {
+          if (res.succeeded()) {
+            consuming = true;
+            logger.info("Consuming records...");
+          } else {
+            logger.error("Failed to start consuming", res.cause());
+          }
         });
-    }
+      }
+      if (action.equals("stop") && consuming) {
+        pauseConsumer(consumerService);
+      }
+    });
+  }
 
-    private void undeployPeriodicProducer() {
-        logger.info("Current producer id: {}", periodicProducerVerticleId);
-        if (!periodicProducerVerticleId.isEmpty()) {
-            vertx.undeploy(periodicProducerVerticleId, res -> res.map(v -> {
-                periodicProducerVerticleId = "";
-                logger.info("Periodic producer verticle undeployed");
-                return null;
-            }).otherwise(t -> {
-                logger.error("Failed to undeploy periodicProducer verticle", t);
-                return null;
-            }));
+  private void pauseConsumer(ConsumerService consumer) {
+    if (consuming) {
+      consumer.pause(TOPIC, res -> {
+        if (res.succeeded()) {
+          consuming = false;
+          logger.info("Stopped consuming");
+        } else {
+          logger.error("Failed to pause the consumer", res.cause());
         }
+      });
     }
-
-    private void handleConsumeSocket(ServerWebSocket websocket) {
-        ConsumerService consumerService = ConsumerService.createProxy(vertx, ConsumerVerticle.ADDRESS);
-        websocket.handler(buffer -> {
-            String message = buffer.getString(0, buffer.length());
-            JsonObject messageObject = new JsonObject(message);
-            String action = messageObject.getString("action");
-            if (action.equals("start") && !consuming) {
-                consumerService.subscribe(topic, websocket.textHandlerID(), res -> res.map(v -> {
-                    consuming = true;
-                    logger.info("Consuming records...");
-                    return null;
-                }).otherwise(t -> {
-                    logger.error("Failed to start consuming", t);
-                    return null;
-                }));
-            }
-            if (action.equals("stop") && consuming) {
-                pauseConsumer(consumerService);
-            }
-        });
-    }
-
-    private void pauseConsumer(ConsumerService consumer) {
-        if (consuming) {
-            consumer.pause(topic, res -> res.map(v -> {
-                consuming = false;
-                logger.info("Stopped consuming");
-                return null;
-            }).otherwise(t -> {
-                logger.error("Failed to pause the consumer", t);
-                return null;
-            }));
-        }
-    }
+  }
 }

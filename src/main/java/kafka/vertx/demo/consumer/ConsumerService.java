@@ -8,12 +8,12 @@ import io.vertx.core.Vertx;
 @ProxyGen
 public interface ConsumerService {
 
-    static ConsumerService createProxy(Vertx vertx, String address) {
-        return new ConsumerServiceVertxEBProxy(vertx, address);
-    }
+  static ConsumerService createProxy(Vertx vertx, String address) {
+    return new ConsumerServiceVertxEBProxy(vertx, address);
+  }
 
-    void subscribe(String topicName, String eventBusId, Handler<AsyncResult<Void>> resultHandler);
+  void subscribe(String topicName, String eventBusId, Handler<AsyncResult<Void>> resultHandler);
 
-    void pause(String topicName, Handler<AsyncResult<Void>> resultHandler);
+  void pause(String topicName, Handler<AsyncResult<Void>> resultHandler);
 
 }

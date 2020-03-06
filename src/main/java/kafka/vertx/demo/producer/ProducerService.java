@@ -9,10 +9,10 @@ import io.vertx.kafka.client.producer.RecordMetadata;
 @ProxyGen
 public interface ProducerService {
 
-    static ProducerService createProxy(Vertx vertx, String address) {
-        return new ProducerServiceVertxEBProxy(vertx, address);
-    }
+  static ProducerService createProxy(Vertx vertx, String address) {
+    return new ProducerServiceVertxEBProxy(vertx, address);
+  }
 
-    void produce(String topic, String message, Handler<AsyncResult<RecordMetadata>> resultHandler);
+  void produce(String topic, String message, Handler<AsyncResult<RecordMetadata>> resultHandler);
 
 }

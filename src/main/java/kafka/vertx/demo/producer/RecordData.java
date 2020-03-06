@@ -1,46 +1,46 @@
 package kafka.vertx.demo.producer;
 
 public class RecordData {
-    private String topic;
-    private int partition;
-    private long offset;
-    private long timestamp;
+  private final String topic;
+  private final int partition;
+  private final long offset;
+  private final long timestamp;
 
-    public enum Status {
-        DELIVERED, ERROR
-    }
+  public enum Status {
+    DELIVERED, ERROR
+  }
 
-    private Status status;
+  private Status status;
 
-    public RecordData(Status status, String topic, int partition, long offset, long timestamp) {
-        this.status = status;
-        this.topic = topic;
-        this.partition = partition;
-        this.offset = offset;
-        this.timestamp = timestamp;
-    }
-    
-    public RecordData(Status status, String topic) {
-        this.status = status;
-        this.topic = topic;
-    }
+  public RecordData(Status status, String topic, int partition, long offset, long timestamp) {
+    this.status = status;
+    this.topic = topic;
+    this.partition = partition;
+    this.offset = offset;
+    this.timestamp = timestamp;
+  }
 
-    public Status getStatus() {
-        return status;
-    }
+  public RecordData(Status status, String topic) {
+    this(status, topic, 0, 0L, 0L);
+  }
 
-    public String getTopic() {
-        return topic;
-    }
-    public int getPartition() {
-        return partition;
-    }
+  public Status getStatus() {
+    return status;
+  }
 
-    public long getOffset() {
-        return offset;
-    }
+  public String getTopic() {
+    return topic;
+  }
 
-    public long getTimestamp() {
-        return timestamp;
-    }
+  public int getPartition() {
+    return partition;
+  }
+
+  public long getOffset() {
+    return offset;
+  }
+
+  public long getTimestamp() {
+    return timestamp;
+  }
 }
