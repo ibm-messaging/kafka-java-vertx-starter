@@ -2,6 +2,8 @@ package kafka.vertx.demo.producer;
 
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.json.JsonObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.TimeUnit;
 
@@ -10,6 +12,8 @@ public class PeriodicProducer extends AbstractVerticle {
     private String topicName;
     private String message;
     private String eventBusId;
+
+    private static final Logger logger = LoggerFactory.getLogger(PeriodicProducer.class);
 
     public PeriodicProducer(String topicName, String message, String eventBusId) {
         this.topicName = topicName;
@@ -26,7 +30,7 @@ public class PeriodicProducer extends AbstractVerticle {
             vertx.eventBus().send(eventBusId, JsonObject.mapFrom(recordData).encode());
             return null;
         }).otherwise(t -> {
-            System.out.printf("Failure in producing record: %s%n", t);
+            logger.error("Failure in producing record", t);
             return null;
         })));
     }

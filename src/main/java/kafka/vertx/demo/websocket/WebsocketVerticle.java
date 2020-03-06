@@ -10,6 +10,8 @@ import io.vertx.ext.web.handler.StaticHandler;
 import kafka.vertx.demo.consumer.ConsumerService;
 import kafka.vertx.demo.consumer.ConsumerVerticle;
 import kafka.vertx.demo.producer.PeriodicProducer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class WebsocketVerticle extends AbstractVerticle {
 
@@ -19,6 +21,8 @@ public class WebsocketVerticle extends AbstractVerticle {
 
     private static final String PRODUCE_PATH = "/demoproduce";
     private static final String CONSUME_PATH = "/democonsume";
+
+    private static final Logger logger = LoggerFactory.getLogger(WebsocketVerticle.class);
 
     @Override
     public void start(Promise<Void> done) {
@@ -35,11 +39,11 @@ public class WebsocketVerticle extends AbstractVerticle {
                 websocket.reject();
             }
         }).requestHandler(router).listen(8080, "localhost", res -> res.map(v -> {
-            System.out.printf("WebSocket is now listening%n");
+            logger.info("WebSocket is now listening");
             done.complete();
             return null;
         }).otherwise(t -> {
-            System.out.printf("WebSocket failed to listen: %s%n", t);
+            logger.error("WebSocket failed to listen", t);
             done.fail(res.cause());
             return null;
         }));
@@ -59,10 +63,10 @@ public class WebsocketVerticle extends AbstractVerticle {
 
                 vertx.deployVerticle(periodicProducer, res -> res.map(id -> {
                     periodicProducerVerticleId = id;
-                    System.out.println("Producing records...");
+                    logger.info("Producing records...");
                     return null;
                 }).otherwise(t -> {
-                    System.out.printf("Failed to deploy periodicProducer verticle: %s%n", t);
+                    logger.error("Failed to deploy periodicProducer verticle", t);
                     return null;
                 }));
             }
@@ -73,14 +77,14 @@ public class WebsocketVerticle extends AbstractVerticle {
     }
 
     private void undeployPeriodicProducer() {
-        System.out.printf("Current producer id: %s%n", periodicProducerVerticleId);
+        logger.info("Current producer id: {}", periodicProducerVerticleId);
         if (!periodicProducerVerticleId.isEmpty()) {
             vertx.undeploy(periodicProducerVerticleId, res -> res.map(v -> {
                 periodicProducerVerticleId = "";
-                System.out.printf("Periodic producer verticle undeployed.%n");
+                logger.info("Periodic producer verticle undeployed");
                 return null;
             }).otherwise(t -> {
-                System.out.printf("Failed to undeploy periodicProducer verticle: %s%n", t);
+                logger.error("Failed to undeploy periodicProducer verticle", t);
                 return null;
             }));
         }
@@ -95,10 +99,10 @@ public class WebsocketVerticle extends AbstractVerticle {
             if (action.equals("start") && !consuming) {
                 consumerService.subscribe(topic, websocket.textHandlerID(), res -> res.map(v -> {
                     consuming = true;
-                    System.out.printf("Consuming records...%n");
+                    logger.info("Consuming records...");
                     return null;
                 }).otherwise(t -> {
-                    System.out.printf("Failed to start consuming: %s%n", t);
+                    logger.error("Failed to start consuming", t);
                     return null;
                 }));
             }
@@ -112,10 +116,10 @@ public class WebsocketVerticle extends AbstractVerticle {
         if (consuming) {
             consumer.pause(topic, res -> res.map(v -> {
                 consuming = false;
-                System.out.printf("Stopped consuming.%n");
+                logger.info("Stopped consuming");
                 return null;
             }).otherwise(t -> {
-                System.out.printf("Failed to pause the consumer: %s%n", t);
+                logger.error("Failed to pause the consumer", t);
                 return null;
             }));
         }

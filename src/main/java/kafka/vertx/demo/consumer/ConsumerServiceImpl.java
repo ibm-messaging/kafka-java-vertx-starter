@@ -7,20 +7,26 @@ import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
 import io.vertx.kafka.client.common.TopicPartition;
 import io.vertx.kafka.client.consumer.KafkaConsumer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Map;
 
 public class ConsumerServiceImpl implements ConsumerService {
 
     private KafkaConsumer<String, String> consumer;
     private Vertx vertx;
+
     //Creating boolean to track whether consumer has already been instantiated and is paused.
     private boolean paused = false;
     private String eventBusId;
 
+    private static final Logger logger = LoggerFactory.getLogger(ConsumerServiceImpl.class);
+
     public ConsumerServiceImpl(Vertx vertx, Map<String, String> config) {
         this.vertx = vertx;
         consumer = KafkaConsumer.create(vertx, config);
-        consumer.exceptionHandler(t -> System.out.printf("KafkaConsumer Exception: %s%n", t));
+        consumer.exceptionHandler(t -> logger.error("KafkaConsumer Exception", t));
     }
 
     @Override

@@ -6,16 +6,20 @@ import io.vertx.core.Vertx;
 import io.vertx.kafka.client.producer.KafkaProducer;
 import io.vertx.kafka.client.producer.KafkaProducerRecord;
 import io.vertx.kafka.client.producer.RecordMetadata;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
-public class ProducerServiceImpl implements ProducerService{
+public class ProducerServiceImpl implements ProducerService {
 
     private KafkaProducer<String, String> producer;
 
+    private static final Logger logger = LoggerFactory.getLogger(ProducerServiceImpl.class);
+
     public ProducerServiceImpl(Vertx vertx, Map<String, String> config) {
         producer = KafkaProducer.create(vertx, config);
-        producer.exceptionHandler(t -> System.out.printf("KafkaProducer Exception: %s%n", t));
+        producer.exceptionHandler(t -> logger.error("KafkaProducer Exception", t));
     }
 
     @Override
