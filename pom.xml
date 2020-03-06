@@ -10,7 +10,7 @@
 
   <properties>
     <kafka.version>2.3.0</kafka.version>
-    <vertx.version>3.8.5</vertx.version>
+    <vertx.version>4.0.0-SNAPSHOT</vertx.version>
   </properties>
 
   <dependencyManagement>
