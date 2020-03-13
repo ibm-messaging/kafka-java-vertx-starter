@@ -6,6 +6,7 @@ import io.vertx.config.ConfigStoreOptions;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
 import io.vertx.core.eventbus.EventBus;
+import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.core.http.ServerWebSocket;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
@@ -85,8 +86,17 @@ public class WebSocketServer extends AbstractVerticle {
       }
     });
 
-    eventBus.<JsonObject>consumer(Main.PERIODIC_PRODUCER_BROADCAST, message ->
+    MessageConsumer<JsonObject> consumer = eventBus.<JsonObject>consumer(Main.PERIODIC_PRODUCER_BROADCAST, message ->
       eventBus.send(webSocket.textHandlerID(), message.body().encode()));
+
+    webSocket.endHandler(ended -> {
+      logger.info("WebSocket closed from {}", webSocket.remoteAddress().host());
+      consumer.unregister();
+    });
+    webSocket.exceptionHandler(err -> {
+      logger.error("WebSocket error", err);
+      consumer.unregister();
+    });
   }
 
   private void handleConsumeSocket(ServerWebSocket webSocket) {
@@ -121,5 +131,18 @@ public class WebSocketServer extends AbstractVerticle {
       }
     });
 
+    webSocket.endHandler(done -> {
+      logger.info("WebSocket closed from {}", webSocket.remoteAddress().host());
+      kafkaConsumer.close().onFailure(err -> {
+        logger.error("Closing Kafka consumer failed", err);
+      });
+    });
+
+    webSocket.exceptionHandler(err -> {
+      logger.error("WebSocket error", err);
+      kafkaConsumer.close().onFailure(kerr -> {
+        logger.error("Closing Kafka consumer failed", kerr);
+      });
+    });
   }
 }
