@@ -30,7 +30,7 @@ public class WebsocketVerticle extends AbstractVerticle {
         HttpServer server = vertx.createHttpServer();
         Router router = Router.router(vertx);
         router.get().handler(StaticHandler.create());
-        server.websocketHandler(websocket -> {
+        server.webSocketHandler(websocket -> {
             String path = websocket.path();
             if (PRODUCE_PATH.equals(path)) {
                 handleProduceSocket(websocket);
