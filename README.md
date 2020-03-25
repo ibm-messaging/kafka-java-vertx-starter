@@ -10,7 +10,7 @@ Test out the app by connecting to the websocket endpoints (UI will be added soon
 
  - Make sure Kafka is running locally. (You can use the [quickstart guide](https://kafka.apache.org/quickstart))
  - Build the app: `mvn install`
- - Start the app: `java -jar target/demo-0.0.1-SNAPSHOT-fat.jar`
+ - Start the app: `java -jar target/demo-0.0.2-SNAPSHOT-all.jar`
  - Connect to `ws://localhost:8080/demoproduce` (e.g., using [websocat](https://github.com/vi/websocat))
  - Start sending records to Kafka by sending the following message to the websocket:
     ```
