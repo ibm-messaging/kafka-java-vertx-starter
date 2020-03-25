@@ -85,9 +85,10 @@ public class WebSocketServer extends AbstractVerticle {
     EventBus eventBus = vertx.eventBus();
 
     webSocket.handler(buffer -> {
-      String action = buffer.toJsonObject().getString("action", "none");
+      JsonObject message = buffer.toJsonObject();
+      String action = message.getString("action", "none");
       if ("start".equals(action) || "stop".equals(action)) {
-        eventBus.send(Main.PERIODIC_PRODUCER_ADDRESS, action);
+        eventBus.send(Main.PERIODIC_PRODUCER_ADDRESS, message);
       }
     });
 

@@ -24,6 +24,7 @@ import java.util.HashMap;
 public class PeriodicProducer extends AbstractVerticle {
 
   private static final Logger logger = LoggerFactory.getLogger(PeriodicProducer.class);
+  private String customMessage;
 
   @Override
   public void start(Promise<Void> startPromise) {
@@ -41,21 +42,22 @@ public class PeriodicProducer extends AbstractVerticle {
   private void setup(JsonObject config, Promise<Void> startPromise) {
     HashMap<String, String> props = new HashMap<>();
     config.forEach(entry -> props.put(entry.getKey(), entry.getValue().toString()));
-    KafkaProducer<String, JsonObject> kafkaProducer = KafkaProducer.create(vertx, props);
+    KafkaProducer<String, String> kafkaProducer = KafkaProducer.create(vertx, props);
 
     TimeoutStream timerStream = vertx.periodicStream(2000);
     timerStream.handler(tick -> produceKafkaRecord(kafkaProducer));
     timerStream.pause();
 
-    vertx.eventBus().<String>consumer(Main.PERIODIC_PRODUCER_ADDRESS, message -> handleCommand(timerStream, message));
+    vertx.eventBus().<JsonObject>consumer(Main.PERIODIC_PRODUCER_ADDRESS, message -> handleCommand(timerStream, message));
     logger.info("🚀 PeriodicConsumer started");
     startPromise.complete();
   }
 
-  private void handleCommand(TimeoutStream timerStream, Message<String> message) {
-    String command = message.body();
+  private void handleCommand(TimeoutStream timerStream, Message<JsonObject> message) {
+    String command = message.body().getString("action", "none");
     if ("start".equals(command)) {
       logger.info("Producing Kafka records");
+      customMessage = message.body().getString("custom", "Hello World");
       timerStream.resume();
     } else if ("stop".equals(command)) {
       logger.info("Stopping producing Kafka records");
@@ -63,12 +65,10 @@ public class PeriodicProducer extends AbstractVerticle {
     }
   }
 
-  private void produceKafkaRecord(KafkaProducer<String, JsonObject> kafkaProducer) {
-    JsonObject payload = new JsonObject()
-      .put("type", "tick")
-      .put("when", Instant.now().toString());
+  private void produceKafkaRecord(KafkaProducer<String, String> kafkaProducer) {
+    String payload = customMessage;
 
-    KafkaProducerRecord<String, JsonObject> record = KafkaProducerRecord.create(Main.TOPIC, payload);
+    KafkaProducerRecord<String, String> record = KafkaProducerRecord.create(Main.TOPIC, payload);
 
     kafkaProducer
       .send(record)
@@ -81,6 +81,6 @@ public class PeriodicProducer extends AbstractVerticle {
           .put("value", payload);
         vertx.eventBus().send(Main.PERIODIC_PRODUCER_BROADCAST, kafkaMetaData);
       })
-      .onFailure(err -> logger.error("Error sending {}", payload.encode(), err));
+      .onFailure(err -> logger.error("Error sending {}", payload, err));
   }
 }

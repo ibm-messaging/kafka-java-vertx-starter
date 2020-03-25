@@ -27,7 +27,6 @@ public class Main {
 
     // Set vertx timeout to deal with slow DNS connections
     System.setProperty(ResolverProvider.DISABLE_DNS_RESOLVER_PROP_NAME, "true");
-
     Vertx vertx = Vertx.vertx(
       new VertxOptions()
         .setWarningExceptionTime(10).setWarningExceptionTimeUnit(TimeUnit.SECONDS)
