@@ -18,18 +18,18 @@ import java.util.Map;
 
 public class ProducerServiceImpl implements ProducerService {
 
-    private KafkaProducer<String, String> producer;
+  private KafkaProducer<String, String> producer;
 
-    private static final Logger logger = LoggerFactory.getLogger(ProducerServiceImpl.class);
+  private static final Logger logger = LoggerFactory.getLogger(ProducerServiceImpl.class);
 
-    public ProducerServiceImpl(Vertx vertx, Map<String, String> config) {
-        producer = KafkaProducer.create(vertx, config);
-        producer.exceptionHandler(t -> logger.error("KafkaProducer Exception", t));
-    }
+  public ProducerServiceImpl(Vertx vertx, Map<String, String> config) {
+    producer = KafkaProducer.create(vertx, config);
+    producer.exceptionHandler(t -> logger.error("KafkaProducer Exception", t));
+  }
 
-    @Override
-    public void produce(String topic, String message, Handler<AsyncResult<RecordMetadata>> resultHandler) {
-        KafkaProducerRecord<String, String> record = KafkaProducerRecord.create(topic, message);
-        producer.send(record, resultHandler);
-    }
+  @Override
+  public void produce(String topic, String message, Handler<AsyncResult<RecordMetadata>> resultHandler) {
+    KafkaProducerRecord<String, String> record = KafkaProducerRecord.create(topic, message);
+    producer.send(record, resultHandler);
+  }
 }

@@ -1,17 +1,17 @@
 <configuration>
 
-    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder>
-            <pattern>%yellow(%d) %highlight(%level) %green([%thread]) %cyan(%logger{50}) - %msg%n</pattern>
-        </encoder>
-    </appender>
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>%yellow(%d) %highlight(%level) %green([%thread]) %cyan(%logger{50}) - %msg%n</pattern>
+    </encoder>
+  </appender>
 
-    <logger name="io.netty" level="warn"/>
-    <logger name="io.vertx" level="info"/>
-    <logger name="org.apache.kafka" level="error"/>
+  <logger name="io.netty" level="warn"/>
+  <logger name="io.vertx" level="info"/>
+  <logger name="org.apache.kafka" level="error"/>
 
-    <root level="debug">
-        <appender-ref ref="STDOUT"/>
-    </root>
+  <root level="debug">
+    <appender-ref ref="STDOUT"/>
+  </root>
 
 </configuration>
