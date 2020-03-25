@@ -1,3 +1,8 @@
+/*
+(C) Copyright IBM Corp. 2020  All Rights Reserved.
+
+SPDX-License-Identifier: Apache-2.0
+*/
 package kafka.vertx.demo.websocket;
 
 import io.vertx.core.AbstractVerticle;
@@ -70,7 +75,7 @@ public class WebsocketVerticle extends AbstractVerticle {
           })
           .onFailure(err -> logger.error("Failed to deploy periodicProducer verticle", err));
       }
-
+      
       if ("stop".equals(action)) {
         undeployPeriodicProducer();
       }
