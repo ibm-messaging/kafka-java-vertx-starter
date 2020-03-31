@@ -22,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
+import java.util.Optional;
 
 public class WebSocketServer extends AbstractVerticle {
 
@@ -120,11 +121,13 @@ public class WebSocketServer extends AbstractVerticle {
       vertx.eventBus().send(webSocket.textHandlerID(), payload.encode());
     });
 
-    kafkaConsumer.subscribe(Main.TOPIC)
-      .onSuccess(ok -> logger.info("Subscribed to {}", Main.TOPIC))
-      .onFailure(err -> logger.error("Could not subscribe to {}", Main.TOPIC, err));
+    String topic = Optional.ofNullable(kafkaConfig.get("topic")).orElse(Main.TOPIC);
 
-    TopicPartition partition = new TopicPartition().setTopic(Main.TOPIC);
+    kafkaConsumer.subscribe(topic)
+      .onSuccess(ok -> logger.info("Subscribed to {}", topic))
+      .onFailure(err -> logger.error("Could not subscribe to {}", topic, err));
+
+    TopicPartition partition = new TopicPartition().setTopic(topic);
 
     webSocket.handler(buffer -> {
       String action = buffer.toJsonObject().getString("action", "none");

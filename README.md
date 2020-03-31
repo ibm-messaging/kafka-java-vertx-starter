@@ -2,7 +2,7 @@
 
 A starter app for testing out your [Apache Kafka](https://kafka.apache.org) deployment and trying out the [Vert.x Kafka client](https://vertx.io/docs/vertx-kafka-client/java/).
 
-The app allows you to send records to a topic in Kafka called `test` every two seconds and consume back those records.
+The app allows you to send records to a topic in Kafka called `demo` every two seconds and consume back those records.
 
 ## Running the app
 
