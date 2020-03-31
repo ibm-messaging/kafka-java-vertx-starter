@@ -44,12 +44,14 @@ public class PeriodicProducer extends AbstractVerticle {
     config.forEach(entry -> props.put(entry.getKey(), entry.getValue().toString()));
     KafkaProducer<String, String> kafkaProducer = KafkaProducer.create(vertx, props);
 
+    kafkaProducer.exceptionHandler(err -> logger.error("Kafka error: {}", err));
+
     TimeoutStream timerStream = vertx.periodicStream(2000);
     timerStream.handler(tick -> produceKafkaRecord(kafkaProducer));
     timerStream.pause();
 
     vertx.eventBus().<JsonObject>consumer(Main.PERIODIC_PRODUCER_ADDRESS, message -> handleCommand(timerStream, message));
-    logger.info("🚀 PeriodicConsumer started");
+    logger.info("🚀 PeriodicProducer started");
     startPromise.complete();
   }
 
