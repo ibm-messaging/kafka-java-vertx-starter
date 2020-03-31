@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import java.time.Instant;
 import java.util.HashMap;
+import java.util.Optional;
 
 public class PeriodicProducer extends AbstractVerticle {
 
@@ -44,10 +45,12 @@ public class PeriodicProducer extends AbstractVerticle {
     config.forEach(entry -> props.put(entry.getKey(), entry.getValue().toString()));
     KafkaProducer<String, String> kafkaProducer = KafkaProducer.create(vertx, props);
 
+    String topic = Optional.ofNullable(config.getString("topic")).orElse(Main.TOPIC);
+
     kafkaProducer.exceptionHandler(err -> logger.error("Kafka error: {}", err));
 
     TimeoutStream timerStream = vertx.periodicStream(2000);
-    timerStream.handler(tick -> produceKafkaRecord(kafkaProducer));
+    timerStream.handler(tick -> produceKafkaRecord(kafkaProducer, topic));
     timerStream.pause();
 
     vertx.eventBus().<JsonObject>consumer(Main.PERIODIC_PRODUCER_ADDRESS, message -> handleCommand(timerStream, message));
@@ -67,10 +70,9 @@ public class PeriodicProducer extends AbstractVerticle {
     }
   }
 
-  private void produceKafkaRecord(KafkaProducer<String, String> kafkaProducer) {
+  private void produceKafkaRecord(KafkaProducer<String, String> kafkaProducer, String topic) {
     String payload = customMessage;
-
-    KafkaProducerRecord<String, String> record = KafkaProducerRecord.create(Main.TOPIC, payload);
+    KafkaProducerRecord<String, String> record = KafkaProducerRecord.create(topic, payload);
 
     kafkaProducer
       .send(record)
