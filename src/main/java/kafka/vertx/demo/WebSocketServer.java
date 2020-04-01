@@ -14,6 +14,7 @@ import io.vertx.core.Promise;
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.core.file.FileSystem;
+import io.vertx.core.http.HttpServer;
 import io.vertx.core.http.ServerWebSocket;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
@@ -41,22 +42,8 @@ public class WebSocketServer extends AbstractVerticle {
     router.get().handler(StaticHandler.create());
 
     loadKafkaConfig()
-      .onSuccess(config -> {
-        kafkaConfig = new HashMap<>();
-        config.forEach(entry -> kafkaConfig.put(entry.getKey(), entry.getValue().toString()));
-        vertx.createHttpServer()
-          .requestHandler(router)
-          .webSocketHandler(this::handleWebSocket)
-          .listen(8080, "localhost")
-          .onSuccess(ok -> {
-            logger.info("🚀 WebSocketServer started");
-            startPromise.complete();
-          })
-          .onFailure(err -> {
-            logger.error("❌ WebSocketServer failed to listen", err);
-            startPromise.fail(err);
-          });
-      })
+      .compose(config -> startWebSocket(router, config))
+      .onSuccess(ok -> startPromise.complete())
       .onFailure(startPromise::fail);
   }
 
@@ -77,6 +64,17 @@ public class WebSocketServer extends AbstractVerticle {
           return Future.failedFuture("Kafka properties file is missing. Either specify using -Dproperties_path=<path> or use the default path of kafka.properties.");
         }
       });
+  }
+
+  private Future<HttpServer> startWebSocket(Router router, JsonObject config) {
+    kafkaConfig = new HashMap<>();
+    config.forEach(entry -> kafkaConfig.put(entry.getKey(), entry.getValue().toString()));
+    return vertx.createHttpServer()
+      .requestHandler(router)
+      .webSocketHandler(this::handleWebSocket)
+      .listen(8080, "localhost")
+      .onSuccess(ok -> logger.info("🚀 WebSocketServer started"))
+      .onFailure(err -> logger.error("❌ WebSocketServer failed to listen", err));
   }
 
   private void handleWebSocket(ServerWebSocket webSocket) {

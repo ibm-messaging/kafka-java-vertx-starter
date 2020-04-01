@@ -31,7 +31,8 @@ public class PeriodicProducer extends AbstractVerticle {
   @Override
   public void start(Promise<Void> startPromise) {
     loadKafkaConfig()
-      .onSuccess(config -> setup(config, startPromise))
+      .compose(config -> setup(config))
+      .onSuccess(startPromise::complete)
       .onFailure(startPromise::fail);
   }
 
@@ -54,7 +55,7 @@ public class PeriodicProducer extends AbstractVerticle {
       });
   }
 
-  private void setup(JsonObject config, Promise<Void> startPromise) {
+  private Future<Void> setup(JsonObject config) {
     HashMap<String, String> props = new HashMap<>();
     config.forEach(entry -> props.put(entry.getKey(), entry.getValue().toString()));
     KafkaProducer<String, String> kafkaProducer = KafkaProducer.create(vertx, props);
@@ -69,7 +70,7 @@ public class PeriodicProducer extends AbstractVerticle {
 
     vertx.eventBus().<JsonObject>consumer(Main.PERIODIC_PRODUCER_ADDRESS, message -> handleCommand(timerStream, message));
     logger.info("🚀 PeriodicProducer started");
-    startPromise.complete();
+    return Future.succeededFuture();
   }
 
   private void handleCommand(TimeoutStream timerStream, Message<JsonObject> message) {
