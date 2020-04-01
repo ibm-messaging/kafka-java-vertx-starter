@@ -9,16 +9,17 @@ import io.vertx.config.ConfigRetriever;
 import io.vertx.config.ConfigRetrieverOptions;
 import io.vertx.config.ConfigStoreOptions;
 import io.vertx.core.AbstractVerticle;
+import io.vertx.core.Future;
 import io.vertx.core.Promise;
 import io.vertx.core.TimeoutStream;
 import io.vertx.core.eventbus.Message;
+import io.vertx.core.file.FileSystem;
 import io.vertx.core.json.JsonObject;
 import io.vertx.kafka.client.producer.KafkaProducer;
 import io.vertx.kafka.client.producer.KafkaProducerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.time.Instant;
 import java.util.HashMap;
 import java.util.Optional;
 
@@ -29,15 +30,28 @@ public class PeriodicProducer extends AbstractVerticle {
 
   @Override
   public void start(Promise<Void> startPromise) {
-    ConfigRetriever.create(vertx,
+    loadKafkaConfig()
+      .onSuccess(config -> setup(config, startPromise))
+      .onFailure(startPromise::fail);
+  }
+
+  private Future<JsonObject> loadKafkaConfig() {
+    String path = Optional.ofNullable(System.getProperty("properties_path")).orElse("kafka.properties");
+    ConfigRetriever configRetriever =  ConfigRetriever.create(vertx,
       new ConfigRetrieverOptions().addStore(
         new ConfigStoreOptions()
           .setType("file")
           .setFormat("properties")
-          .setConfig(new JsonObject().put("path", "kafka.properties").put("raw-data", true))))
-      .getConfig()
-      .onSuccess(config -> setup(config, startPromise))
-      .onFailure(startPromise::fail);
+          .setConfig(new JsonObject().put("path", path).put("raw-data", true))));
+    FileSystem fileSystem = vertx.fileSystem();
+    return fileSystem.exists(path)
+      .compose(exists -> {
+        if (exists) {
+          return configRetriever.getConfig();
+        } else {
+          return Future.failedFuture("Kafka properties file is missing. Either specify using -Dproperties_path=<path> or use the default path of kafka.properties.");
+        }
+      });
   }
 
   private void setup(JsonObject config, Promise<Void> startPromise) {
