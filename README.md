@@ -35,5 +35,7 @@ Test out the app by connecting to the websocket endpoints (UI will be added soon
  - Disconnect from the consume websocket
 
 ## Configuration
-To configure the application to connect to your Kafka edit the properties file in `src/main/resources`.
-If your Kafka is secured you will need to enable the security configuration options and add your certificate to `src/main/resources`.
+To configure the application to connect to your Kafka edit the properties file called `kafka.properties`.
+Alternatively you can provide a custom path to the properties file using `-Dproperties_path=<path>` when starting the application.
+
+If your Kafka is secured you will need to enable the security configuration options in your properties file

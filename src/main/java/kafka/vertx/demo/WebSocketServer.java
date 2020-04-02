@@ -9,9 +9,12 @@ import io.vertx.config.ConfigRetriever;
 import io.vertx.config.ConfigRetrieverOptions;
 import io.vertx.config.ConfigStoreOptions;
 import io.vertx.core.AbstractVerticle;
+import io.vertx.core.Future;
 import io.vertx.core.Promise;
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.eventbus.MessageConsumer;
+import io.vertx.core.file.FileSystem;
+import io.vertx.core.http.HttpServer;
 import io.vertx.core.http.ServerWebSocket;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
@@ -35,38 +38,43 @@ public class WebSocketServer extends AbstractVerticle {
 
   @Override
   public void start(Promise<Void> startPromise) {
-    loadKafkaConfig(startPromise);
-
     Router router = Router.router(vertx);
     router.get().handler(StaticHandler.create());
 
-    vertx.createHttpServer()
-      .requestHandler(router)
-      .webSocketHandler(this::handleWebSocket)
-      .listen(8080, "localhost")
-      .onSuccess(ok -> {
-        logger.info("🚀 WebSocketServer started");
-        startPromise.complete();
-      })
-      .onFailure(err -> {
-        logger.error("❌ WebSocketServer failed to listen", err);
-        startPromise.fail(err);
-      });
+    loadKafkaConfig()
+      .compose(config -> startWebSocket(router, config))
+      .onSuccess(ok -> startPromise.complete())
+      .onFailure(startPromise::fail);
   }
 
-  private void loadKafkaConfig(Promise<Void> startPromise) {
-    ConfigRetriever.create(vertx,
+  private Future<JsonObject> loadKafkaConfig() {
+    String path = Optional.ofNullable(System.getProperty("properties_path")).orElse("kafka.properties");
+    ConfigRetriever configRetriever =  ConfigRetriever.create(vertx,
       new ConfigRetrieverOptions().addStore(
         new ConfigStoreOptions()
           .setType("file")
           .setFormat("properties")
-          .setConfig(new JsonObject().put("path", "kafka.properties").put("raw-data", true))))
-      .getConfig()
-      .onSuccess(config -> {
-        kafkaConfig = new HashMap<>();
-        config.forEach(entry -> kafkaConfig.put(entry.getKey(), entry.getValue().toString()));
-      })
-      .onFailure(startPromise::fail);
+          .setConfig(new JsonObject().put("path", path).put("raw-data", true))));
+    FileSystem fileSystem = vertx.fileSystem();
+    return fileSystem.exists(path)
+      .compose(exists -> {
+        if (exists) {
+          return configRetriever.getConfig();
+        } else {
+          return Future.failedFuture("Kafka properties file is missing. Either specify using -Dproperties_path=<path> or use the default path of kafka.properties.");
+        }
+      });
+  }
+
+  private Future<HttpServer> startWebSocket(Router router, JsonObject config) {
+    kafkaConfig = new HashMap<>();
+    config.forEach(entry -> kafkaConfig.put(entry.getKey(), entry.getValue().toString()));
+    return vertx.createHttpServer()
+      .requestHandler(router)
+      .webSocketHandler(this::handleWebSocket)
+      .listen(8080, "localhost")
+      .onSuccess(ok -> logger.info("🚀 WebSocketServer started"))
+      .onFailure(err -> logger.error("❌ WebSocketServer failed to listen", err));
   }
 
   private void handleWebSocket(ServerWebSocket webSocket) {
