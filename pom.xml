@@ -10,7 +10,7 @@
 
   <properties>
     <kafka.version>2.3.0</kafka.version>
-    <vertx.version>4.0.0-SNAPSHOT</vertx.version>
+    <vertx.version>4.0.0-milestone5</vertx.version>
     <jackson-databind.version>2.10.2</jackson-databind.version>
   </properties>
 
