@@ -17,9 +17,11 @@ import io.vertx.core.file.FileSystem;
 import io.vertx.core.json.JsonObject;
 import io.vertx.kafka.client.producer.KafkaProducer;
 import io.vertx.kafka.client.producer.KafkaProducerRecord;
+import org.apache.kafka.common.config.SslConfigs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Optional;
 
@@ -59,7 +61,15 @@ public class PeriodicProducer extends AbstractVerticle {
 
   private void setup(JsonObject config) {
     HashMap<String, String> props = new HashMap<>();
-    config.forEach(entry -> props.put(entry.getKey(), entry.getValue().toString()));
+    config.forEach(entry -> {
+      String key = entry.getKey();
+      String value = entry.getValue().toString();
+      if (SslConfigs.SSL_TRUSTSTORE_LOCATION_CONFIG.equals(key) || SslConfigs.SSL_KEYSTORE_LOCATION_CONFIG.equals(key)) {
+        File trustStorefile = new File(value);
+        value = trustStorefile.toPath().toAbsolutePath().toString();
+      }
+      props.put(key, value);
+    });
     KafkaProducer<String, String> kafkaProducer = KafkaProducer.create(vertx, props);
 
     String topic = Optional.ofNullable(config.getString("topic")).orElse(Main.TOPIC);

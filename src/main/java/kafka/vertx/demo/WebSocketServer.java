@@ -21,9 +21,11 @@ import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.StaticHandler;
 import io.vertx.kafka.client.common.TopicPartition;
 import io.vertx.kafka.client.consumer.KafkaConsumer;
+import org.apache.kafka.common.config.SslConfigs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Optional;
 
@@ -68,7 +70,15 @@ public class WebSocketServer extends AbstractVerticle {
 
   private Future<HttpServer> startWebSocket(Router router, JsonObject config) {
     kafkaConfig = new HashMap<>();
-    config.forEach(entry -> kafkaConfig.put(entry.getKey(), entry.getValue().toString()));
+    config.forEach(entry -> {
+      String key = entry.getKey();
+      String value = entry.getValue().toString();
+      if (SslConfigs.SSL_TRUSTSTORE_LOCATION_CONFIG.equals(key) || SslConfigs.SSL_KEYSTORE_LOCATION_CONFIG.equals(key)) {
+        File trustStorefile = new File(value);
+        value = trustStorefile.toPath().toAbsolutePath().toString();
+      }
+      kafkaConfig.put(key, value);
+    });
     return vertx.createHttpServer()
       .requestHandler(router)
       .webSocketHandler(this::handleWebSocket)
