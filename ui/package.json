@@ -4,7 +4,8 @@
   "description": "UI for the Kafka Java Vertx starter application",
   "main": "src/index.js",
   "scripts": {
-    "test": "test"
+    "test": "test",
+    "build": "ls"
   },
   "author": "",
   "license": "Apache-2.0"

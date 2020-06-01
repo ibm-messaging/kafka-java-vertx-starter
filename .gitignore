@@ -1,3 +1,15 @@
-target
+# IDE ignores
 .idea
 *.iml
+.settings
+.vscode
+.classpath
+.project
+
+# Java ignores
+target
+
+# UI ignores
+node/
+ui/dist
+ui/node_modules
