@@ -5,6 +5,7 @@
 .vscode
 .classpath
 .project
+.DS_Store
 
 # Java ignores
 target
@@ -13,3 +14,4 @@ target
 node/
 ui/dist
 ui/node_modules
+coverage/
