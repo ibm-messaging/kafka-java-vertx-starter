@@ -35,6 +35,7 @@ Test out the app by connecting to the websocket endpoints (UI will be added soon
  - Disconnect from the consume websocket
 
 ## Configuration
+
 To configure the application to connect to your Kafka edit the properties file called `kafka.properties`.
 Alternatively you can provide a custom path to the properties file using `-Dproperties_path=<path>` when starting the application.
 

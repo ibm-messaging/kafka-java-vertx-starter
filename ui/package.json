@@ -15,8 +15,60 @@
     "test": "jest",
     "storybook": "start-storybook"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "prettier --write",
+      "eslint --fix --cache"
+    ]
+  },
   "eslintConfig": {
     "extends": "react-app"
+  },
+  "commitlint": {
+    "rules": {
+      "header-max-length": [
+        2,
+        "always",
+        72
+      ],
+      "body-max-length": [
+        2,
+        "always",
+        72
+      ],
+      "footer-max-length": [
+        2,
+        "always",
+        72
+      ],
+      "type-enum": [
+        2,
+        "always",
+        [
+          "feat",
+          "fix",
+          "docs",
+          "style",
+          "refactor",
+          "test",
+          "revert"
+        ]
+      ],
+      "type-empty": [
+        2,
+        "never"
+      ],
+      "references-empty": [
+        2,
+        "never"
+      ]
+    }
   },
   "dependencies": {
     "carbon-components": "^10.12.0",
@@ -29,6 +81,7 @@
     "@babel/core": "^7.10.2",
     "@babel/preset-env": "^7.10.2",
     "@babel/preset-react": "^7.10.1",
+    "@commitlint/cli": "^8.3.5",
     "@storybook/addon-actions": "^5.3.19",
     "@storybook/addon-centered": "^5.3.19",
     "@storybook/addon-info": "^5.3.19",
@@ -41,9 +94,16 @@
     "babel-jest": "^26.0.1",
     "babel-loader": "^8.1.0",
     "css-loader": "^3.5.3",
+    "eslint": "^7.1.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-prettier": "^3.1.3",
+    "eslint-plugin-react": "^7.20.0",
     "html-webpack-plugin": "^4.3.0",
+    "husky": "^4.2.5",
     "jest": "^26.0.1",
+    "lint-staged": "^10.2.7",
     "mocha": "^7.2.0",
+    "prettier": "^2.0.5",
     "react-test-renderer": "^16.13.1",
     "sass": "^1.26.7",
     "sass-loader": "^8.0.2",
