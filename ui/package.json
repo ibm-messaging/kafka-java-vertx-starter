@@ -5,6 +5,7 @@
   "author": "",
   "license": "Apache-2.0",
   "private": true,
+  "sideEffects": false,
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ibm-messaging/kafka-java-vertx-starter.git"

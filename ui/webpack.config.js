@@ -65,5 +65,8 @@ module.exports = {
     inline: true,
     hot: true
   },
+  optimization: {
+    usedExports: true,
+  },
   plugins: pluginSet
 }
