@@ -69,16 +69,8 @@ public class WebSocketServer extends AbstractVerticle {
   }
 
   private Future<HttpServer> startWebSocket(Router router, JsonObject config) {
-    kafkaConfig = new HashMap<>();
-    config.forEach(entry -> {
-      String key = entry.getKey();
-      String value = entry.getValue().toString();
-      if (SslConfigs.SSL_TRUSTSTORE_LOCATION_CONFIG.equals(key) || SslConfigs.SSL_KEYSTORE_LOCATION_CONFIG.equals(key)) {
-        File trustStorefile = new File(value);
-        value = trustStorefile.toPath().toAbsolutePath().toString();
-      }
-      kafkaConfig.put(key, value);
-    });
+    String path = Optional.ofNullable(System.getProperty("properties_path")).orElse("kafka.properties");
+    kafkaConfig = Main.getKafkaConfig(config, path);
     return vertx.createHttpServer()
       .requestHandler(router)
       .webSocketHandler(this::handleWebSocket)
