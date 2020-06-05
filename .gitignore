@@ -13,5 +13,7 @@ target
 # UI ignores
 node/
 ui/dist
-ui/node_modules
+**/node_modules
 coverage/
+**/.out/
+ui/.eslintcache

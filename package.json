@@ -1,5 +1,8 @@
 {
   "scripts": {
-    "prebuild": "cd ui && npm install && npm run build"
+    "install": "cd ui && npm install",
+    "build": "cd ui && npm run build",
+    "prebuild": "cd ui && npm install && npm run build",
+    "test": "cd ui && npm run test"
   }
 }

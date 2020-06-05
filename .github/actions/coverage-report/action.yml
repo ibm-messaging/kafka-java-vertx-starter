@@ -1,0 +1,12 @@
+name: 'Coverage report'
+description: 'Report test coverage'
+branding:
+  icon: 'activity'  
+  color: 'yellow'
+inputs:
+  GITHUB_TOKEN:
+    description: 'Github token from secret'
+    required: true
+runs:
+  using: 'docker'
+  image: 'Dockerfile'

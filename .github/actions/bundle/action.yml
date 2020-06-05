@@ -1,0 +1,12 @@
+name: 'Bundle size'
+description: 'Check the size of the bundle'
+branding:
+  icon: 'minimize-2'  
+  color: 'yellow'
+inputs:
+  GITHUB_TOKEN:
+    description: 'Github token of the repository (automatically created by Github)'
+    required: true
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
