@@ -15,6 +15,7 @@
     "build": "webpack --mode production",
     "test": "jest",
     "storybook": "start-storybook",
+    "build-storybook": "build-storybook -o .out",
     "lint": "eslint .",
     "prettier": "prettier --write ."
   },
