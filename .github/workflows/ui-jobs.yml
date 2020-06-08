@@ -1,4 +1,4 @@
-name: UI
+name: Node
 
 on: [pull_request]
 
@@ -14,17 +14,32 @@ jobs:
         with:
           node-version: 12.x
       - name: Install Dependencies
-        run: npm run install
+        run: cd ui && npm install
       - name: Build
-        run: npm run build
+        run: cd ui && npm run build
       - name: Caluclate bundle size
         uses: ./.github/actions/bundle
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Test
-        run: npm run test
+        run: cd ui && npm run test
       - name: Coverage report
         if: ${{ always() }}
         uses: ./.github/actions/coverage-report
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  lint:
+    runs-on: ubuntu-latest
+    name: ESLint
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js 12.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+      - name: Install Dependencies
+        run: cd ui && npm install
+      - name: Code lint
+        run: cd ui && npm run lint
