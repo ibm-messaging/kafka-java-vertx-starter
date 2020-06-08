@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - ui
+    paths:
+      - 'ui/**'
 
 jobs:
   deploy:

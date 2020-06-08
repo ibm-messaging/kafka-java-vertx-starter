@@ -1,6 +1,9 @@
 name: Node
 
-on: [pull_request]
+on: 
+  pull_request:
+    paths:
+    - 'ui/**'
 
 jobs:
   build:
