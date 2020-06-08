@@ -18,4 +18,5 @@ jobs:
       - name: Fetch and checkout
         run: git fetch origin && git checkout ${{ github.head_ref }}
       - name: Lint commit message
+        if: ${{ github.event.sender.login != 'dependabot-preview' }}
         run: npx commitlint --from ${{ github.base_ref }} --to ${{ github.head_ref }} -g ./ui/package.json
