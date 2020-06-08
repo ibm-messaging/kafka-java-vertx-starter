@@ -40,7 +40,7 @@
         "always",
         72
       ],
-      "body-max-length": [
+      "body-max-line-length": [
         2,
         "always",
         72

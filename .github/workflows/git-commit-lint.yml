@@ -1,0 +1,21 @@
+name: Git
+
+on: [pull_request]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    name: Lint Commit Messages
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.base_ref }}
+      - name: Use Node.js 12.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+      - name: Fetch and checkout
+        run: git fetch origin && git checkout ${{ github.head_ref }}
+      - name: Lint commit message
+        run: npx commitlint --from ${{ github.base_ref }} --to ${{ github.head_ref }} -g ./ui/package.json

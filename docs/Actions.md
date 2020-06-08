@@ -25,3 +25,7 @@ This workflow is for all jobs related to the UI that need to be run on a pull re
 #### node-deploy-storybook
 
 This workflow will automatically update the storybook hosted on Github pages when a push is made to master.
+
+#### git-commit-lint
+
+This workflow will lint all commit messages made on a branch that is in a pull request.
