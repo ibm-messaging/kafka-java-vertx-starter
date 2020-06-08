@@ -9,7 +9,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    name: Test
+    name: Build and Test
 
     steps:
       - uses: actions/checkout@v2
@@ -19,3 +19,5 @@ jobs:
           java-version: 1.8
       - name: Test
         run: mvn test
+      - name: Build with Maven
+        run: mvn package

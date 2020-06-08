@@ -1,0 +1,26 @@
+name: Node
+
+on: 
+  push:
+    branches:
+      - ui
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy Storybook
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js 12.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+      - name: Install Dependencies
+        run: cd ui && npm install
+      - name: Install Storybook
+        run: npm install @storybook/storybook-deployer @storybook/react -g 
+      - name: Deploy storybook
+        run: cd ui && storybook-to-ghpages -o .out --ci
+        env:
+          GH_TOKEN: ${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}
