@@ -17,6 +17,8 @@ jobs:
           node-version: 12.x
       - name: Fetch and checkout
         run: git fetch origin && git checkout ${{ github.head_ref }}
+      - name: Event Sender
+        run: echo ${{ github.event.sender.login }}
       - name: Lint commit message
-        if: ${{ github.event.sender.login != 'dependabot-preview' }}
+        if: ${{ github.event.sender.login != 'dependabot-preview[bot]' }}
         run: npx commitlint --from ${{ github.base_ref }} --to ${{ github.head_ref }} -g ./ui/package.json
