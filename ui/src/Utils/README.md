@@ -5,8 +5,6 @@ React component based (ie meaning a Hook would not suitable). These utilities
 are expected to be small helper functions, with comments accompanying them
 to descirbe usage. All naming should be clear and perscriptive.
 
-- Content to follow -
-
 ## File structure
 
 For a new utility function or module, eg `MyUtilModule`, the expected structure 
@@ -17,6 +15,7 @@ src/
     Utils/
         index.js
         MyUtilModule.util.js
+        MyUtilModule.spec.js
 ```
 
 where;
@@ -24,3 +23,4 @@ where;
     When implemented, `MyUtilModule` would be added to that index.js for use
     across the UI.
     - `*.util.js` is the utility module/function
+    - `*.spec.js` are the tests for this utility

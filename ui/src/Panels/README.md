@@ -1,7 +1,7 @@
 # Panels
 
-`Panels` are top level components in the UI. There should be one `Panel` 
-component per page in the UI. The role of the `Panel` is to act as the
+`Panels` are top level components in the UI. Normally there would be one 
+`Panel` component per page in the UI. The role of the `Panel` is to act as the
 datafetcher/state reducer for the page. It would be responsible for
 performing actions such as fetching data on request from a child
 component, or on load of the page, or rendering different `Group`/`Element`
@@ -54,6 +54,6 @@ where;
     - `*.scss` is the styling for this component
 
 All of these files should follow the style guide for this codebase, which 
-can be found here: <link to follow post catch up>
+can be found [here](../../docs/CodeStyle.md).
 
 ### List of currently implemented Panels

@@ -19,7 +19,7 @@ const pluginSet = [new htmlPlugin(htmlPluginConfiguration)];
 
 module.exports = {
   mode: IS_PRODUCTION ? 'production' : 'development',
-  entry: [path.join(parentDir, 'src/index.js')],
+  entry: [path.join(parentDir, 'src/Bootstrap/index.js')],
   module: {
     rules: [
       {

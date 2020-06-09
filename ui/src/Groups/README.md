@@ -55,6 +55,6 @@ where;
     - `*.scss` is the styling for this component
 
 All of these files should follow the style guide for this codebase, which 
-can be found here: <link to follow post catch up>
+can be found [here](../../docs/CodeStyle.md).
 
 ### List of currently implemented Groups

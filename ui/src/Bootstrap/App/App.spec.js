@@ -1,6 +1,5 @@
 import React from 'react';
-// eslint-disable-next-line import/no-unresolved
-import { render } from 'test-utils';
+import { render } from '../../TestUtils/index.js';
 import App from './App.js';
 
 describe('App tests', () => {
