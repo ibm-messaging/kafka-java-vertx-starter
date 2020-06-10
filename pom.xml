@@ -13,7 +13,7 @@
     <vertx.version>4.0.0-milestone5</vertx.version>
     <logback.version>1.2.3</logback.version>
     <jackson-databind.version>2.10.2</jackson-databind.version>
-    <junit.version>5.6.0</junit.version>
+    <junit.version>5.6.1</junit.version>
     <hamcrest.version>2.2</hamcrest.version>
     <maven.surefire.version>3.0.0-M4</maven.surefire.version>
   </properties>
@@ -53,6 +53,10 @@
     </dependency>
     <dependency>
       <groupId>io.vertx</groupId>
+      <artifactId>vertx-web-client</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.vertx</groupId>
       <artifactId>vertx-kafka-client</artifactId>
     </dependency>
     <dependency>
@@ -78,6 +82,26 @@
       <groupId>org.hamcrest</groupId>
       <artifactId>hamcrest-core</artifactId>
       <version>${hamcrest.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.vertx</groupId>
+      <artifactId>vertx-web-templ-thymeleaf</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.vertx</groupId>
+      <artifactId>vertx-junit5</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.hamcrest</groupId>
+      <artifactId>hamcrest-core</artifactId>
+      <version>2.2</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -107,6 +131,11 @@
       </plugins>
     </pluginManagement>
     <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>${maven.surefire.version}</version>
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
@@ -152,6 +181,7 @@
               <nodeVersion>v12.17.0</nodeVersion>
               <npmVersion>6.14.4</npmVersion>
             </configuration>
+            <phase>install</phase>
           </execution>
           <execution>
             <id>npm run prebuild</id>
@@ -161,6 +191,7 @@
             <configuration>
               <arguments>run prebuild</arguments>
             </configuration>
+            <phase>install</phase>
           </execution>
         </executions>
       </plugin>

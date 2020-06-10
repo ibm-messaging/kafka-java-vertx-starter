@@ -15,6 +15,7 @@ import io.vertx.core.http.ServerWebSocket;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.StaticHandler;
+import io.vertx.ext.web.templ.thymeleaf.ThymeleafTemplateEngine;
 import io.vertx.kafka.client.common.TopicPartition;
 import io.vertx.kafka.client.consumer.KafkaConsumer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
@@ -48,13 +49,73 @@ public class WebSocketServer extends AbstractVerticle {
         // Auto commit as this is a demo app
         config.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, true);
         kafkaConfig = config.mapTo(HashMap.class);
-        return startWebSocket(router);
+        return createRouterAndStartServer(config);
       })
       .onSuccess(ok -> startPromise.complete())
       .onFailure(startPromise::fail);
   }
 
-  private Future<HttpServer> startWebSocket(Router router) {
+  private Future<JsonObject> loadKafkaConfig() {
+    String path = Optional.ofNullable(System.getProperty("properties_path")).orElse("kafka.properties");
+    ConfigRetriever configRetriever =  ConfigRetriever.create(vertx,
+      new ConfigRetrieverOptions().addStore(
+        new ConfigStoreOptions()
+          .setType("file")
+          .setFormat("properties")
+          .setConfig(new JsonObject().put("path", path).put("raw-data", true))));
+    FileSystem fileSystem = vertx.fileSystem();
+    return fileSystem.exists(path)
+      .compose(exists -> {
+        if (exists) {
+          return configRetriever.getConfig();
+        } else {
+          return Future.failedFuture("Kafka properties file is missing. Either specify using -Dproperties_path=<path> or use the default path of kafka.properties.");
+        }
+      });
+  }
+
+  private Future<HttpServer> createRouterAndStartServer(JsonObject config) {
+    Router router = Router.router(vertx);
+    final ThymeleafTemplateEngine engine = ThymeleafTemplateEngine.create(vertx);
+
+    router.routeWithRegex(".*js").handler(StaticHandler.create());
+
+    router.route().handler(ctx -> {
+      JsonObject data = new JsonObject();
+      JsonObject props = new JsonObject();
+
+      String topic = Optional.ofNullable(config.getString("topic")).orElse(Main.TOPIC);
+      
+      props.put("topic", topic);
+      props.put("producerPath", PRODUCE_PATH);
+      props.put("consumerPath", CONSUME_PATH);
+
+      data.put("config", props);
+
+      engine.render(data, "webroot/index.html", res -> {
+        if (res.succeeded()) {
+          ctx.response().end(res.result());
+        } else {
+          logger.error(res.cause().getMessage());
+          ctx.fail(res.cause());
+        }
+      });
+    });
+
+    return startWebSocket(router, config);
+  }
+
+  private Future<HttpServer> startWebSocket(Router router, JsonObject config) {
+    kafkaConfig = new HashMap<>();
+    config.forEach(entry -> {
+      String key = entry.getKey();
+      String value = entry.getValue().toString();
+      if (SslConfigs.SSL_TRUSTSTORE_LOCATION_CONFIG.equals(key) || SslConfigs.SSL_KEYSTORE_LOCATION_CONFIG.equals(key)) {
+        File trustStorefile = new File(value);
+        value = trustStorefile.toPath().toAbsolutePath().toString();
+      }
+      kafkaConfig.put(key, value);
+    });
     return vertx.createHttpServer()
       .requestHandler(router)
       .webSocketHandler(this::handleWebSocket)

@@ -4,7 +4,7 @@ const fs = require('fs');
 
 async function calculateBundle() {
   try {
-    const fileSize = Math.round((fs.statSync('./ui/dist/public/main.bundle.js')['size'] / 1024.0) * 100) / 100;
+    const fileSize = Math.round((fs.statSync('./src/main/resources/webroot/main.bundle.js')['size'] / 1024.0) * 100) / 100;
 
     const github_token = core.getInput('GITHUB_TOKEN');
 

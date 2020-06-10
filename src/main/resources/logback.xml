@@ -10,6 +10,7 @@
   <logger name="io.vertx" level="info"/>
   <logger name="org.apache.kafka" level="${log.level.kafka:-error}"/>
   <logger name="org.apache.kafka.clients.NetworkClient" level="warn"/>
+  <logger name="org.thymeleaf" level="error"/>
 
   <root level="${log.level:-info}">
     <appender-ref ref="STDOUT"/>

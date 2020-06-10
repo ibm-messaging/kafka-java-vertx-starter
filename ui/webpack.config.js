@@ -5,7 +5,7 @@ const IS_PRODUCTION = process.argv.indexOf('-p') != -1;
 
 const parentDir = path.join(__dirname, './');
 const PUBLIC_DIR = path.resolve(__dirname, './public/');
-const BUILD_DIR = path.resolve(__dirname, './dist');
+const BUILD_DIR = path.resolve(__dirname, '../src/main/resources/webroot');
 
 const htmlPlugin = require('html-webpack-plugin');
 
@@ -53,10 +53,10 @@ module.exports = {
   },
   output: {
     filename: '[name].bundle.js',
-    path: BUILD_DIR + '/public/',
+    path: BUILD_DIR,
   },
   devServer: {
-    contentBase: BUILD_DIR + '/public',
+    contentBase: BUILD_DIR,
     compress: true,
     inline: true,
     hot: true,
