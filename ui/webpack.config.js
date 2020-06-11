@@ -1,7 +1,6 @@
 const path = require('path');
-
-// check/detect if a production build (or not) via the webpack -p flag
-const IS_PRODUCTION = process.argv.indexOf('-p') != -1;
+const { webpackAliases } = require('./moduleAliases');
+const babelPresets = require('./babelPresets.js');
 
 const parentDir = path.join(__dirname, './');
 const PUBLIC_DIR = path.resolve(__dirname, './public/');
@@ -17,52 +16,55 @@ const htmlPluginConfiguration = {
 
 const pluginSet = [new htmlPlugin(htmlPluginConfiguration)];
 
-module.exports = {
-  mode: IS_PRODUCTION ? 'production' : 'development',
-  entry: [path.join(parentDir, 'src/Bootstrap/index.js')],
-  module: {
-    rules: [
-      {
-        test: /(\.css|.scss)$/,
-        use: [
-          {
-            loader: 'style-loader',
-          },
-          {
-            loader: 'css-loader',
-          },
-          {
-            loader: 'sass-loader',
-          },
-        ],
-      },
-      {
-        test: /\.(jsx|js)?$/,
-        exclude: /(node_modules)/,
-        use: [
-          {
-            loader: 'babel-loader',
-            options: {
-              cacheDirectory: true,
-              presets: ['@babel/preset-react'],
+module.exports = (_, argv) => {
+  return {
+    mode: argv.mode || 'development',
+    entry: [path.join(parentDir, 'src/Bootstrap/index.js')],
+    module: {
+      rules: [
+        {
+          test: /(\.css|.scss)$/,
+          use: [
+            {
+              loader: 'style-loader',
             },
-          },
-        ],
-      },
-    ],
-  },
-  output: {
-    filename: '[name].bundle.js',
-    path: BUILD_DIR,
-  },
-  devServer: {
-    contentBase: BUILD_DIR,
-    compress: true,
-    inline: true,
-    hot: true,
-  },
-  optimization: {
-    usedExports: true,
-  },
-  plugins: pluginSet,
+            {
+              loader: 'css-loader',
+            },
+            {
+              loader: 'sass-loader',
+            },
+          ],
+        },
+        {
+          test: /\.(jsx|js)?$/,
+          exclude: /(node_modules)/,
+          use: [
+            {
+              loader: 'babel-loader',
+              options: {
+                cacheDirectory: true,
+                presets: babelPresets,
+              },
+            },
+          ],
+        },
+      ],
+    },
+    output: {
+      filename: '[name].bundle.js',
+      path: BUILD_DIR,
+    },
+    devServer: {
+      contentBase: BUILD_DIR,
+      compress: true,
+      inline: true,
+      hot: true,
+    },
+    plugins: pluginSet,
+    resolve: {
+      alias: webpackAliases,
+      extensions: ['.js'],
+    },
+  };
 };

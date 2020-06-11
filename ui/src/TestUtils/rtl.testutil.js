@@ -1,3 +1,4 @@
+/* eslint-disable import/export */
 /*
  * This file will override the react testing library to allow a
  * custom global render method to be created that includes

@@ -1,0 +1,6 @@
+.history
+node_modules
+dist
+coverage
+.eslintcache
+.vscode

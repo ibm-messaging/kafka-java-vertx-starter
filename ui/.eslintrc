@@ -23,7 +23,8 @@
   "settings": {
     "react": {
       "version": "detect"
-    }
+    },
+    "import/resolver": "webpack"
   },
   "parser": "babel-eslint",
   "rules": {

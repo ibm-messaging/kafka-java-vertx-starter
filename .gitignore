@@ -1,4 +1,5 @@
 # IDE ignores
+.history
 .idea
 *.iml
 .settings

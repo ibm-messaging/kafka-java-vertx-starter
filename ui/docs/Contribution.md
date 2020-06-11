@@ -1,8 +1,7 @@
 # Contribution
 
-As well as the [contibution](../../CONTRIBUTING.md) and [code of conduct](../../CODE_OF_CONDUCT.md) guidelines detailed at the top
-level of this repo, UI contributions will also need to adhere to the following
-requirements:
+As well as the [contribution](../../CONTRIBUTING.md) and [code of conduct](../../CODE_OF_CONDUCT.md) guidelines detailed at the top
+level of this repo, UI contributions will additionally need to adhere to the following requirements:
 
 - All changes should follow the documented [code style](./CodeStyle.md) for 
 the particular type of file being modified or contributed.
