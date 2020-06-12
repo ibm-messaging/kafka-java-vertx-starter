@@ -40,6 +40,7 @@ such as `describe`, `it` and `expect`:
 
 - `ui/src/Utils`
 - `ui/src/ReactCustomHooks`
+- `ui/src/Contexts`
 
 ### Behavioural test style
 
@@ -82,3 +83,22 @@ The testing tooling used for UI code is as follows:
 - RTL (react-test-library) - used to emulate a browser DOM and mimick
 user interaction with React components
 - <e2e framework here>
+
+## Testing contexts
+
+As mentioned above, contexts should be tested in a functional style. Some 
+additional setup may be required with a context depending on how high-level
+it is. If the context provider is provided in `index.js`, then the provider
+should be added into `TestUtils/rtl.testutil.js` along with the other providers.
+As this extends the RTL render method, it allows us to create simple consumer 
+tests with no additional setup. For example:
+
+```
+render(
+      <ContextConsumer>
+        {(contextValue) => {
+          // test context behaviour here
+        }}
+      </ContextConsumer>
+);
+```

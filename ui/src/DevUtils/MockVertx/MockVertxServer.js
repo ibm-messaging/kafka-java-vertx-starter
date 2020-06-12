@@ -5,14 +5,15 @@ const {
   generateMockProducerMetadataResponseShape,
   generateMockErrorResponseShape,
 } = require('../../TestUtils/server.testutil.js');
+const config = require('./config.json');
 
 // Constants
 
 const MAX_OFFSETS = 5000;
 const PORT = 8080;
-const PRODUCE_ENDPOINT = '/demoproduce';
-const CONSUME_ENDPOINT = '/democonsume';
-const TOPIC_NAME = 'mock_topic';
+const PRODUCE_ENDPOINT = config.producerPath;
+const CONSUME_ENDPOINT = config.consumerPath;
+const TOPIC_NAME = config.topic;
 const NUMBER_OF_PARTITIONS = 1;
 const PLACEHOLDER_PAYLOAD = 'Hello world';
 const TICK_RATE = 2000;

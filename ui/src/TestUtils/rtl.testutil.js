@@ -8,11 +8,20 @@
  */
 import React from 'react';
 import { render } from '@testing-library/react';
+import { ConfigContextProvider } from '../Contexts/index.js';
+
+const mockConfig = {
+  topic: 'topic',
+  producerPath: 'producerPath',
+  consumerPath: 'consumerPath',
+};
 
 // eslint-disable-next-line react/prop-types
 const AllTheProviders = ({ children }) => {
   // Wrap children with any contexts/providers we end up having
-  return <div>{children}</div>;
+  return (
+    <ConfigContextProvider value={mockConfig}>{children}</ConfigContextProvider>
+  );
 };
 
 const customRender = (ui, options) =>

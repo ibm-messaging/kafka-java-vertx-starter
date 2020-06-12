@@ -181,7 +181,6 @@
               <nodeVersion>v12.17.0</nodeVersion>
               <npmVersion>6.14.4</npmVersion>
             </configuration>
-            <phase>install</phase>
           </execution>
           <execution>
             <id>npm run prebuild</id>
@@ -191,7 +190,6 @@
             <configuration>
               <arguments>run prebuild</arguments>
             </configuration>
-            <phase>install</phase>
           </execution>
         </executions>
       </plugin>
