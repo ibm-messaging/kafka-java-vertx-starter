@@ -1,0 +1,13 @@
+# https://help.github.com/en/github/administering-a-repository/configuration-options-for-dependency-updates
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: "/ui"
+    schedule:
+      interval: daily
+    open-pull-requests-limit: 3
+  - package-ecosystem: maven
+    directory: "/"
+    schedule:
+      interval: daily
+    open-pull-requests-limit: 3
