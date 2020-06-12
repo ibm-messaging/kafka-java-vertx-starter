@@ -35,6 +35,8 @@ where;
 
 ## Available helpers
 
-- RTL - react test library is provided to you via TestUtils - no need to import
+- rtl - react test library is provided to you via TestUtils - no need to import
 it per test file. It also adds helpful capabilities on top of the core RTL
 implementation.
+- server - functions which can be called which return the various shapes 
+returned by the backend. See comments in the file for more details.

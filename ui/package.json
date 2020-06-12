@@ -11,8 +11,10 @@
     "url": "git+https://github.com/ibm-messaging/kafka-java-vertx-starter.git"
   },
   "scripts": {
-    "start": "webpack-dev-server --mode development",
+    "start": "run-p dev mock-vertx",
+    "dev": "webpack-dev-server --mode development",
     "build": "webpack --mode production",
+    "mock-vertx": "node ./src/DevUtils/MockVertx",
     "test": "jest",
     "storybook": "start-storybook",
     "build-storybook": "build-storybook -o .out",
@@ -111,6 +113,7 @@
     "jest": "^26.0.1",
     "lint-staged": "^10.2.9",
     "mocha": "^7.2.0",
+    "npm-run-all": "^4.1.5",
     "prettier": "^2.0.5",
     "react-test-renderer": "^16.13.1",
     "sass": "^1.26.8",
@@ -118,6 +121,7 @@
     "style-loader": "^1.2.1",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.11",
-    "webpack-dev-server": "^3.11.0"
+    "webpack-dev-server": "^3.11.0",
+    "ws": "^7.3.0"
   }
 }

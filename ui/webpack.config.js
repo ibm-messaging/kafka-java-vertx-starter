@@ -1,6 +1,9 @@
 const path = require('path');
 const { webpackAliases } = require('./moduleAliases');
 const babelPresets = require('./babelPresets.js');
+const {
+  getDevWebpackProxyConfigForMockVertx,
+} = require('./src/DevUtils/MockVertx/MockVertxServer.js');
 
 const parentDir = path.join(__dirname, './');
 const PUBLIC_DIR = path.resolve(__dirname, './public/');
@@ -60,6 +63,9 @@ module.exports = (_, argv) => {
       compress: true,
       inline: true,
       hot: true,
+      proxy: {
+        ...getDevWebpackProxyConfigForMockVertx(7050),
+      },
     },
     plugins: pluginSet,
     resolve: {

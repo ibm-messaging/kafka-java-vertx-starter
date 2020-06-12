@@ -12,6 +12,7 @@ module.exports = {
     '!**/src/**/*.stories.js',
     '!**/src/**/*.assets.js',
     '!**/src/TestUtils/**',
+    '!**/src/DevUtils/**',
     '!**/*.json',
   ],
   coverageDirectory: './coverage/jest/',
