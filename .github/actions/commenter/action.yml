@@ -1,0 +1,12 @@
+name: "Commenter"
+description: "Comment inputed text on issue/pull request"
+inputs:
+  GITHUB_TOKEN:
+    description: "Github action bot token"
+  BUNDLE_SIZE:
+    description: "Bundle size of webpack build"
+  TEST_COVERAGE:
+    description: "Test coverage report from jest tests"
+runs:
+  using: "docker"
+  image: "Dockerfile"

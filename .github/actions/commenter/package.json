@@ -1,0 +1,13 @@
+{
+  "name": "commenter",
+  "version": "1.0.0",
+  "description": "Action to comment inputed text",
+  "main": "main.js",
+  "scripts": {},
+  "author": "",
+  "license": "Apache 2.0",
+  "dependencies": {
+    "@actions/core": "^1.2.4",
+    "@actions/github": "^2.2.0"
+  }
+}

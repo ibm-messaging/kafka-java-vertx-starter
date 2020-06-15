@@ -1,9 +1,9 @@
 name: Node
 
-on: 
+on:
   pull_request:
     paths:
-    - 'ui/**'
+      - "ui/**"
 
 jobs:
   build:
@@ -21,16 +21,21 @@ jobs:
       - name: Build
         run: cd ui && npm run build
       - name: Caluclate bundle size
+        id: bundle
         uses: ./.github/actions/bundle
-        with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Test
         run: cd ui && npm run test
       - name: Coverage report
+        id: coverage
         if: ${{ always() }}
         uses: ./.github/actions/coverage-report
+      - name: Comment on PR
+        if: ${{ always() }}
+        uses: ./.github/actions/commenter
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BUNDLE_SIZE: ${{ steps.bundle.outputs.bundle_size }}
+          TEST_COVERAGE: ${{ steps.coverage.outputs.test_coverage }}
 
   lint:
     runs-on: ubuntu-latest
