@@ -49,3 +49,4 @@ All of these files should follow the style guide for this codebase, which
 can be found [here](../../docs/CodeStyle.md).
 
 ### List of currently implemented Elements
+- [`Text`](./Text/README.md)

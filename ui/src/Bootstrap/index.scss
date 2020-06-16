@@ -1,3 +1,18 @@
+// disable carbon font style import
+$css--font-face: false;
+$css--plex: false;
+
+// import plex fonts ourselves
+$font-prefix: '~@ibm/plex'; // path to where the font files are
+@import '~@ibm/plex/scss/ibm-plex.scss'; // import scss to load them
+
 // Import Carbon styles (individually) here
+@import '@carbon/type/scss/styles';
+@import '@carbon/type/scss/font-family';
+@import '@carbon/type/scss/reset';
+
+// include carbon global mixin/changes
+@include carbon--type-reset();
 
 // Import all other .scss files here
+@import '../Elements/Text/Text.scss';

@@ -1,4 +1,5 @@
 const path = require('path');
+const miniCssExtractPlugin = require('mini-css-extract-plugin');
 const { webpackAliases } = require('./moduleAliases');
 const babelPresets = require('./babelPresets.js');
 const {
@@ -21,28 +22,44 @@ module.exports = (_, argv) => {
   const htmlPluginConfiguration = {
     filename: 'index.html',
     template: PUBLIC_DIR + '/index.html',
-    title: 'Kafka Java VertX Starter UI',
+    title: 'Kafka Java Vertx Starter UI',
     config: mode === 'development' ? MOCK_SERVER_CONFIG : REAL_SERVER_CONFIG,
   };
 
-  const pluginSet = [new htmlPlugin(htmlPluginConfiguration)];
+  const cssPluginConfiguration = {
+    filename: '[name].bundle.css',
+    hmr: mode,
+  };
+
+  const pluginSet = [
+    new htmlPlugin(htmlPluginConfiguration),
+    new miniCssExtractPlugin(cssPluginConfiguration),
+  ];
 
   return {
     mode,
-    entry: [path.join(parentDir, 'src/Bootstrap/index.js')],
+    entry: [
+      path.join(parentDir, 'src/Bootstrap/index.js'),
+      path.join(parentDir, 'src/Bootstrap/index.scss'),
+    ],
     module: {
       rules: [
         {
           test: /(\.css|.scss)$/,
           use: [
             {
-              loader: 'style-loader',
+              loader: miniCssExtractPlugin.loader,
             },
             {
               loader: 'css-loader',
             },
             {
               loader: 'sass-loader',
+              options: {
+                sassOptions: {
+                  includePaths: ['node_modules'],
+                },
+              },
             },
           ],
         },
@@ -59,7 +76,37 @@ module.exports = (_, argv) => {
             },
           ],
         },
+        {
+          test: /\.(woff(2)?|ttf|eot)$/,
+          use: [
+            {
+              loader: 'file-loader',
+              options: {
+                name: '[name].[ext]',
+                publicPath: '/fonts/',
+                outputPath: '/fonts/',
+              },
+            },
+          ],
+        },
       ],
+    },
+    optimization: {
+      splitChunks: {
+        cacheGroups: {
+          commons: {
+            test: /[\\/]node_modules[\\/]/,
+            name: 'libs',
+            chunks: 'all',
+          },
+          styles: {
+            name: 'styles',
+            test: /(\.css|.scss)$/,
+            chunks: 'all',
+            enforce: true,
+          },
+        },
+      },
     },
     output: {
       filename: '[name].bundle.js',
