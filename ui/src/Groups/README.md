@@ -40,6 +40,7 @@ src/
             MyComponent.model.js
             MyComponent.view.js
             MyComponent.scss
+            MyComponent.i18n.json
 ```
 
 where;
@@ -53,6 +54,7 @@ where;
     - `*.model.js` contains any business logic for the component
     - `*.view.js` is the component rendering code
     - `*.scss` is the styling for this component
+    - `*.i18n.json` are the translations for this component
 
 All of these files should follow the style guide for this codebase, which 
 can be found [here](../../docs/CodeStyle.md).

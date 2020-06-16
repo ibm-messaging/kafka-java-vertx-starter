@@ -30,6 +30,7 @@ src/
             MyComponent.stories.js
             MyComponent.view.js
             MyComponent.scss
+            MyComponent.i18n.json
 ```
 
 where;
@@ -42,6 +43,7 @@ where;
     - `*.stories.js` contains the Storybook entries for this component
     - `*.view.js` is the component rendering logic itself
     - `*.scss` is the styling for this component
+    - `*.i18n.json` are the translations for this component
 
 All of these files should follow the style guide for this codebase, which 
 can be found [here](../../docs/CodeStyle.md).

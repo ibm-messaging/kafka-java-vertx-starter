@@ -1,5 +1,5 @@
 import React from 'react';
-import { render } from '../../TestUtils/index.js';
+import { render } from 'TestUtils';
 import App from './App.js';
 
 describe('App tests', () => {

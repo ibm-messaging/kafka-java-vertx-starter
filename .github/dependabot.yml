@@ -2,12 +2,24 @@
 version: 2
 updates:
   - package-ecosystem: npm
-    directory: "/ui"
+    directory: '/ui'
     schedule:
       interval: daily
+    allow:
+      - dependency-type: production
+    open-pull-requests-limit: 5
+  - package-ecosystem: npm
+    directory: '/ui'
+    schedule:
+      interval: weekly
     open-pull-requests-limit: 3
+    target-branch: 'ui'
+    allow:
+      - dependency-type: development
+    labels:
+      - 'npm dev dependency'
   - package-ecosystem: maven
-    directory: "/"
+    directory: '/'
     schedule:
       interval: daily
     open-pull-requests-limit: 3

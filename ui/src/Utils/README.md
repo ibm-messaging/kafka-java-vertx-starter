@@ -24,3 +24,10 @@ where;
     across the UI.
     - `*.util.js` is the utility module/function
     - `*.spec.js` are the tests for this utility
+
+## Currently provided utils
+
+- `idAttributeGenerator` - utility for generating a `data-testid` attribute  - 
+mainly used in testing, but useful for identifying elements.
+- `idAttributeSelector` - utility to get a `data-testid` attribute - 
+mainly used in testing, but useful for identifying elements.
