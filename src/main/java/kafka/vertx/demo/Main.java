@@ -5,7 +5,11 @@ SPDX-License-Identifier: Apache-2.0
 */
 package kafka.vertx.demo;
 
+import io.vertx.config.ConfigRetriever;
+import io.vertx.config.ConfigRetrieverOptions;
+import io.vertx.config.ConfigStoreOptions;
 import io.vertx.core.*;
+import io.vertx.core.json.JsonObject;
 import io.vertx.core.spi.resolver.ResolverProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +35,15 @@ public class Main {
       new VertxOptions()
         .setWarningExceptionTime(10).setWarningExceptionTimeUnit(TimeUnit.SECONDS)
         .setMaxEventLoopExecuteTime(20).setMaxEventLoopExecuteTimeUnit((TimeUnit.SECONDS)));
+
+    ConfigRetriever.create(vertx,
+      new ConfigRetrieverOptions().addStore(
+        new ConfigStoreOptions()
+          .setType("file")
+          .setFormat("properties")
+          .setConfig(new JsonObject().put("path", "project.properties"))
+      )
+    ).getConfig().onSuccess(config -> logger.info("Application version: " + config.getString("app.version")));
 
     Future<String> periodicProducerDeployment = vertx.deployVerticle(new PeriodicProducer());
     Future<String> webSocketServerDeployment = vertx.deployVerticle(new WebSocketServer());
