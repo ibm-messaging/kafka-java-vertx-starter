@@ -39,7 +39,7 @@ public class WebSocketServer extends AbstractVerticle {
     String propertiesPath = System.getProperty(Main.PROPERTIES_PATH_ENV_NAME, Main.DEFAULT_PROPERTIES_PATH);
     Main.loadKafkaConfig(vertx, propertiesPath)
       .compose(config -> {
-        kafkaConfig = Main.getKafkaConfig(config, propertiesPath);
+        kafkaConfig = config.mapTo(HashMap.class);
         return startWebSocket(router);
       })
       .onSuccess(ok -> startPromise.complete())

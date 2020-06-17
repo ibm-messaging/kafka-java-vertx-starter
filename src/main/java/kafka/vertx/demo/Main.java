@@ -18,8 +18,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
 
 import static java.lang.System.currentTimeMillis;
 
@@ -57,7 +57,7 @@ public class Main {
     Future<String> periodicProducerDeployment = vertx.deployVerticle(new PeriodicProducer());
     Future<String> webSocketServerDeployment = vertx.deployVerticle(new WebSocketServer());
 
-    CompositeFuture.all(periodicProducerDeployment, webSocketServerDeployment)
+    CompositeFuture.join(periodicProducerDeployment, webSocketServerDeployment)
       .onSuccess(ok -> logger.info("✅ Application started in {}ms", currentTimeMillis() - startTime))
       .onFailure(err -> logger.error("❌ Application failed to start", err));
   }
@@ -70,7 +70,7 @@ public class Main {
         new ConfigStoreOptions()
           .setType("file")
           .setFormat("properties")
-          .setConfig(new JsonObject().put("path", properties).put("raw-data", true))));
+          .setConfig(new JsonObject().put("path", properties).put("raw-data", true)))).setConfigurationProcessor(configurationProcessor(properties));
     FileSystem fileSystem = vertx.fileSystem();
     return fileSystem.exists(properties)
       .compose(exists -> {
@@ -82,7 +82,7 @@ public class Main {
       });
   }
 
-  public static HashMap<String, String> getKafkaConfig(JsonObject properties, String propertiesPath) {
+  public static Function<JsonObject, JsonObject> configurationProcessor(String propertiesPath) {
     Path propertiesAbsolutePath = new File(propertiesPath).toPath().toAbsolutePath();
     String propertiesDir;
     if (propertiesAbsolutePath.toFile().isDirectory()) {
@@ -90,19 +90,23 @@ public class Main {
     } else {
       propertiesDir = propertiesAbsolutePath.getParent().toString();
     }
-    HashMap<String, String> kafkaConfig = new HashMap<>();
-    properties.forEach(entry -> {
-      String key = entry.getKey();
-      String value = entry.getValue().toString();
-      if (SslConfigs.SSL_TRUSTSTORE_LOCATION_CONFIG.equals(key) || SslConfigs.SSL_KEYSTORE_LOCATION_CONFIG.equals(key)) {
-        File trustStorefile = new File(value);
-        if (!trustStorefile.isAbsolute()) {
-          value = new File(propertiesDir, value).toString();
+    return (properties) -> {
+      JsonObject kafkaConfig = new JsonObject();
+      properties.forEach(entry -> {
+        String key = entry.getKey();
+        String value = entry.getValue().toString();
+        if (SslConfigs.SSL_TRUSTSTORE_LOCATION_CONFIG.equals(key) || SslConfigs.SSL_KEYSTORE_LOCATION_CONFIG.equals(key)) {
+          File trustStorefile = new File(value);
+          if (!trustStorefile.isAbsolute()) {
+            value = new File(propertiesDir, value).toString();
+          }
         }
+        kafkaConfig.put(key, value);
+      });
+      if (!kafkaConfig.containsKey(TOPIC_KEY)) {
+        kafkaConfig.put(TOPIC_KEY, DEFAULT_TOPIC);
       }
-      kafkaConfig.put(key, value);
-    });
-    kafkaConfig.putIfAbsent(TOPIC_KEY, DEFAULT_TOPIC);
-    return kafkaConfig;
+      return kafkaConfig;
+    };
   }
 }

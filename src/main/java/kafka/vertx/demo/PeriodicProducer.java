@@ -27,7 +27,7 @@ public class PeriodicProducer extends AbstractVerticle {
     String propertiesPath = System.getProperty(Main.PROPERTIES_PATH_ENV_NAME, Main.DEFAULT_PROPERTIES_PATH);
     Main.loadKafkaConfig(vertx, propertiesPath)
       .onSuccess(config -> {
-        HashMap<String, String> props = Main.getKafkaConfig(config, propertiesPath);
+        HashMap<String, String> props = config.mapTo(HashMap.class);
         setup(props);
         startPromise.complete();
       })
