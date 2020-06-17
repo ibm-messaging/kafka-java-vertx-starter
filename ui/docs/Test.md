@@ -53,9 +53,21 @@ React component code:
 - `ui/src/Groups`
 - `ui/src/Panels`
 
-End to end test cases validating end user flows should be tested using 
-_<e2e framework here>_. These tests should be defined and sit alongside the
-code in the `ui/src/Bootstrap` directory.
+#### End to End integration test
+
+End to End integration tests should exercise a user scenario - focus on the behaviour a user will take to interact with the application to achieve an end goal.
+
+They should be fairly coarse grained, exercising multiple pages/panels as necessary.
+
+For example - "I can produce a message and observe it being consumed", or "I can stop producing and no more messages are consumed".
+
+These tests are using _Jest_ as a test runner, using standard Jest test assets,
+such as `describe`, `it` and `expect`, and _Playwright_ to instrument the browser.
+
+To avoid the temptation to correlate scenarios with particular panels, these tests are located in the `e2e/test` directory.
+
+On failure - the `failure_output/screenshots` and `failure_output/videos` directories will contain a capture of the page at failure time, and a recordings of the test until failure.
+
 
 ## Writing a test
 
@@ -80,9 +92,9 @@ and reliable creation and maintaince of tests going forwards.
 The testing tooling used for UI code is as follows:
 
 - Jest - as a test runner. Used to run functional and behavioural tests
-- RTL (react-test-library) - used to emulate a browser DOM and mimick
+- RTL (react-test-library) - used to emulate a browser DOM and mimic
 user interaction with React components
-- <e2e framework here>
+- Playwright - starts headless browsers and instruments interactions to mimic real user activity
 
 ## Testing contexts
 

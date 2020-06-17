@@ -1,1 +1,4 @@
-module.exports = [['@babel/preset-env'], ['@babel/preset-react']];
+module.exports = [
+  ['@babel/preset-env', { targets: { node: 'current' } }],
+  ['@babel/preset-react'],
+];
