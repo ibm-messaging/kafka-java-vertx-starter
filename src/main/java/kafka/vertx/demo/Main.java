@@ -17,17 +17,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.HashMap;
-import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 import static java.lang.System.currentTimeMillis;
 
 public class Main {
 
-  public static final String TOPIC = "demo";
   public static final String PERIODIC_PRODUCER_ADDRESS = "demo.periodic.producer";
   public static final String PERIODIC_PRODUCER_BROADCAST = "demo.periodic.producer.broadcast";
+  public static final String TOPIC_KEY = "topic";
+  public static final String PROPERTIES_PATH_ENV_NAME = "properties_path";
+  public static final String DEFAULT_PROPERTIES_PATH = "kafka.properties";
+
+  private static final String DEFAULT_TOPIC = "demo";
 
   private static final Logger logger = LoggerFactory.getLogger(Main.class);
 
@@ -58,10 +62,9 @@ public class Main {
       .onFailure(err -> logger.error("❌ Application failed to start", err));
   }
 
-  public static Future<JsonObject> loadKafkaConfig(Vertx vertx, String path) {
-    String propertiesPath = Optional.ofNullable(path).orElse("kafka.properties");
+  public static Future<JsonObject> loadKafkaConfig(Vertx vertx, String propertiesPath) {
     File propertiesPathFile = new File(propertiesPath);
-    String properties = propertiesPathFile.isDirectory() ? new File(propertiesPathFile, "kafka.properties").toString() : propertiesPath;
+    String properties = propertiesPathFile.isDirectory() ? new File(propertiesPathFile, DEFAULT_PROPERTIES_PATH).toString() : propertiesPath;
     ConfigRetriever configRetriever =  ConfigRetriever.create(vertx,
       new ConfigRetrieverOptions().addStore(
         new ConfigStoreOptions()
@@ -74,28 +77,32 @@ public class Main {
         if (exists) {
           return configRetriever.getConfig();
         } else {
-          return Future.failedFuture("Kafka properties file is missing. Either specify using -Dproperties_path=<path> or use the default path of kafka.properties.");
+          return Future.failedFuture(String.format("Kafka properties file is missing. Either specify using -D%s=<path> or use the default path of %s.", PROPERTIES_PATH_ENV_NAME, DEFAULT_PROPERTIES_PATH));
         }
       });
   }
 
   public static HashMap<String, String> getKafkaConfig(JsonObject properties, String propertiesPath) {
+    Path propertiesAbsolutePath = new File(propertiesPath).toPath().toAbsolutePath();
+    String propertiesDir;
+    if (propertiesAbsolutePath.toFile().isDirectory()) {
+      propertiesDir = propertiesAbsolutePath.toString();
+    } else {
+      propertiesDir = propertiesAbsolutePath.getParent().toString();
+    }
     HashMap<String, String> kafkaConfig = new HashMap<>();
     properties.forEach(entry -> {
       String key = entry.getKey();
       String value = entry.getValue().toString();
       if (SslConfigs.SSL_TRUSTSTORE_LOCATION_CONFIG.equals(key) || SslConfigs.SSL_KEYSTORE_LOCATION_CONFIG.equals(key)) {
         File trustStorefile = new File(value);
-        if (trustStorefile.isAbsolute()) {
-          value = trustStorefile.toString();
-        } else {
-          File propertiesPathFile = new File(propertiesPath);
-          String propertiesDir = propertiesPathFile.isDirectory() ? propertiesPath : new File(propertiesPath).getParentFile().getPath();
+        if (!trustStorefile.isAbsolute()) {
           value = new File(propertiesDir, value).toString();
         }
       }
       kafkaConfig.put(key, value);
     });
+    kafkaConfig.putIfAbsent(TOPIC_KEY, DEFAULT_TOPIC);
     return kafkaConfig;
   }
 }
