@@ -20,14 +20,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @ExtendWith(VertxExtension.class)
 public class MainTest {
   private static Vertx vertx;
-  private static final String DEFAULT_PROPERTIES_PATH = new File("kafka.properties").toPath().toAbsolutePath().toString();
+  private static final Path DEFAULT_PROPERTIES_PATH = Paths.get("kafka.properties").toAbsolutePath();
 
   @BeforeAll
   public static void setup() {
@@ -54,7 +53,7 @@ public class MainTest {
   @DisplayName("when calling config processor, relative truststore path is converted to absolute")
   @Test
   public void testConfigConvertsTruststoreToAbsolute() {
-    String propertiesPath = "/kafka/config/kafka.properties";
+    Path propertiesPath = Paths.get("/kafka/config/kafka.properties");
     String relativePath = "cert.jks";
     JsonObject properties = new JsonObject()
       .put(SslConfigs.SSL_TRUSTSTORE_LOCATION_CONFIG, relativePath);
@@ -67,8 +66,8 @@ public class MainTest {
   @DisplayName("when calling config processor, absolute truststore path is unchanged")
   @Test
   public void testConfigKeepsTruststoreAsAbsolute() {
-    String propertiesPath = "/kafka/config/kafka.properties";
-    String certPath = new File("cert.jks").toPath().toAbsolutePath().toString();
+    Path propertiesPath = Paths.get("/kafka/config/kafka.properties");
+    String certPath = Paths.get("cert.jks").toAbsolutePath().toString();
     JsonObject properties = new JsonObject()
       .put(SslConfigs.SSL_TRUSTSTORE_LOCATION_CONFIG, certPath);
     JsonObject kafkaConfig = Main.configurationProcessor(propertiesPath).apply(properties);
@@ -80,7 +79,7 @@ public class MainTest {
   @Test
   public void testConfigConvertsKeystoreToAbsolute() {
     String relativePath = "user.jks";
-    String propertiesPath = "/kafka/config/kafka.properties";
+    Path propertiesPath = Paths.get("/kafka/config/kafka.properties");
     JsonObject properties = new JsonObject()
       .put(SslConfigs.SSL_KEYSTORE_LOCATION_CONFIG, relativePath);
     JsonObject kafkaConfig = Main.configurationProcessor(propertiesPath).apply(properties);
@@ -92,27 +91,27 @@ public class MainTest {
   @DisplayName("when calling config processor, topic name is defaulted if missing")
   @Test
   public void testGetKafkaConfigTopicMissing() {
-    JsonObject kafkaConfig = Main.configurationProcessor("kafka.properties").apply(new JsonObject());
+    Path propertiesPath = Paths.get("kafka.properties");
+    JsonObject kafkaConfig = Main.configurationProcessor(propertiesPath).apply(new JsonObject());
     assertThat(kafkaConfig.getString("topic"), is("demo"));
   }
 
   @DisplayName("when calling config processor, absolute keystore path is unchanged")
   @Test
   public void testConfigPathAsDir() {
-    Path resourceDirectory = Paths.get("src","test","resources");
-    String propertiesPath = resourceDirectory.toFile().getAbsolutePath();
+    Path propertiesPath = Paths.get("src","test","resources").toAbsolutePath();
     JsonObject properties = new JsonObject()
       .put(SslConfigs.SSL_KEYSTORE_LOCATION_CONFIG, "cert.jks");
     JsonObject kafkaConfig = Main.configurationProcessor(propertiesPath).apply(properties);
     String keystorePath = kafkaConfig.getString(SslConfigs.SSL_KEYSTORE_LOCATION_CONFIG);
-    String expectedPath = Paths.get("src","test","resources", "cert.jks").toFile().getAbsolutePath();
+    String expectedPath = Paths.get("src","test","resources", "cert.jks").toAbsolutePath().toString();
     assertThat(keystorePath, is(expectedPath));
   }
 
   @DisplayName("when calling loadKafkaConfig, properties in the file are loaded")
   @Test
   public void testLoadKafkaConfig(VertxTestContext context) {
-    String propertiesPath = Paths.get("src","test","resources", "testConfig", "myconfig.properties").toFile().getAbsolutePath();
+    String propertiesPath = Paths.get("src","test","resources", "testConfig", "myconfig.properties").toAbsolutePath().toString();
     Main.loadKafkaConfig(vertx, propertiesPath).onComplete(context.succeeding(properties -> context.verify(() -> {
       assertThat(properties.getString("mykey1"), is("myvalue1"));
       assertThat(properties.getString("mykey2"), is("myvalue2"));
@@ -123,7 +122,7 @@ public class MainTest {
   @DisplayName("when calling loadKafkaConfig, future fails if the file does not exist")
   @Test
   public void testLoadKafkaConfigFileMissing(VertxTestContext context) {
-    String propertiesPath = Paths.get("src","test","resources", "testConfig", "missing.properties").toFile().getAbsolutePath();
+    String propertiesPath = Paths.get("src","test","resources", "testConfig", "missing.properties").toAbsolutePath().toString();
 
     Main.loadKafkaConfig(vertx, propertiesPath).onComplete(context.failing(err -> context.completeNow()));
   }
@@ -131,7 +130,7 @@ public class MainTest {
   @DisplayName("when calling loadKafkaConfig with a directory, properties in the file kafka.properties are loaded")
   @Test
   public void testLoadKafkaConfigUsingDir(VertxTestContext context) {
-    String propertiesPath = Paths.get("src","test","resources", "testConfig").toFile().getAbsolutePath();
+    String propertiesPath = Paths.get("src","test","resources", "testConfig").toAbsolutePath().toString();
     Main.loadKafkaConfig(vertx, propertiesPath).onComplete(context.succeeding(properties -> context.verify(() -> {
       assertThat(properties.getString("key1"), is("value1"));
       assertThat(properties.getString("key2"), is("value2"));

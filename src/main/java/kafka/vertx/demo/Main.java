@@ -16,8 +16,9 @@ import org.apache.kafka.common.config.SslConfigs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
@@ -62,33 +63,33 @@ public class Main {
       .onFailure(err -> logger.error("❌ Application failed to start", err));
   }
 
-  public static Future<JsonObject> loadKafkaConfig(Vertx vertx, String propertiesPath) {
-    File propertiesPathFile = new File(propertiesPath);
-    String properties = propertiesPathFile.isDirectory() ? new File(propertiesPathFile, DEFAULT_PROPERTIES_PATH).toString() : propertiesPath;
+  public static Future<JsonObject> loadKafkaConfig(Vertx vertx, String properties) {
+    Path propertiesPath = Paths.get(properties);
+    Path propertiesCompletePath = Files.isDirectory(propertiesPath) ? propertiesPath.resolve(DEFAULT_PROPERTIES_PATH) : propertiesPath;
     ConfigRetriever configRetriever =  ConfigRetriever.create(vertx,
       new ConfigRetrieverOptions().addStore(
         new ConfigStoreOptions()
           .setType("file")
           .setFormat("properties")
-          .setConfig(new JsonObject().put("path", properties).put("raw-data", true)))).setConfigurationProcessor(configurationProcessor(properties));
+          .setConfig(new JsonObject().put("path", propertiesCompletePath.toString()).put("raw-data", true)))).setConfigurationProcessor(configurationProcessor(propertiesPath));
     FileSystem fileSystem = vertx.fileSystem();
     return fileSystem.exists(properties)
       .compose(exists -> {
         if (exists) {
           return configRetriever.getConfig();
         } else {
-          return Future.failedFuture(String.format("Kafka properties file is missing. Either specify using -D%s=<path> or use the default path of %s.", PROPERTIES_PATH_ENV_NAME, DEFAULT_PROPERTIES_PATH));
+          return Future.failedFuture(String.format("Kafka properties file at location %s is missing. Either specify using -D%s=<path> or use the default path of %s.", propertiesCompletePath, PROPERTIES_PATH_ENV_NAME, DEFAULT_PROPERTIES_PATH));
         }
       });
   }
 
-  public static Function<JsonObject, JsonObject> configurationProcessor(String propertiesPath) {
-    Path propertiesAbsolutePath = new File(propertiesPath).toPath().toAbsolutePath();
-    String propertiesDir;
-    if (propertiesAbsolutePath.toFile().isDirectory()) {
-      propertiesDir = propertiesAbsolutePath.toString();
+  protected static Function<JsonObject, JsonObject> configurationProcessor(Path propertiesPath) {
+    Path propertiesAbsolutePath = propertiesPath.toAbsolutePath();
+    Path propertiesDir;
+    if (Files.isDirectory(propertiesAbsolutePath)) {
+      propertiesDir = propertiesAbsolutePath;
     } else {
-      propertiesDir = propertiesAbsolutePath.getParent().toString();
+      propertiesDir = propertiesAbsolutePath.getParent();
     }
     return (properties) -> {
       JsonObject kafkaConfig = new JsonObject();
@@ -96,9 +97,9 @@ public class Main {
         String key = entry.getKey();
         String value = entry.getValue().toString();
         if (SslConfigs.SSL_TRUSTSTORE_LOCATION_CONFIG.equals(key) || SslConfigs.SSL_KEYSTORE_LOCATION_CONFIG.equals(key)) {
-          File trustStorefile = new File(value);
-          if (!trustStorefile.isAbsolute()) {
-            value = new File(propertiesDir, value).toString();
+          Path truststorePath = Paths.get(value);
+          if (!truststorePath.isAbsolute()) {
+            value = propertiesDir.resolve(value).toString();
           }
         }
         kafkaConfig.put(key, value);
