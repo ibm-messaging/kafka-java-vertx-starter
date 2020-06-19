@@ -1,6 +1,7 @@
 /* eslint-disable react/no-multi-comp */ // disabled as we have a hoc funtion in file
 import React from 'react';
 import PropTypes from 'prop-types';
+import clsx from 'clsx';
 
 import { HEADING, SUBHEADING, BODY, CODE } from './Text.assets.js';
 
@@ -25,9 +26,9 @@ const Text = (props) => {
       break;
   }
 
-  const classesToApply = `Text Text--${typeModifier}${
-    className ? ` ${className}` : ''
-  }`;
+  const classesToApply = clsx('Text', `Text--${typeModifier}`, {
+    [className]: className,
+  });
 
   return (
     <span {...others} className={classesToApply}>

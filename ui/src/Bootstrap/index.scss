@@ -16,3 +16,4 @@ $font-prefix: '~@ibm/plex'; // path to where the font files are
 
 // Import all other .scss files here
 @import '../Elements/Text/Text.scss';
+@import '../Groups/Counter/Counter.scss';

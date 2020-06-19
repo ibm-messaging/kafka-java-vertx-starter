@@ -43,20 +43,21 @@ src/
             MyComponent.i18n.json
 ```
 
-where;
-    - `index.js` for exposing any 'public' exported asset - ie the component,
+where:
+ - `index.js` for exposing any 'public' exported asset - ie the component,
     constants used, etc
-    - `README.md` is the documentation/design doc for this component
-    - `*.spec.js` are the behavioual tests for this component 
-    - `*.assets.js` are reuasble assets used in the test, storybook stories,
+ - `README.md` is the documentation/design doc for this component
+ - `*.spec.js` are the behavioual tests for this component 
+ - `*.assets.js` are reuasble assets used in the test, storybook stories,
     or constants used by the component
-    - `*.stories.js` contains the Storybook entries for this component
-    - `*.model.js` contains any business logic for the component
-    - `*.view.js` is the component rendering code
-    - `*.scss` is the styling for this component
-    - `*.i18n.json` are the translations for this component
+ - `*.stories.js` contains the Storybook entries for this component
+ - `*.model.js` contains any business logic for the component
+ - `*.view.js` is the component rendering code
+ - `*.scss` is the styling for this component
+ - `*.i18n.json` are the translations for this component
 
 All of these files should follow the style guide for this codebase, which 
 can be found [here](../../docs/CodeStyle.md).
 
 ### List of currently implemented Groups
+ - [Status](./Status/README.md)

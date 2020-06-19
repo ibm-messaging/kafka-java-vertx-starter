@@ -1,0 +1,5 @@
+.Counter {
+    &__count {
+        @include carbon--type-style('productive-heading-06');
+    }
+}
