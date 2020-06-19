@@ -53,21 +53,22 @@ React component code:
 - `ui/src/Groups`
 - `ui/src/Panels`
 
-#### End to End integration test
+#### End to End testing
 
-End to End integration tests should exercise a user scenario - focus on the behaviour a user will take to interact with the application to achieve an end goal.
+End to End tests should exercise a user scenario - focus on the behaviour a user will take to interact with the application to achieve an end goal.
 
 They should be fairly coarse grained, exercising multiple pages/panels as necessary.
 
 For example - "I can produce a message and observe it being consumed", or "I can stop producing and no more messages are consumed".
 
 These tests are using _Jest_ as a test runner, using standard Jest test assets,
-such as `describe`, `it` and `expect`, and _Playwright_ to instrument the browser.
+such as `describe`, `it` and `expect`, and _Playwright_ to instrument the browser - which also provides additional expect matchers via _expect-playwright_.
 
-To avoid the temptation to correlate scenarios with particular panels, these tests are located in the `e2e/test` directory.
+To avoid the temptation to correlate scenarios with particular panels, these tests are located in the `e2e/features` directory.
+
+The e2e tests are written using [Gerkin](https://cucumber.io/docs/gherkin/reference) syntax. Your `.feature` file should live inside `e2e/features`. The steps are written inside `e2e/features/step_definitions`. Definition files are written using [stucumber](https://github.com/sjmeverett/stucumber) syntax - each file corresponds to a set of related steps exported with a `bootstrap` function to register rule definitions with stucumber, and `index.js` handles bootstrapping each set of definitions. Note - while you can define a rule multiple times, it is only the first occurance that is executed (based off bootstrapping order).
 
 On failure - the `failure_output/screenshots` and `failure_output/videos` directories will contain a capture of the page at failure time, and a recordings of the test until failure.
-
 
 ## Writing a test
 

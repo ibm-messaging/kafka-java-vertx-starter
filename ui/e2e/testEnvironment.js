@@ -2,6 +2,7 @@ const { mkdir } = require('fs').promises;
 const PlaywrightEnvironment = require('jest-playwright-preset/lib/PlaywrightEnvironment')
   .default;
 const { saveVideo } = require('playwright-video');
+
 class CustomEnvironment extends PlaywrightEnvironment {
   constructor(props) {
     super(props);

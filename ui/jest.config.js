@@ -22,4 +22,6 @@ module.exports = {
     '!**/src/DevUtils/**',
     '!**/*.json',
   ],
+  testMatch: ['<rootDir>/src/**/*.feature', '<rootDir>/src/**/*.spec.js'],
+  setupFilesAfterEnv: ['<rootDir>/src/Panels/integration.setup.js'],
 };

@@ -7,8 +7,8 @@ module.exports = {
     (module) => `<rootDir>/node_modules/(?!${module})`
   ),
   transform: {
-    '^.+\\.jsx$': 'babel-jest',
-    '^.+\\.js$': 'babel-jest',
+    '^.+\\.feature$': 'gherkin-jest',
+    '^.+\\.js[x]?$': 'babel-jest',
   },
   moduleNameMapper: jestModuleMapper,
   testPathIgnorePatterns: [
@@ -17,4 +17,5 @@ module.exports = {
     '/coverage/',
     '/public/',
   ],
+  moduleFileExtensions: ['js', 'ts', 'feature'],
 };
