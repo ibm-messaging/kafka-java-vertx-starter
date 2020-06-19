@@ -10,7 +10,7 @@
   <logger name="io.vertx" level="info"/>
   <logger name="org.apache.kafka" level="error"/>
 
-  <root level="debug">
+  <root level="info">
     <appender-ref ref="STDOUT"/>
   </root>
 
