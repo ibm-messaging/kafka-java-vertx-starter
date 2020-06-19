@@ -21,8 +21,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
+import java.util.Set;
 
 public class WebSocketServer extends AbstractVerticle {
+
+  public static final String ACTION = "action";
+  public static final String START_ACTION = "start";
+  public static final String STOP_ACTION = "stop";
 
   private static final String PRODUCE_PATH = "/demoproduce";
   private static final String CONSUME_PATH = "/democonsume";
@@ -73,8 +78,8 @@ public class WebSocketServer extends AbstractVerticle {
 
     webSocket.handler(buffer -> {
       JsonObject message = buffer.toJsonObject();
-      String action = message.getString("action", "none");
-      if ("start".equals(action) || "stop".equals(action)) {
+      String action = message.getString(ACTION, "none");
+      if (START_ACTION.equals(action) || STOP_ACTION.equals(action)) {
         eventBus.send(Main.PERIODIC_PRODUCER_ADDRESS, message);
       }
     });
@@ -83,11 +88,13 @@ public class WebSocketServer extends AbstractVerticle {
       eventBus.send(webSocket.textHandlerID(), message.body().encode()));
 
     webSocket.endHandler(ended -> {
-      logger.info("WebSocket closed from {}", webSocket.remoteAddress().host());
+      logger.info("Producer WebSocket closed from {}", webSocket.remoteAddress().host());
+      eventBus.send(Main.PERIODIC_PRODUCER_ADDRESS, new JsonObject().put(ACTION, STOP_ACTION));
       consumer.unregister();
     });
     webSocket.exceptionHandler(err -> {
-      logger.error("WebSocket error", err);
+      logger.error("Producer WebSocket error", err);
+      eventBus.send(Main.PERIODIC_PRODUCER_ADDRESS, new JsonObject().put(ACTION, STOP_ACTION));
       consumer.unregister();
     });
   }
@@ -97,6 +104,9 @@ public class WebSocketServer extends AbstractVerticle {
 
     kafkaConsumer.exceptionHandler(err -> logger.error("Kafka error", err));
 
+    String topic = kafkaConfig.get(Main.TOPIC_KEY);
+    TopicPartition topicPartition = new TopicPartition().setTopic(topic);
+
     kafkaConsumer.handler(record -> {
       JsonObject payload = new JsonObject()
         .put("topic", record.topic())
@@ -104,40 +114,33 @@ public class WebSocketServer extends AbstractVerticle {
         .put("offset", record.offset())
         .put("timestamp", record.timestamp())
         .put("value", record.value());
+      logger.debug("Received record {}", payload);
       vertx.eventBus().send(webSocket.textHandlerID(), payload.encode());
     });
 
-    String topic = kafkaConfig.get(Main.TOPIC_KEY);
-
-    kafkaConsumer.subscribe(topic)
-      .onSuccess(ok -> logger.info("Subscribed to {}", topic))
-      .onFailure(err -> logger.error("Could not subscribe to {}", topic, err));
-
-    TopicPartition partition = new TopicPartition().setTopic(topic);
-
     webSocket.handler(buffer -> {
-      String action = buffer.toJsonObject().getString("action", "none");
-      if ("start".equals(action)) {
-        kafkaConsumer.resume(partition)
-          .onFailure(err -> logger.error("Cannot resume consumer", err));
-      } else if ("stop".equals(action)) {
-        kafkaConsumer.pause(partition)
+      String action = buffer.toJsonObject().getString(ACTION, "none");
+      if (START_ACTION.equals(action)) {
+        kafkaConsumer.subscription()
+          .compose(sub -> (sub.size() > 0) ? kafkaConsumer.resume(topicPartition) : kafkaConsumer.subscribe(topic))
+            .onSuccess(ok -> logger.info("Subscribed to {}", topic))
+            .onFailure(err -> logger.error("Could not subscribe to {}", topic, err));
+      } else if (STOP_ACTION.equals(action)) {
+        kafkaConsumer.pause(topicPartition)
           .onFailure(err -> logger.error("Cannot pause consumer", err));
       }
     });
 
     webSocket.endHandler(done -> {
-      logger.info("WebSocket closed from {}", webSocket.remoteAddress().host());
-      kafkaConsumer.close().onFailure(err -> {
-        logger.error("Closing Kafka consumer failed", err);
-      });
+      logger.info("Consumer WebSocket closed from {}", webSocket.remoteAddress().host());
+      kafkaConsumer.close()
+        .onFailure(err -> logger.error("Closing Kafka consumer failed", err));
     });
 
     webSocket.exceptionHandler(err -> {
-      logger.error("WebSocket error", err);
-      kafkaConsumer.close().onFailure(kerr -> {
-        logger.error("Closing Kafka consumer failed", kerr);
-      });
+      logger.error("Consumer WebSocket error", err);
+      kafkaConsumer.close()
+        .onFailure(kerr -> logger.error("Closing Kafka consumer failed", kerr));
     });
   }
 }

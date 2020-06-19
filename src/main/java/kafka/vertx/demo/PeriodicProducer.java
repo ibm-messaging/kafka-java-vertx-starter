@@ -48,12 +48,12 @@ public class PeriodicProducer extends AbstractVerticle {
   }
 
   private void handleCommand(TimeoutStream timerStream, Message<JsonObject> message) {
-    String command = message.body().getString("action", "none");
-    if ("start".equals(command)) {
+    String command = message.body().getString(WebSocketServer.ACTION, "none");
+    if (WebSocketServer.START_ACTION.equals(command)) {
       logger.info("Producing Kafka records");
       customMessage = message.body().getString("custom", "Hello World");
       timerStream.resume();
-    } else if ("stop".equals(command)) {
+    } else if (WebSocketServer.STOP_ACTION.equals(command)) {
       logger.info("Stopping producing Kafka records");
       timerStream.pause();
     }
@@ -62,6 +62,7 @@ public class PeriodicProducer extends AbstractVerticle {
   private void produceKafkaRecord(KafkaProducer<String, String> kafkaProducer, String topic) {
     String payload = customMessage;
     KafkaProducerRecord<String, String> record = KafkaProducerRecord.create(topic, payload);
+    logger.debug("Producing record to topic {} with payload {}", topic, payload);
 
     kafkaProducer
       .send(record)
