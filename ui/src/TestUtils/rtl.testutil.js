@@ -8,7 +8,7 @@
  */
 import React from 'react';
 import { render } from '@testing-library/react';
-import { renderHook } from '@testing-library/react-hooks';
+import { renderHook, act } from '@testing-library/react-hooks';
 import { ConfigContextProvider } from 'Contexts';
 
 const mockConfig = {
@@ -58,11 +58,11 @@ const customRender = (ui, options) =>
   });
 
 const customRenderHook = (callback) => {
-  const { result, ...rest } = renderHook(callback);
+  const { result, ...others } = renderHook(callback);
   return {
-    result: result.current,
-    resultErr: result.error,
-    ...rest,
+    getResultFromHook: (key) => (key ? result.current[key] : result.current),
+    result,
+    ...others,
   };
 };
 
@@ -72,4 +72,5 @@ export {
   customRender as render,
   customRenderHook as renderHook,
   containsTextContentGenerator,
+  act,
 };

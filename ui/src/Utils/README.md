@@ -27,6 +27,10 @@ where;
 
 ## Currently provided utils
 
+- `NO_OP` - a placeholder function which returns `true`. Intended for use in
+cases where a default function (if one not provided) could be used.
+- `EMPTY_OBJ` - an empty object.  Intended for use in cases where an empty 
+object parameter is expected.
 - `idAttributeGenerator` - utility for generating a `data-testid` attribute  - 
 mainly used in testing, but useful for identifying elements.
 - `idAttributeSelector` - utility to get a `data-testid` attribute - 
