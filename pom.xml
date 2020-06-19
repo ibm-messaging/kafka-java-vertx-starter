@@ -51,6 +51,12 @@
   </dependencies>
 
   <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>true</filtering>
+      </resource>
+    </resources>
     <pluginManagement>
       <plugins>
         <plugin>
@@ -89,7 +95,7 @@
               </transformers>
               <artifactSet>
               </artifactSet>
-              <outputFile>${project.build.directory}/${project.artifactId}-${project.version}-all.jar
+              <outputFile>${project.build.directory}/${project.artifactId}-all.jar
               </outputFile>
             </configuration>
           </execution>
