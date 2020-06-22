@@ -9,8 +9,9 @@
   <logger name="io.netty" level="warn"/>
   <logger name="io.vertx" level="info"/>
   <logger name="org.apache.kafka" level="error"/>
+  <logger name="org.apache.kafka.clients.NetworkClient" level="warn"/>
 
-  <root level="info">
+  <root level="${log.level:-info}">
     <appender-ref ref="STDOUT"/>
   </root>
 

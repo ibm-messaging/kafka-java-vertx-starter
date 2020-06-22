@@ -12,6 +12,7 @@ import io.vertx.core.eventbus.Message;
 import io.vertx.core.json.JsonObject;
 import io.vertx.kafka.client.producer.KafkaProducer;
 import io.vertx.kafka.client.producer.KafkaProducerRecord;
+import org.apache.kafka.clients.producer.ProducerConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,9 +36,12 @@ public class PeriodicProducer extends AbstractVerticle {
   }
 
   private void setup(HashMap<String, String> props) {
+    // Don't retry and only wait 10 secs for partition info as this is a demo app
+    props.put(ProducerConfig.RETRIES_CONFIG, "0");
+    props.put(ProducerConfig.MAX_BLOCK_MS_CONFIG, "10000");
     KafkaProducer<String, String> kafkaProducer = KafkaProducer.create(vertx, props);
 
-    kafkaProducer.exceptionHandler(err -> logger.error("Kafka error: {}", err));
+    kafkaProducer.exceptionHandler(err -> logger.debug("Kafka error: {}", err));
 
     TimeoutStream timerStream = vertx.periodicStream(2000);
     timerStream.handler(tick -> produceKafkaRecord(kafkaProducer, props.get(Main.TOPIC_KEY)));

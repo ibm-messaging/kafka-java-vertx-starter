@@ -38,4 +38,6 @@ Test out the app by connecting to the websocket endpoints (UI will be added soon
 To configure the application to connect to your Kafka edit the properties file called `kafka.properties`.
 Alternatively you can provide a custom path to the properties file using `-Dproperties_path=<path>` when starting the application.
 
-If your Kafka is secured you will need to enable the security configuration options in your properties file
+If your Kafka is secured you will need to enable the security configuration options in your properties file.
+
+To increase the logging level to debug provide a system property at start time: `-Dlog.level=debug`.
