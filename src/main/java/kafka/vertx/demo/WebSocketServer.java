@@ -17,9 +17,11 @@ import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.StaticHandler;
 import io.vertx.kafka.client.common.TopicPartition;
 import io.vertx.kafka.client.consumer.KafkaConsumer;
+import io.vertx.kafka.client.consumer.OffsetAndMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -108,14 +110,20 @@ public class WebSocketServer extends AbstractVerticle {
     TopicPartition topicPartition = new TopicPartition().setTopic(topic);
 
     kafkaConsumer.handler(record -> {
+      String recordTopic = record.topic();
+      int recordPartition = record.partition();
+      long recordOffset = record.offset();
       JsonObject payload = new JsonObject()
-        .put("topic", record.topic())
-        .put("partition", record.partition())
-        .put("offset", record.offset())
+        .put("topic", recordTopic)
+        .put("partition", recordPartition)
+        .put("offset", recordOffset)
         .put("timestamp", record.timestamp())
         .put("value", record.value());
       logger.debug("Received record {}", payload);
       vertx.eventBus().send(webSocket.textHandlerID(), payload.encode());
+      TopicPartition recordTopicPartition = new TopicPartition(recordTopic, recordPartition);
+      OffsetAndMetadata offset = new OffsetAndMetadata(recordOffset, null);
+      kafkaConsumer.commit(Collections.singletonMap(recordTopicPartition, offset));
     });
 
     webSocket.handler(buffer -> {

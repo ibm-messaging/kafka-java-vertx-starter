@@ -40,4 +40,5 @@ Alternatively you can provide a custom path to the properties file using `-Dprop
 
 If your Kafka is secured you will need to enable the security configuration options in your properties file.
 
-To increase the logging level to debug provide a system property at start time: `-Dlog.level=debug`.
+To increase the logging level of the application to debug provide a system property at start time: `-Dlog.level=debug`.
+To increase the logging level of Kafka client to info provide a system property at start time: `-Dlog.level.kafka=info`.
