@@ -17,6 +17,7 @@ import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.StaticHandler;
 import io.vertx.kafka.client.common.TopicPartition;
 import io.vertx.kafka.client.consumer.KafkaConsumer;
+import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,6 +45,8 @@ public class WebSocketServer extends AbstractVerticle {
     String propertiesPath = System.getProperty(Main.PROPERTIES_PATH_ENV_NAME, Main.DEFAULT_PROPERTIES_PATH);
     Main.loadKafkaConfig(vertx, propertiesPath)
       .compose(config -> {
+        // Auto commit as this is a demo app
+        config.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, true);
         kafkaConfig = config.mapTo(HashMap.class);
         return startWebSocket(router);
       })
