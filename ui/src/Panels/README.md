@@ -29,7 +29,6 @@ The tests are written using [Gerkin](https://cucumber.io/docs/gherkin/reference)
 ```
 src/
     Panels/
-        integration.setup.js
         MyComponent/
             MyComponent.feature
             MyComponent.steps.js
@@ -44,24 +43,17 @@ src/
         When I add an item
         Then the item is displayed
     ``` 
-- `*.steps.js` implements the steps
+- `*.steps.js` implements the steps - exporting via a `bootstrap` function used to register with stucumber
    ```
     import {MyComponent} from './MyComponent.view.js';
     import { render } from 'TestUtils';
-    export const bootstrap = cucumber => {
+    export const stepDefs = cucumber => {
        cucumber.defineRule('I have an empty MyComponent', (world) => {
-           world.component = render(MyComponent);
+           world.rendered = render(MyComponent);
        });
        ...additional rules
     }
     
-   ```
-- `integration.setup.js` is used to bootstrap each of the steps using _gherkin-jest_. Bootstraps the `*.steps.js` file inside each component.
-   ```
-   import {cucumber} = from 'gherkin-jest';
-   import {bootstrap as MyComponent} from './MyComponent/MyComponent.steps.js';
-   cucumber.defineCreateWorld(() => ({})); //Empty object to be used as the 'world' for each scenario
-   MyComponent(cucumber); //Bootstrap the MyComponent steps
    ```
 
 ## File structure
@@ -89,7 +81,7 @@ where:
     constants used, etc
 - `README.md` is the documentation/design doc for this component
 - `*.feature` is the integration test, written in Gherkin syntax
-- `*.steps.js` contains the implementations of the steps used in the `feature`, using _RTL_
+- `*.steps.js` exports the implementations of the steps used in the `feature`, using _RTL_
 - `*.assets.js` are reuasble assets used in storybook stories,
 or constants used by the component
 - `*.stories.js` contains the Storybook entries for this component

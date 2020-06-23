@@ -23,5 +23,5 @@ module.exports = {
     '!**/*.json',
   ],
   testMatch: ['<rootDir>/src/**/*.feature', '<rootDir>/src/**/*.spec.js'],
-  setupFilesAfterEnv: ['<rootDir>/src/Panels/integration.setup.js'],
+  setupFilesAfterEnv: ['<rootDir>/stucumber.setup.js'],
 };

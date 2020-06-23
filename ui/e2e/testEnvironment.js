@@ -17,6 +17,8 @@ class CustomEnvironment extends PlaywrightEnvironment {
     this.browserName = this.global.browserName;
     this.screenshotPath = `${failureOutput}/screenshots/${this.browserName}`;
     await mkdir(this.screenshotPath, { recursive: true });
+    this.global.page.setDefaultTimeout(5000);
+    this.global.page.setDefaultNavigationTimeout(30000);
   }
   async handleTestEvent(event, state) {
     await super.handleTestEvent(event, state);

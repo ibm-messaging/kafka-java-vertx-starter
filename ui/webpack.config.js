@@ -18,12 +18,13 @@ const htmlPlugin = require('html-webpack-plugin');
 
 module.exports = (_, argv) => {
   const mode = argv.mode || 'development';
+  const devMode = mode === 'development';
 
   const htmlPluginConfiguration = {
     filename: 'index.html',
     template: PUBLIC_DIR + '/index.html',
     title: 'Kafka Java Vertx Starter UI',
-    config: mode === 'development' ? MOCK_SERVER_CONFIG : REAL_SERVER_CONFIG,
+    config: devMode ? MOCK_SERVER_CONFIG : REAL_SERVER_CONFIG,
   };
 
   const cssPluginConfiguration = {
@@ -47,9 +48,11 @@ module.exports = (_, argv) => {
         {
           test: /(\.css|.scss)$/,
           use: [
-            {
-              loader: miniCssExtractPlugin.loader,
-            },
+            devMode
+              ? 'style-loader'
+              : {
+                  loader: miniCssExtractPlugin.loader,
+                },
             {
               loader: 'css-loader',
             },

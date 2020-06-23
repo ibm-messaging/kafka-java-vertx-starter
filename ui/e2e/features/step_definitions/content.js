@@ -1,4 +1,4 @@
-export const bootstrap = (cucumber) => {
+export const stepDefs = (cucumber) => {
   cucumber.defineRule('the page contains {string}', async (_, content) => {
     await expect(page).toHaveText(content);
   });

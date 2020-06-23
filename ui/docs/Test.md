@@ -25,7 +25,7 @@ focus on the user of the component. Depending on the type of code being
 developed, the user may be another developer (using the component for example)
 or the end user of the UI.
 
-`Functional` tests conversley target individual functions in a more traditional
+`Functional` tests conversely target individual functions in a more traditional
 unit test style - validating that for a given input, the expected output is 
 returned.
 
