@@ -1,0 +1,22 @@
+.Message {
+    &__consumer-details {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    &__icon {
+
+      &--checkmark {
+        fill: $icon-02;
+      }
+
+      &--error {
+        fill: $support-01;
+      }
+    }
+
+    &--producer-first &__icon--checkmark {
+      fill: $support-02;
+    }
+}

@@ -37,8 +37,8 @@ where;
     - `index.js` for exposing any 'public' exported asset - ie the component,
     constants used, etc
     - `README.md` is the documentation/design doc for this component
-    - `*.spec.js` are the behavioual tests for this component 
-    - `*.assets.js` are reuasble assets used in the test, storybook stories,
+    - `*.spec.js` are the behavioural tests for this component
+    - `*.assets.js` are reusable assets used in the test, storybook stories,
     or constants used by the component
     - `*.stories.js` contains the Storybook entries for this component
     - `*.view.js` is the component rendering logic itself
@@ -49,4 +49,5 @@ All of these files should follow the style guide for this codebase, which
 can be found [here](../../docs/CodeStyle.md).
 
 ### List of currently implemented Elements
+- [`Message`](./Message/README.md)
 - [`Text`](./Text/README.md)

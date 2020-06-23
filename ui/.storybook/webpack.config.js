@@ -1,6 +1,8 @@
 const path = require('path');
 
 const miniCssExtractPlugin = require('mini-css-extract-plugin');
+const { webpackAliases } = require('../moduleAliases');
+
 const cssPluginConfiguration = {
   filename: '[name].bundle.css',
 };
@@ -34,6 +36,11 @@ module.exports = async ({ config, mode }) => {
   config.plugins.push(new miniCssExtractPlugin(cssPluginConfiguration));
 
   config.entry.push(path.join(__dirname, '../src/Bootstrap/index.scss'));
+
+  config.resolve = {
+    alias: webpackAliases,
+    extensions: ['.js'],
+  };
 
   return config;
 };
