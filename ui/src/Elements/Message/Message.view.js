@@ -16,8 +16,7 @@ import clsx from 'clsx';
 
 import { Body } from 'Elements';
 import { useTranslate } from 'ReactCustomHooks';
-import { CONSUMER, PRODUCER } from './Message.assets.js';
-import translations from './Message.i18n.json';
+import { CONSUMER, PRODUCER, translations } from './Message.assets.js';
 
 const Message = (props) => {
   const {

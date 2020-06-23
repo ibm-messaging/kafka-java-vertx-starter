@@ -26,12 +26,12 @@ src/
 ```
 
 where;
-    - `index.js` is the top level module where all contexts are exported.
-    When implemented, `MyContext` would be added to that index.js for use
-    across the UI.
-    - `README.md` is the documentation/design doc for this context
-    - `*.spec.js` are the tests for this context
-    - `*.context.js` is the context implementation itself
+- `index.js` is the top level module where all contexts are exported.
+When implemented, `MyContext` would be added to that index.js for use
+across the UI.
+- `README.md` is the documentation/design doc for this context
+- `*.spec.js` are the tests for this context
+- `*.context.js` is the context implementation itself
 
 ## List of custom contexts implemented
 

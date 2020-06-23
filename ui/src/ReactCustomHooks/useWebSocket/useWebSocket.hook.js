@@ -102,7 +102,8 @@ const useWebSocket = (getWebsocket, handlers = EMPTY_OBJ) => {
       updateSocketState
     );
     return closeSocket; // will be called on unmount
-  }, []); // only run on first render
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // only run on first render - hence lint disable
 
   return {
     send,

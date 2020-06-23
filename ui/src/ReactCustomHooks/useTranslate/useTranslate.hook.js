@@ -47,5 +47,5 @@ export const useTranslate = (
         <Fragment>{parsedValue}</Fragment>
       );
     };
-  }, [currentLocale]);
+  }, [bundle, currentLocale]);
 };

@@ -12,7 +12,7 @@ module.exports = {
       statements: 100,
     },
   },
-  coverageReporters: ['json', 'text', 'json-summary'],
+  coverageReporters: ['lcov', 'json', 'text', 'json-summary'],
   collectCoverageFrom: [
     '**/src/**/*.{js,jsx}',
     '!**/src/**/index.js',

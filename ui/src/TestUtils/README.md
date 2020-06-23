@@ -35,7 +35,11 @@ across the UI. - `*.testutil.js` is the utility module/function
 
 - rtl - react test library is provided to you via TestUtils - no need to import
 it per test file. It also adds helpful capabilities on top of the core RTL
-implementation. Includes core RTL, `expect()` extensions and the hooks package.
+implementation. Includes core RTL, `expect()` extensions, the hooks package,
+and a helper function, `mountHook` which will mount and return a hook ready for
+testing.
 - server - functions which can be called which return the various shapes
   returned by the backend. See comments in the file for more details.
 - MockWebSocket - a class that can be used in place of a real WebSocket.
+- `sinon` is imported fully from this set of helpers - useful for items such
+as controlling time.

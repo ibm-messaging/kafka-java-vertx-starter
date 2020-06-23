@@ -1,8 +1,9 @@
-import { returnMockSocket, renderHook, act } from 'TestUtils';
+import { returnMockSocket, mountHook, act } from 'TestUtils';
 import { useWebSocket, STATUS } from '../index.js';
 
 describe(`useWebSocket hook`, () => {
   let mockWebSocket,
+    returnMockSocketForTest,
     getSocketEventHandler,
     triggerEvent,
     mockEventListener,
@@ -16,16 +17,10 @@ describe(`useWebSocket hook`, () => {
     onClose: jest.fn(),
   });
 
-  const mountHook = (testSocket, handlers = baseHandlers()) =>
-    renderHook(() =>
-      useWebSocket(() => testSocket, {
-        ...handlers,
-      })
-    );
-
   beforeEach(() => {
     handlers = baseHandlers();
     const mockWebSocketForTest = returnMockSocket();
+    returnMockSocketForTest = () => mockWebSocketForTest.getSocket();
     mockWebSocket = mockWebSocketForTest.getSocket();
     mockEventListener = mockWebSocketForTest.getAddEventListener();
     triggerEvent = mockWebSocketForTest.triggerEvent;
@@ -40,7 +35,8 @@ describe(`useWebSocket hook`, () => {
   });
 
   it('does nothing if argument one is not a function', () => {
-    const { getResultFromHook } = renderHook(() => useWebSocket(undefined, {}));
+    const { getResultFromHook } = mountHook(useWebSocket, undefined, {});
+
     let { send, currentState } = getResultFromHook();
     // confirm externals as expected - tell the user invalid input provided
     expect(send).toBeDefined();
@@ -48,7 +44,11 @@ describe(`useWebSocket hook`, () => {
     expect(currentState).toEqual(STATUS.INVALID);
   });
   it('provides the user with the expected websocket starting state and externals', () => {
-    const { getResultFromHook } = mountHook(mockWebSocket, handlers);
+    const { getResultFromHook } = mountHook(
+      useWebSocket,
+      returnMockSocketForTest,
+      handlers
+    );
 
     let { send, currentState } = getResultFromHook();
 
@@ -66,7 +66,11 @@ describe(`useWebSocket hook`, () => {
   });
 
   it('correctly reports state to the user as the socket connection is established', () => {
-    const { getResultFromHook } = mountHook(mockWebSocket, handlers);
+    const { getResultFromHook } = mountHook(
+      useWebSocket,
+      returnMockSocketForTest,
+      handlers
+    );
 
     // confirm our handler hasnt been called yet, as the socket hasnt opened
     expect(handlers.onOpen).toBeCalledTimes(0);
@@ -85,8 +89,9 @@ describe(`useWebSocket hook`, () => {
   });
 
   it('binds a default set of handlers if none are provided by the user, allowing the hook to still function', () => {
-    const { getResultFromHook } = renderHook(() =>
-      useWebSocket(() => mockWebSocket)
+    const { getResultFromHook } = mountHook(
+      useWebSocket,
+      returnMockSocketForTest
     );
     // validate, even though we provided no handlers, some have been registered
     expect(mockEventListener).toBeCalledTimes(4); // once for each event type
@@ -119,7 +124,7 @@ describe(`useWebSocket hook`, () => {
   });
 
   it('correctly binds user provided event socket events', () => {
-    mountHook(mockWebSocket, handlers);
+    mountHook(useWebSocket, returnMockSocketForTest, handlers);
     // trigger the supported handlers, validate the are called with expected value(s)
     [
       {
@@ -157,7 +162,11 @@ describe(`useWebSocket hook`, () => {
   });
 
   it('allows a user to send messages when the socket is open, and in other cases, return the expected response', () => {
-    const { getResultFromHook } = mountHook(mockWebSocket, handlers);
+    const { getResultFromHook } = mountHook(
+      useWebSocket,
+      returnMockSocketForTest,
+      handlers
+    );
     const mockMessage = 'foo';
     let send = getResultFromHook('send');
     let sendResult;
@@ -199,7 +208,11 @@ describe(`useWebSocket hook`, () => {
   });
 
   it('on unmount closes the websocket as intended', () => {
-    const { unmount, getResultFromHook } = mountHook(mockWebSocket, handlers);
+    const { unmount, getResultFromHook } = mountHook(
+      useWebSocket,
+      returnMockSocketForTest,
+      handlers
+    );
 
     // confirm all event handlers have been registered
     expect(mockEventListener).toBeCalledTimes(4); // once for each event type

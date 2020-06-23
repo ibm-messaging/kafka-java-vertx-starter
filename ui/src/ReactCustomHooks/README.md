@@ -26,15 +26,17 @@ src/
 ```
 
 where;
-    - `index.js` is the top level module where all hooks are exported.
-    When implemented, `MyHook` would be added to that index.js for use
-    across the UI.
-    - `README.md` is the documentation/design doc for this hook
-    - `*.spec.js` are the tests for this hook
-    - `*.hook.js` is the hook implementation itself
+- `index.js` is the top level module where all hooks are exported.
+When implemented, `MyHook` would be added to that index.js for use
+across the UI.
+- `README.md` is the documentation/design doc for this hook
+- `*.spec.js` are the tests for this hook
+- `*.hook.js` is the hook implementation itself
 
 ## List of custom hooks implemented
 
-- useWebsocket <link to readme here>
 - [`useTranslate`](./useTranslate/README.md) - a translation hook, enabling internationalisation
-- useKafkaVertxWebsocket <link to readme here>
+- [`useKafkaVertxWebsocket`](./useKafkaVertxWebSocket/README.md) - a websocket to interact with the Vertx
+backend used by this UI
+- [`useToggle`](./useToggle/README.md) - a hook which provides a boolean state and toggle
+- [`useWebSocket`](./useWebSocket/README.md) - a hook to manage and interact with a WebSocket

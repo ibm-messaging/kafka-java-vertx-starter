@@ -5,7 +5,8 @@
     "plugin:import/warnings",
     "plugin:react/recommended",
     "prettier",
-    "plugin:jest-playwright/recommended"
+    "plugin:jest-playwright/recommended",
+    "plugin:react-hooks/recommended"
   ],
   "plugins": ["react", "jsx-a11y", "prettier"],
   "parserOptions": {

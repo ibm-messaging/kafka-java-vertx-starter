@@ -34,16 +34,16 @@ src/
 ```
 
 where;
-    - `index.js` for exposing any 'public' exported asset - ie the component,
-    constants used, etc
-    - `README.md` is the documentation/design doc for this component
-    - `*.spec.js` are the behavioural tests for this component
-    - `*.assets.js` are reusable assets used in the test, storybook stories,
-    or constants used by the component
-    - `*.stories.js` contains the Storybook entries for this component
-    - `*.view.js` is the component rendering logic itself
-    - `*.scss` is the styling for this component
-    - `*.i18n.json` are the translations for this component
+- `index.js` for exposing any 'public' exported asset - ie the component,
+constants used, etc
+- `README.md` is the documentation/design doc for this component
+- `*.spec.js` are the behavioural tests for this component
+- `*.assets.js` are reusable assets used in the test, storybook stories,
+or constants used by the component
+- `*.stories.js` contains the Storybook entries for this component
+- `*.view.js` is the component rendering logic itself
+- `*.scss` is the styling for this component
+- `*.i18n.json` are the translations for this component
 
 All of these files should follow the style guide for this codebase, which 
 can be found [here](../../docs/CodeStyle.md).

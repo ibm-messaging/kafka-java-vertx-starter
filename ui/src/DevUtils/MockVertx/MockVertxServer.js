@@ -255,17 +255,23 @@ const startMockVertx = (config = {}) => {
   mainLogger('startMockVertx', 'Starting mock vertx server');
   mainLogger('startMockVertx', 'Configuration provided', config);
   mainLogger('startMockVertx', 'Generating handlers and model for this config');
-  const onConnectionHandlers = generateHandlers({
-    produceEndpoint,
-    consumeEndpoint,
-    produceRate,
-    topic,
-    numberOfPartitions,
-    defaultPayload,
-    maxOffsets,
-    enableLog,
-    errorChance,
-  });
+  const onConnectionHandlers = generateHandlers(
+    {
+      produceEndpoint,
+      consumeEndpoint,
+      produceRate,
+      topic,
+      numberOfPartitions,
+      defaultPayload,
+      maxOffsets,
+      enableLog,
+      errorChance,
+    },
+    {
+      close: ({ url }) =>
+        mainLogger('startMockVertx', `${url} connection closing`),
+    }
+  );
   // create a single server
   const server = new ws.Server({
     port,

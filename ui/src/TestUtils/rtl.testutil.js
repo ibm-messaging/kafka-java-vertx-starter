@@ -66,6 +66,8 @@ const customRenderHook = (callback) => {
   };
 };
 
+const mountHook = (hook, ...args) => customRenderHook(() => hook(...args));
+
 export * from '@testing-library/react';
 export * from '@testing-library/jest-dom/extend-expect';
 export {
@@ -73,4 +75,5 @@ export {
   customRenderHook as renderHook,
   containsTextContentGenerator,
   act,
+  mountHook,
 };
