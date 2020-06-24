@@ -1,8 +1,8 @@
 import React from 'react';
 import { ProducerMessages, ConsumerMessages } from './index.js';
-import { CONSUMER, PRODUCER } from './Messages.assets.js';
-import { testMessage, testMessages } from './Messages.spec.assets.js';
-import { fireEvent, render } from 'TestUtils';
+import { testMessages, STATUS_ERROR } from './Messages.assets.js';
+import { render } from 'TestUtils';
+import { ConsumerMessage, ProducerMessage } from 'Elements';
 
 describe('Messages Element component', () => {
   const testClassName = 'testCssClass';
@@ -11,30 +11,34 @@ describe('Messages Element component', () => {
     classNamesExpected.every((className) => node.classList.contains(className)); // has all the expected classnames
 
   describe('ConsumerMessages component', () => {
-    it('renders the expected component', () => {
+    it('renders the expected component when provided child content', () => {
       const { getAllByText, getByText } = render(
-        <ConsumerMessages messages={testMessages} />
+        <ConsumerMessages>
+          {testMessages.map((msg, index) => (
+            <ConsumerMessage
+              key={`m-${index}`}
+              isFirst={index === 0}
+              error={
+                msg.status === STATUS_ERROR ? { message: 'Error!' } : undefined
+              }
+              message={msg.status !== STATUS_ERROR ? msg : undefined}
+            />
+          ))}
+        </ConsumerMessages>
       );
       expect(
         getByText(confirmHasClassNames('Messages', 'Messages--consumer'))
       ).toBeInTheDocument();
       expect(
-        getAllByText(
-          confirmHasClassNames(
-            'Message',
-            'Message--consumer',
-            'Messages__Message--consumer'
-          )
-        ).length
+        getAllByText(confirmHasClassNames('Message', 'Message--consumer'))
+          .length
       ).toBe(4);
       expect(
         getByText(
           confirmHasClassNames(
             'Message',
             'Message--consumer',
-            'Message--consumer-first',
-            'Messages__Message--consumer',
-            'Messages__Message--consumer-first'
+            'Message--consumer-first'
           )
         )
       ).toBeInTheDocument();
@@ -43,8 +47,7 @@ describe('Messages Element component', () => {
           confirmHasClassNames(
             'Message',
             'Message--consumer',
-            'Message--consumer-error',
-            'Messages__Message--consumer'
+            'Message--consumer-error'
           )
         )
       ).toBeInTheDocument();
@@ -52,7 +55,7 @@ describe('Messages Element component', () => {
 
     it('renders the expected component with a custom class name', () => {
       const { getByText } = render(
-        <ConsumerMessages messages={testMessages} className={testClassName} />
+        <ConsumerMessages className={testClassName} />
       );
       expect(
         getByText(
@@ -61,29 +64,8 @@ describe('Messages Element component', () => {
       ).toBeInTheDocument();
     });
 
-    it('renders the expected component with an interaction handler function', () => {
-      const testOnInteraction = jest.fn();
-      const { getAllByText } = render(
-        <ConsumerMessages
-          messages={testMessages}
-          onInteraction={testOnInteraction}
-        />
-      );
-
-      expect(testOnInteraction).toHaveBeenCalledTimes(0);
-      fireEvent.click(
-        getAllByText(confirmHasClassNames('Message__tile--consumer'))[0]
-      );
-      expect(testOnInteraction).toHaveBeenCalledTimes(1);
-      expect(testOnInteraction).toHaveBeenCalledWith(
-        expect.anything(),
-        CONSUMER,
-        testMessage
-      );
-    });
-
     it('renders the expected component with an empty messages list', () => {
-      const { getByText } = render(<ConsumerMessages messages={[]} />);
+      const { getByText } = render(<ConsumerMessages />);
       expect(
         getByText(
           confirmHasClassNames(
@@ -104,28 +86,32 @@ describe('Messages Element component', () => {
   describe('ProducerMessages component', () => {
     it('renders the expected component', () => {
       const { getAllByText, getByText } = render(
-        <ProducerMessages messages={testMessages} />
+        <ProducerMessages>
+          {testMessages.map((msg, index) => (
+            <ProducerMessage
+              key={`m-${index}`}
+              isFirst={index === 0}
+              error={
+                msg.status === STATUS_ERROR ? { message: 'Error!' } : undefined
+              }
+              message={msg.status !== STATUS_ERROR ? msg : undefined}
+            />
+          ))}
+        </ProducerMessages>
       );
       expect(
         getByText(confirmHasClassNames('Messages', 'Messages--producer'))
       ).toBeInTheDocument();
       expect(
-        getAllByText(
-          confirmHasClassNames(
-            'Message',
-            'Message--producer',
-            'Messages__Message--producer'
-          )
-        ).length
+        getAllByText(confirmHasClassNames('Message', 'Message--producer'))
+          .length
       ).toBe(4);
       expect(
         getByText(
           confirmHasClassNames(
             'Message',
             'Message--producer',
-            'Message--producer-first',
-            'Messages__Message--producer',
-            'Messages__Message--producer-first'
+            'Message--producer-first'
           )
         )
       ).toBeInTheDocument();
@@ -134,8 +120,7 @@ describe('Messages Element component', () => {
           confirmHasClassNames(
             'Message',
             'Message--producer',
-            'Message--producer-error',
-            'Messages__Message--producer'
+            'Message--producer-error'
           )
         )
       ).toBeInTheDocument();
@@ -143,7 +128,7 @@ describe('Messages Element component', () => {
 
     it('renders the expected component with a custom class name', () => {
       const { getByText } = render(
-        <ProducerMessages messages={testMessages} className={testClassName} />
+        <ProducerMessages className={testClassName} />
       );
       expect(
         getByText(
@@ -152,29 +137,8 @@ describe('Messages Element component', () => {
       ).toBeInTheDocument();
     });
 
-    it('renders the expected component with an interaction handler function', () => {
-      const testOnInteraction = jest.fn();
-      const { getAllByText } = render(
-        <ProducerMessages
-          messages={testMessages}
-          onInteraction={testOnInteraction}
-        />
-      );
-
-      expect(testOnInteraction).toHaveBeenCalledTimes(0);
-      fireEvent.click(
-        getAllByText(confirmHasClassNames('Message__tile--producer'))[0]
-      );
-      expect(testOnInteraction).toHaveBeenCalledTimes(1);
-      expect(testOnInteraction).toHaveBeenCalledWith(
-        expect.anything(),
-        PRODUCER,
-        testMessage
-      );
-    });
-
     it('renders the expected component with an empty messages list', () => {
-      const { getByText } = render(<ProducerMessages messages={[]} />);
+      const { getByText } = render(<ProducerMessages />);
       expect(
         getByText(
           confirmHasClassNames(

@@ -23,7 +23,7 @@ using BDD Gherkin syntax.
 
 This allows testing of not only the `Panels` component, but also any `Groups` and `Elements` used in it, driving it as a user would (clicking/typing in elements etc.)
 
-The tests are written using [Gerkin](https://cucumber.io/docs/gherkin/reference) syntax. Test steps are written using [stucumber](https://github.com/sjmeverett/stucumber) syntax - each file corresponds to a set of related steps exported with a `bootstrap` function to register rule definitions with stucumber, and `integration.setup.js` handles bootstrapping each set of definitions. Note - while you can define a rule multiple times, it is only the first occurance that is executed (based off bootstrapping order) - so common steps can located in their own file if needed.
+The tests are written using [Gerkin](https://cucumber.io/docs/gherkin/reference) syntax. Test steps are written using [stucumber](https://github.com/sjmeverett/stucumber) syntax - each file corresponds to a set of related steps exported with a `stepDefs` function to register rule definitions with stucumber, and `stucumber.setup.js` handles bootstrapping each set of definitions. Note - while you can define a rule multiple times, it is only the first occurance that is executed (based off bootstrapping order) - so common steps can located in their own file if needed.
 
 ### Test files
 ```
@@ -43,7 +43,7 @@ src/
         When I add an item
         Then the item is displayed
     ``` 
-- `*.steps.js` implements the steps - exporting via a `bootstrap` function used to register with stucumber
+- `*.steps.js` implements the steps - exporting via a `stepDefs` function used to register with stucumber
    ```
     import {MyComponent} from './MyComponent.view.js';
     import { render } from 'TestUtils';
@@ -93,5 +93,5 @@ or constants used by the component
 All of these files should follow the style guide for this codebase, which 
 can be found [here](../../docs/CodeStyle.md).
 
-
 ### List of currently implemented Panels
+- [`Consumer`](./Consumer/README.md)

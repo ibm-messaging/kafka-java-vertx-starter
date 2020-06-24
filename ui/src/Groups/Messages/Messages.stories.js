@@ -1,23 +1,24 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
-import { withKnobs, text, number } from '@storybook/addon-knobs';
+import { withKnobs, text } from '@storybook/addon-knobs';
 import { withInfo } from '@storybook/addon-info';
-import { action } from '@storybook/addon-actions';
 import { ConsumerMessages, ProducerMessages } from './index.js';
-import { STATUS_SUCCESS, STATUS_ERROR } from './Messages.assets.js';
-import { testMessages } from './Messages.spec.assets.js';
+import { ConsumerMessage, ProducerMessage } from 'Elements';
+import { testMessages, STATUS_ERROR } from './Messages.assets.js';
 import MessagesReadme from './README.md';
 
 const renderHelper = (
   Component,
+  ChildComponent,
   messages = testMessages,
   defaultClassName
 ) => () => {
   const className = text('Custom CSS classname', defaultClassName);
   let props = {
-    messages,
+    children: messages.map((msg, index) => <ChildComponent key={`m-${index}`} error={ msg.status === STATUS_ERROR
+      ? { message: 'Error!', }
+      : undefined} message={msg}/>),
     className,
-    onInteraction: action('onInteraction'),
   };
 
   return <Component {...props} />;
@@ -33,17 +34,17 @@ storiesOf('Groups/Messages', module)
   })
   .add(
     'ConsumerMessage component (default props)',
-    renderHelper(ConsumerMessages)
+    renderHelper(ConsumerMessages, ConsumerMessage)
   )
   .add(
     'ProducerMessage component (default props)',
-    renderHelper(ProducerMessages)
+    renderHelper(ProducerMessages, ProducerMessage)
   )
   .add(
     'ConsumerMessage component with empty messages list',
-    renderHelper(ConsumerMessages, [])
+    renderHelper(ConsumerMessages, ConsumerMessage, [])
   )
   .add(
     'ProducerMessage component with empty messages list',
-    renderHelper(ProducerMessages, [])
+    renderHelper(ProducerMessages, ProducerMessage, [])
   );

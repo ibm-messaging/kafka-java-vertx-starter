@@ -17,5 +17,5 @@ module.exports = {
     '/coverage/',
     '/public/',
   ],
-  moduleFileExtensions: ['js', 'ts', 'feature'],
+  moduleFileExtensions: ['js', 'feature'],
 };

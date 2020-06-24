@@ -7,14 +7,23 @@ $font-prefix: '~@ibm/plex'; // path to where the font files are
 @import '~@ibm/plex/scss/ibm-plex.scss'; // import scss to load them
 
 // Import Carbon styles (individually) here
+@import "@carbon/themes/scss/themes";
+// default to the g100 theme
+$carbon--theme: $carbon--theme--g100;
 @import '@carbon/type/scss/styles';
 @import '@carbon/type/scss/font-family';
-@import '@carbon/type/scss/reset';
-@import 'carbon-components/scss/components/tag/_tag.scss';
-@import 'carbon-components/scss/components/tile/_tile.scss';
+@import 'carbon-components/scss/globals/scss/_css--helpers';
+@import 'carbon-components/scss/components/tag/tag';
+@import 'carbon-components/scss/components/tile/tile';
+@import 'carbon-components/scss/components/button/button';
 
-// include carbon global mixin/changes
-@include carbon--type-reset();
+// include global changes to styling
+body {
+    @include carbon--type-style('body-short-01');
+    color: $text-01;
+    background-color: $ui-background;
+    line-height: 1;
+}
 
 // Import all other .scss files here
 @import 'Bootstrap/App/App.scss';
@@ -22,3 +31,4 @@ $font-prefix: '~@ibm/plex'; // path to where the font files are
 @import 'Elements/Text/Text.scss';
 @import 'Groups/Counter/Counter.scss';
 @import 'Groups/Messages/Messages.scss';
+@import 'Panels/Consumer/Consumer.scss';

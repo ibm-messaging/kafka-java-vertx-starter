@@ -1,0 +1,14 @@
+.Consumer {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    min-height: 100vh;
+    background-color: $ui-01;
+
+    &__count {
+        margin-top: 10%;
+    }
+    &__control {
+        align-self: flex-end;
+    }
+}

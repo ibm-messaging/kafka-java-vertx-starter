@@ -18,6 +18,7 @@ module.exports = {
     '!**/src/**/index.js',
     '!**/src/**/*.stories.js',
     '!**/src/**/*.assets.js',
+    '!**/src/**/*.steps.js',
     '!**/src/TestUtils/**',
     '!**/src/DevUtils/**',
     '!**/*.json',

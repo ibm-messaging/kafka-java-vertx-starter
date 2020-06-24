@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 
-import { Body, Subheading } from '../../Elements/Text/index.js';
+import { Body, Subheading } from 'Elements';
 
 const Counter = (props) => {
   const { title, subtitle, count, countLimit, className, ...others } = props;

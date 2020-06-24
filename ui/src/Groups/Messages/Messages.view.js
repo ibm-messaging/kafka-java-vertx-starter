@@ -2,65 +2,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
-import { isEmpty } from 'lodash-es';
 
 import { useTranslate } from 'ReactCustomHooks';
-import {
-  CONSUMER,
-  PRODUCER,
-  STATUS_ERROR,
-  translations,
-} from './Messages.assets.js';
-import { Body, ConsumerMessage, ProducerMessage, Subheading } from 'Elements';
+import { CONSUMER, PRODUCER, translations } from './Messages.assets.js';
+import { Body, Subheading } from 'Elements';
 
 const Messages = (props) => {
-  const { messages, usage, className, onInteraction, ...others } = props;
+  const { usage, className, children, ...others } = props;
+  // check if we have any child elements. If not, empty state
+  const hasChildren = React.Children.count(children) > 0;
   const classesToApply = clsx('Messages', `Messages--${usage}`, {
     [className]: className,
-    [`Messages--${usage}-empty`]: isEmpty(messages),
+    [`Messages--${usage}-empty`]: !hasChildren,
   });
   const translate = useTranslate(translations);
 
-  let messagesJSX;
-  if (isEmpty(messages)) {
-    messagesJSX = renderEmptyMessagesPlaceholder(translate, usage);
-  } else {
-    messagesJSX = messages.map((message, index) =>
-      renderMessage(message, index, usage, onInteraction)
-    );
-  }
-
-  return (
-    <div {...others} className={classesToApply}>
-      {messagesJSX}
-    </div>
-  );
-};
-
-const renderMessage = (message, index, usage, onInteraction) => {
-  const props = {
-    className: clsx('Messages__Message', `Messages__Message--${usage}`, {
-      [`Messages__Message--${usage}-first`]: index === 0,
-    }),
-    isFirst: index === 0,
-    key: `${usage}-${index}`,
-    onInteraction,
-  };
-
-  if (message.status === STATUS_ERROR) {
-    props.error = message;
-  } else {
-    props.message = message;
-  }
-
-  return usage === CONSUMER ? (
-    <ConsumerMessage {...props} />
-  ) : (
-    <ProducerMessage {...props} />
-  );
-};
-
-const renderEmptyMessagesPlaceholder = (translate, usage) => {
   let titleTranslationKey = 'NO_MESSAGES_TITLE_CONSUMER';
   let bodyTranslationKey = 'NO_MESSAGES_BODY_CONSUMER';
   if (usage === PRODUCER) {
@@ -69,13 +25,19 @@ const renderEmptyMessagesPlaceholder = (translate, usage) => {
   }
 
   return (
-    <div className={clsx('Messages__empty', `Messages__empty--${usage}`)}>
-      <div className={'Messages__empty-title'}>
-        <Subheading>{translate(titleTranslationKey)}</Subheading>
-      </div>
-      <div className={'Messages__empty-body'}>
-        <Body>{translate(bodyTranslationKey)}</Body>
-      </div>
+    <div {...others} className={classesToApply}>
+      {hasChildren ? (
+        children
+      ) : (
+        <div className={clsx('Messages__empty', `Messages__empty--${usage}`)}>
+          <div className={'Messages__empty-title'}>
+            <Subheading>{translate(titleTranslationKey)}</Subheading>
+          </div>
+          <div className={'Messages__empty-body'}>
+            <Body>{translate(bodyTranslationKey)}</Body>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
@@ -83,30 +45,15 @@ const renderEmptyMessagesPlaceholder = (translate, usage) => {
 const commonProps = {
   /** optional - add any specific styling classes to this component */
   className: PropTypes.string,
-  /** required - array of messages - either Kafka messages or error messages */
-  messages: PropTypes.arrayOf(
-    PropTypes.oneOfType([
-      PropTypes.shape({
-        status: PropTypes.string.isRequired,
-        topic: PropTypes.string.isRequired,
-        partition: PropTypes.number.isRequired,
-        offset: PropTypes.number.isRequired,
-        timestamp: PropTypes.number.isRequired,
-        value: PropTypes.string.isRequired,
-      }),
-      PropTypes.shape({
-        status: PropTypes.string.isRequired,
-        message: PropTypes.string,
-      }),
-    ])
-  ).isRequired,
-  /** optional - interaction handler function passed to the ConsumerMessage/ProducerMessage elements */
-  onInteraction: PropTypes.func,
+  /** optional - child content to render. If this is provided, the expectation is that it will contain either ProducedMessage or ConsumedMessage components. If none provided, empty state will render. */
+  children: PropTypes.oneOfType([
+    PropTypes.element,
+    PropTypes.arrayOf(PropTypes.element),
+  ]),
 };
 
 const commonDefaultProps = {
   className: '',
-  messages: [],
 };
 
 Messages.propTypes = {

@@ -1,0 +1,9 @@
+{
+    "en": {
+      "ERROR_CONSUMING": "An error occured during message consumption",
+      "MESSAGES_CONSUMED": "Messages consumed",
+      "FROM_TOPIC": "from topic: ${topic}",
+      "START_CONSUMING": "Start consuming",
+      "STOP_CONSUMING": "Stop consuming"
+    }
+}

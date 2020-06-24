@@ -4,12 +4,4 @@
   &--consumer {
     flex-direction: column;
   }
-
-  &__Message {
-    margin: $spacing-03;
-
-    &--producer:not(&--producer-first) {
-      margin-top: $spacing-08;
-    }
-  }
 }

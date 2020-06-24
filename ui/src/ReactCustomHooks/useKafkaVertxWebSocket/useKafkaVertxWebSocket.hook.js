@@ -76,7 +76,7 @@ const useManagedMessageState = (maxMessageNumber) => {
       totalMessages: newTotalMessages,
       totalSuccessMessages: newTotalOfSuccessMessages,
       totalErrorMessages: newTotalOfErrorMessages,
-      messages: newMessageSet,
+      messages: newMessageSet.reverse(), // reverse, so newest first
     };
     updateMessageState(messageStateRef.current);
   };

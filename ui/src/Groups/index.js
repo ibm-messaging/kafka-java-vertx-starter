@@ -1,2 +1,2 @@
-export * from './Counter/index.js';
-export * from './Messages/index.js';
+export * from './Counter';
+export * from './Messages';

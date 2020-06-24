@@ -380,15 +380,16 @@ describe('useKafkaVertxWebSocket hook', () => {
     } = getResultFromHook();
 
     expect(metadata).toEqual({});
+    // newest first
     expect(messages).toEqual([
-      {
-        status: CONSTANTS.VERTX_ERROR_STATUS,
-        index: 2,
-      },
       {
         status: CONSTANTS.VERTX_SUCCESS_STATUS,
         index: 3,
         ...successDataShape,
+      },
+      {
+        status: CONSTANTS.VERTX_ERROR_STATUS,
+        index: 2,
       },
     ]);
     expect(totalSuccessMessages).toEqual(2);

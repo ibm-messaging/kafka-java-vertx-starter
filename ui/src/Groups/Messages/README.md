@@ -17,23 +17,22 @@ modification of the styling if needed.
   on the type of messages. Must be either:
   - `consumer` - for messages that are consumed from Kafka
   - `producer` - for messages that are produced to Kafka
-- `messages` - optional - array of a messages, each of which is a shape
-  containing the Kafka topic, partition, offset, value and timestamp or a shape
-  containing the error details.
-- `onInteraction` - optional - a function invoked on hover, tab, click, etc. The
-  interaction event, `usage` value and `message` value are passed to the
-  function in that order.
+- `children` - child content to render. If this is provided, the expectation is
+that it will contain either ProducedMessage or ConsumedMessage components. If 
+none provided, empty state will render.
 
 Any property which is not matched will be passed onto the parent element
 rendered as a part of this component.
 
 ## Example usage
 
-Example usage of the `Messages` component, passing the `usage` and `messages`
-properties, plus a custom `className` property.
+Example usage of the `Messages` component, passing the `usage` and child 
+content, plus a custom `className` property.
 
 ```
-<Messages usage={'consumer'} className={'myclass'} messages={consumedMessages} />
+<Messages usage={'consumer'} className={'myclass'} >
+  <ConsumerMessage />
+</Messages>
 ```
 
 Note that the `Messages` component itself is not exposed. Instead, `ConsumerMessages`
@@ -43,7 +42,9 @@ in effect abstract the `usage` property away.
 For example:
 
 ```
-<ProducerMessages messages={producedMessages} />
+<ConsumerMessages className={'myclass'}>
+  <ConsumerMessage />
+</ConsumerMessages>
 ```
 
 The full set of exposed components and constants are as follows:
