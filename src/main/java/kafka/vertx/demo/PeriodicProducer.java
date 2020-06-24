@@ -79,6 +79,9 @@ public class PeriodicProducer extends AbstractVerticle {
           .put("value", payload);
         vertx.eventBus().send(Main.PERIODIC_PRODUCER_BROADCAST, kafkaMetaData);
       })
-      .onFailure(err -> logger.error("Error sending {}", payload, err));
+      .onFailure(err -> {
+        logger.error("Error sending {}", payload, err);
+        vertx.eventBus().send(Main.PERIODIC_PRODUCER_BROADCAST, new JsonObject().put("status", "ERROR"));
+      });
   }
 }
