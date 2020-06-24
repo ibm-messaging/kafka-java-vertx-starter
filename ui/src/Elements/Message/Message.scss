@@ -1,22 +1,33 @@
 .Message {
+    display: flex;
+    flex-direction: column;
+
     &__consumer-details {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
     }
 
+    &__tile--producer {
+        padding: $spacing-05;
+    }
+
+    &__tile--producer, &__tile--error {
+        height: 100%;
+    }
+
     &__icon {
 
-      &--checkmark {
-        fill: $icon-02;
-      }
+        &--checkmark {
+            fill: $icon-02;
+        }
 
-      &--error {
-        fill: $support-01;
-      }
+        &--error {
+            fill: $support-01;
+        }
     }
 
     &--producer-first &__icon--checkmark {
-      fill: $support-02;
+        fill: $support-02;
     }
 }

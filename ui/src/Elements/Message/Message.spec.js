@@ -1,5 +1,6 @@
 import React from 'react';
 import { ProducerMessage, ConsumerMessage } from './index.js';
+import { CONSUMER, PRODUCER } from './Message.assets.js';
 import { render, fireEvent } from 'TestUtils';
 
 describe('Message Element component', () => {
@@ -124,7 +125,7 @@ describe('Message Element component', () => {
       expect(testOnInteraction).toHaveBeenCalledTimes(1);
       expect(testOnInteraction).toHaveBeenCalledWith(
         expect.anything(),
-        'consumer',
+        CONSUMER,
         testMessage
       );
     });
@@ -249,7 +250,7 @@ describe('Message Element component', () => {
       expect(testOnInteraction).toHaveBeenCalledTimes(1);
       expect(testOnInteraction).toHaveBeenCalledWith(
         expect.anything(),
-        'producer',
+        PRODUCER,
         testMessage
       );
     });

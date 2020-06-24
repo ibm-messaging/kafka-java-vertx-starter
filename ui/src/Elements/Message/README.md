@@ -55,5 +55,3 @@ The full set of exposed components and constants are as follows:
 
 - `ProducerMessage` - Message component with producer styling/structure
 - `ConsumerMessage` - Message component with consumer styling/structure
-- `PRODUCER` - producer usage constant
-- `CONSUMER` - consumer usage constant

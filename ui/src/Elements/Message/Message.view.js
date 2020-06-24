@@ -43,7 +43,12 @@ const Message = (props) => {
   if (error) {
     messageJSX = renderErrorTile(error);
   } else if (usage === CONSUMER) {
-    messageJSX = renderConsumerMessageTile(translate, message, onInteraction);
+    messageJSX = renderConsumerMessageTile(
+      translate,
+      message,
+      isFirst,
+      onInteraction
+    );
   } else {
     messageJSX = renderProducerMessageTile(translate, message, onInteraction);
   }
@@ -51,7 +56,11 @@ const Message = (props) => {
   let firstTagJSX;
   if (isFirst) {
     firstTagJSX = (
-      <Tag className={`Message__tag-${usage}-first`}>{translate('NEWEST')}</Tag>
+      <div>
+        <Tag className={`Message__tag-${usage}-first`}>
+          {translate('NEWEST')}
+        </Tag>
+      </div>
     );
   }
 
@@ -63,13 +72,18 @@ const Message = (props) => {
   );
 };
 
-const renderConsumerMessageTile = (translate, message, onInteraction) => {
+const renderConsumerMessageTile = (
+  translate,
+  message,
+  isFirst,
+  onInteraction
+) => {
   const { partition, offset, timestamp, value } = message;
 
   const valueSize = isEmpty(value) ? '0' : value.length.toString();
   return (
     <ExpandableTile
-      expanded={false}
+      expanded={isFirst}
       {...getInteractionHandler(onInteraction, CONSUMER, message)}
       className={'Message__tile--consumer'}
     >
