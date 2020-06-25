@@ -181,9 +181,10 @@ const generateHandlers = (
   { produceEndpoint, consumeEndpoint, ...modelConfigs },
   otherEventHandlers = {}
 ) => {
-  const { handleProduceMessage, handleConsumeMessage } = generateModelForConfig(
-    modelConfigs
-  );
+  const {
+    handleProduceMessage,
+    handleConsumeMessage,
+  } = generateModelForConfig({ ...modelConfigs });
   return handleWebsocketEvents({
     ...otherEventHandlers,
     message: ({ calledWith, url, ws }) => {
@@ -199,6 +200,25 @@ const generateHandlers = (
           break;
       }
     },
+    close: ({ url }) => {
+      // Send a stop message to stop the consumer or producer when the socket closes
+      const stopMessage = { action: 'stop' };
+      switch (url) {
+        case produceEndpoint:
+          handleProduceMessage(stopMessage);
+          break;
+        case consumeEndpoint:
+          handleConsumeMessage(stopMessage);
+          break;
+        default:
+          break;
+      }
+
+      // Call any other close handlers
+      if (otherEventHandlers.close) {
+        otherEventHandlers.close({ url });
+      }
+    },
   });
 };
 
@@ -212,7 +232,7 @@ const defaultConfig = {
   // consume records endpoint
   consumeEndpoint: CONSUME_ENDPOINT,
   // enable/disable extra logging
-  enableLog: false,
+  enableLog: true,
   // one record will be produced every produceRate ms
   produceRate: TICK_RATE,
   // name of the topic being produced/consumed

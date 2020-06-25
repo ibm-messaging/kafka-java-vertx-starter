@@ -106,10 +106,15 @@ const renderConsumerMessageTile = (
       <TileAboveTheFoldContent>
         <div className={'Message__consumer-details'}>
           <div className={'Message__consumer-partition-offset-container'}>
-            {renderValueWithLabel(translate('PARTITION'), partition)}
+            {renderValueWithLabel(
+              translate('PARTITION'),
+              partition,
+              'partition'
+            )}
             {renderValueWithLabel(
               translate('OFFSET'),
               offset,
+              'offset',
               'Message__consumer-partition-offset'
             )}
           </div>
@@ -162,8 +167,8 @@ const renderProducerMessageTile = (
       <CheckmarkFilled16
         className={clsx('Message__icon', 'Message__icon--checkmark')}
       />
-      {renderValueWithLabel(translate('PARTITION'), partition)}
-      {renderValueWithLabel(translate('OFFSET'), offset)}
+      {renderValueWithLabel(translate('PARTITION'), partition, 'partition')}
+      {renderValueWithLabel(translate('OFFSET'), offset, 'offset')}
     </ClickableTile>
   );
 };
@@ -182,13 +187,15 @@ const renderErrorTile = (error) => {
   );
 };
 
-const renderValueWithLabel = (label, value, additionalClasses) => {
+const renderValueWithLabel = (label, value, idAttribute, additionalClasses) => {
   return (
     <div className={clsx('Message__labelled-value', additionalClasses)}>
       <div>
         <Label className={'Message__label'}>{label}</Label>
       </div>
-      <div className={'Message__value'}>{value}</div>
+      <div className={'Message__value'} {...idAttributeGenerator(idAttribute)}>
+        {value}
+      </div>
     </div>
   );
 };

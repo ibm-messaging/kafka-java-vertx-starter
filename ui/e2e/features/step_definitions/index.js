@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 import { cucumber } from 'gherkin-jest';
-import { stepDefs as navgigation } from './navigation.js';
+import { stepDefs as navigation } from './navigation.js';
 import { stepDefs as content } from './content.js';
 import { stepDefs as producer } from './producer.js';
 import { stepDefs as consumer } from './consumer.js';
@@ -13,7 +13,7 @@ import { stepDefs as consumer } from './consumer.js';
 jest.setTimeout(60000); // 60 seconds
 
 cucumber.defineCreateWorld(() => ({}));
-navgigation(cucumber);
+navigation(cucumber);
 content(cucumber);
 producer(cucumber);
 consumer(cucumber);
