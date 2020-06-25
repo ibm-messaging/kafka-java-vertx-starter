@@ -54,7 +54,8 @@ export const storybookWebsocket = (
 
 export const controlledWebsocket = (
   socketType = CONSTANTS.PRODUCER,
-  onClose = NO_OP
+  onClose = NO_OP,
+  onStart = NO_OP
 ) => {
   let eventListeners = {};
   let running = false;
@@ -81,6 +82,7 @@ export const controlledWebsocket = (
             //send the metadata event
             sendMessageFn(consumerMetadata);
           }
+          onStart(evt);
         } else if (parsedEvt.action === 'stop') {
           running = false;
         }

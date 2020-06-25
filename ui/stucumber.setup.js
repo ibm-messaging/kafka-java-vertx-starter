@@ -1,6 +1,7 @@
 import { cucumber } from 'gherkin-jest';
 import { HookType } from 'stucumber'; //Brought in via 'gherkin-jest'
 import { stepDefs as consumerStepDefs } from 'Panels/Consumer/Consumer.steps.js';
+import { stepDefs as producerStepDefs } from 'Panels/Producer/Producer.steps.js';
 import { stepDefs as appStepDefs } from 'Bootstrap/App/App.steps.js';
 import { stepDefs as commonStepDefs } from 'TestUtils/common_stepdefs.testutil.js';
 
@@ -11,4 +12,5 @@ cucumber.addHook(HookType.AfterScenarios, (world) => {
 });
 commonStepDefs(cucumber);
 consumerStepDefs(cucumber);
+producerStepDefs(cucumber);
 appStepDefs(cucumber);

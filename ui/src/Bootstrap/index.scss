@@ -16,6 +16,7 @@ $carbon--theme: $carbon--theme--g100;
 @import 'carbon-components/scss/components/tag/tag';
 @import 'carbon-components/scss/components/tile/tile';
 @import 'carbon-components/scss/components/button/button';
+@import 'carbon-components/scss/components/text-input/text-input';
 
 // include global changes to styling
 body {
@@ -32,3 +33,4 @@ body {
 @import 'Groups/Counter/Counter.scss';
 @import 'Groups/Messages/Messages.scss';
 @import 'Panels/Consumer/Consumer.scss';
+@import 'Panels/Producer/Producer.scss';

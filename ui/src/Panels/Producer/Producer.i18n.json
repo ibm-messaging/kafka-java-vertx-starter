@@ -1,0 +1,12 @@
+{
+    "en": {
+      "MESSAGE_VALUE_DEFAULT": "Sample message value",
+      "MESSAGE_VALUE_LABEL": "Message value",
+      "MESSAGE_VALUE_PLACEHOLDER": "Enter your message value here",
+      "ERROR_PRODUCING": "An error occured during message production",
+      "MESSAGES_PRODUCED": "Messages produced",
+      "FROM_TOPIC": "to topic: ${topic}",
+      "START_PRODUCING": "Start producing",
+      "STOP_PRODUCING": "Stop producing"
+    }
+}

@@ -113,14 +113,14 @@ will make up the corpus available for you to use. We recommend 'namespacing'
 your translation keys, eg `MYCOMPONENT_TEXT`, to reduce the chance of
 collisions.
 
-The full signiture of the returned function is as follows:
+The full signature of the returned function is as follows:
 
 `translate(key, inserts, returnAsString)`
 
 - `key` - string, required - the translation key to use to render the desired
 value
 - `inserts` - object, optional - a JS object where the keys match with the
-above specified `${}` delimeters. At run time, the value for this key is
+above specified `${}` delimiters. At run time, the value for this key is
 inserted into the returned value.
 - `returnAsString` - boolean, optional, defaults to false - by default, the
 hook will return JSX. By setting this to true, a string value will be returned

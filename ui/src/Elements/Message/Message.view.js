@@ -17,6 +17,7 @@ import clsx from 'clsx';
 import { Body } from 'Elements';
 import { useTranslate } from 'ReactCustomHooks';
 import { CONSUMER, PRODUCER, translations } from './Message.assets.js';
+import { idAttributeGenerator } from 'Utils';
 
 const Message = (props) => {
   const {
@@ -86,6 +87,7 @@ const renderConsumerMessageTile = (
       expanded={isFirst}
       {...getInteractionHandler(onInteraction, CONSUMER, message)}
       className={'Message__tile--consumer'}
+      {...idAttributeGenerator('consumed_message_tile')}
     >
       <TileAboveTheFoldContent>
         <div className={'Message__consumer-details'}>
@@ -123,6 +125,7 @@ const renderProducerMessageTile = (translate, message, onInteraction) => {
     <ClickableTile
       {...getInteractionHandler(onInteraction, PRODUCER, message)}
       className={'Message__tile--producer'}
+      {...idAttributeGenerator('produced_message_tile')}
     >
       <div>
         <CheckmarkFilled16
