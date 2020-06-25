@@ -1,5 +1,7 @@
 import { createContext } from 'react';
 
 const ConfigContext = createContext({});
+const ConfigContextProvider = ConfigContext.Provider;
+const ConfigContextConsumer = ConfigContext.Consumer;
 
-export default ConfigContext;
+export { ConfigContext, ConfigContextProvider, ConfigContextConsumer };

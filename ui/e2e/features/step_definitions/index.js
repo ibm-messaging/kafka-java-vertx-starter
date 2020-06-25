@@ -4,6 +4,10 @@ import { stepDefs as content } from './content.js';
 import { stepDefs as producer } from './producer.js';
 import { stepDefs as consumer } from './consumer.js';
 
+// Increase the Jest timeout. First test to run will
+// need time for everything to build
+jest.setTimeout(60000); // 60 seconds
+
 cucumber.defineCreateWorld(() => ({}));
 navgigation(cucumber);
 content(cucumber);

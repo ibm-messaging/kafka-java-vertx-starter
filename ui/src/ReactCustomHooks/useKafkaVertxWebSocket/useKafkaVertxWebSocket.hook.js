@@ -76,9 +76,9 @@ const useManagedMessageState = (maxMessageNumber) => {
       totalMessages: newTotalMessages,
       totalSuccessMessages: newTotalOfSuccessMessages,
       totalErrorMessages: newTotalOfErrorMessages,
-      messages: newMessageSet.reverse(), // reverse, so newest first
+      messages: newMessageSet,
     };
-    updateMessageState(messageStateRef.current);
+    updateMessageState({ ...messageStateRef.current });
   };
 
   return [messageState, updateMessageStateWithBuffer];
@@ -143,7 +143,7 @@ const useKafkaVertxWebSocket = (
     isReady,
     isRunning: isReady && hasStarted,
     metadata,
-    messages: messageState.messages,
+    messages: [].concat(messageState.messages).reverse(),
     totalSuccessMessages: messageState.totalSuccessMessages,
     totalErrorMessages: messageState.totalErrorMessages,
   };

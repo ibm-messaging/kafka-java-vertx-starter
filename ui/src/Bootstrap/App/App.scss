@@ -1,4 +1,38 @@
 .App {
-  display: flex;
-  flex-direction: column;
+
+  &__summary {
+    padding-top: $layout-06;
+    min-height: $layout-07 * 2;
+
+    &_icon {
+      height: $spacing-08;
+      margin-bottom: $spacing-05;
+    }
+
+    &_subheading {
+      @include carbon--type-style("productive-heading-01");
+    }
+
+    &_heading {
+      @include carbon--type-style("productive-heading-04");
+      margin-bottom: $spacing-05;
+    }
+
+    &_body {
+
+    }
+
+  }
+
+  &__column {
+
+    &--producer {
+      top: 0;
+      position: sticky;
+    }
+
+    &--consumer {
+      background-color: $ui-01;
+    }
+  }
 }

@@ -1,14 +1,11 @@
 import React from 'react';
 import { ProducerMessages, ConsumerMessages } from './index.js';
 import { testMessages, STATUS_ERROR } from './Messages.assets.js';
-import { render } from 'TestUtils';
+import { render, confirmHasClassNames } from 'TestUtils';
 import { ConsumerMessage, ProducerMessage } from 'Elements';
 
 describe('Messages Element component', () => {
   const testClassName = 'testCssClass';
-
-  const confirmHasClassNames = (...classNamesExpected) => (content, node) =>
-    classNamesExpected.every((className) => node.classList.contains(className)); // has all the expected classnames
 
   describe('ConsumerMessages component', () => {
     it('renders the expected component when provided child content', () => {

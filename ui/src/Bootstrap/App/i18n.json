@@ -1,8 +1,8 @@
 {
     "en": {
-        "heading": "this is the sample app heading",
-        "subheading": "this is the sample app subheading",
-        "body": "this is the sample app body",
-        "logo_alt": "sample app logo"
+        "app_name": "IBM Event Streams",
+        "heading": "Starter Application",
+        "body": "We've created this starter application in order to give you a starting point to produce and consume messages to IBM Event Streams. Start the producer and see the consumed messages appear.",
+        "logo_alt": "IBM Event Streams logo"
     }
 }

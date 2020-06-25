@@ -355,7 +355,7 @@ describe('useKafkaVertxWebSocket hook', () => {
     const { getResultFromHook } = mountHook(
       useKafkaVertxWebSocket,
       mockSocketFn,
-      2
+      3
     ); // max two messages
 
     act(() => {
@@ -367,7 +367,9 @@ describe('useKafkaVertxWebSocket hook', () => {
       // start and 'receive' a few record shapes
       start();
       recieveMessage(successDataShape);
+      recieveMessage(successDataShape);
       recieveMessage(errorDataShape);
+      recieveMessage(successDataShape);
       recieveMessage(successDataShape);
       fakeTime.tick(debounceTimer);
     });
@@ -384,15 +386,20 @@ describe('useKafkaVertxWebSocket hook', () => {
     expect(messages).toEqual([
       {
         status: CONSTANTS.VERTX_SUCCESS_STATUS,
-        index: 3,
+        index: 5,
+        ...successDataShape,
+      },
+      {
+        status: CONSTANTS.VERTX_SUCCESS_STATUS,
+        index: 4,
         ...successDataShape,
       },
       {
         status: CONSTANTS.VERTX_ERROR_STATUS,
-        index: 2,
+        index: 3,
       },
     ]);
-    expect(totalSuccessMessages).toEqual(2);
+    expect(totalSuccessMessages).toEqual(4);
     expect(totalErrorMessages).toEqual(1);
   });
 

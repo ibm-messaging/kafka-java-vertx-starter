@@ -36,3 +36,4 @@ across the UI.
 ## List of custom contexts implemented
 
 - [ConfigContext](./ConfigContext/README.md)
+- [SelectedMessage](./SelectedMessage/README.md)

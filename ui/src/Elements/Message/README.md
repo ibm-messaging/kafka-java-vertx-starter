@@ -17,6 +17,8 @@ modification of the styling if needed.
   - `consumer` - for messages that are consumed from Kafka
   - `producer` - for messages that are produced to Kafka
 - `isFirst` - optional - enables additional styling to indicate the first message.
+- `isSelected` - optional - enables additional styling to indicate if this 
+message has been selected.
 - `message` - optional - a shape containing the Kafka topic, partition,
   offset, value and timestamp
 - `error` - optional - a shape containing the error details. Overrides `message`

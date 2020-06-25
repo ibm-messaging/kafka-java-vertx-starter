@@ -7,6 +7,7 @@ import { translations } from './Consumer.assets.js';
 import { CONSTANTS, idAttributeGenerator } from 'Utils';
 import { Counter, ConsumerMessages } from 'Groups';
 import { ConsumerMessage } from 'Elements';
+import { SelectedMessageConsumer } from 'Contexts';
 import {
   useTranslate,
   useToggle,
@@ -66,19 +67,29 @@ const Consumer = (props) => {
       </div>
       <ConsumerMessages>
         {messages.map((msg, index) => (
-          <ConsumerMessage
-            {...idAttributeGenerator('consumer_consumed_message')}
-            key={`consumed-message-${index}:${msg.index}`}
-            isFirst={index === 0}
-            error={
-              msg.status === CONSTANTS.VERTX_ERROR_STATUS
-                ? { message: translate('ERROR_CONSUMING', {}, true) }
-                : undefined
-            }
-            message={
-              msg.status !== CONSTANTS.VERTX_ERROR_STATUS ? msg : undefined
-            }
-          />
+          <SelectedMessageConsumer key={`smc-${index}:${msg.index}`}>
+            {({ updateSelectedMessage, isSameAsSelected }) => {
+              return (
+                <ConsumerMessage
+                  {...idAttributeGenerator('consumer_consumed_message')}
+                  key={`consumed-message-${index}:${msg.index}`}
+                  isFirst={index === 0}
+                  isSelected={isSameAsSelected(msg)}
+                  onInteraction={() => updateSelectedMessage(msg)}
+                  error={
+                    msg.status === CONSTANTS.VERTX_ERROR_STATUS
+                      ? { message: translate('ERROR_CONSUMING', {}, true) }
+                      : undefined
+                  }
+                  message={
+                    msg.status !== CONSTANTS.VERTX_ERROR_STATUS
+                      ? msg
+                      : undefined
+                  }
+                />
+              );
+            }}
+          </SelectedMessageConsumer>
         ))}
       </ConsumerMessages>
     </div>

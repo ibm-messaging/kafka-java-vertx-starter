@@ -19,10 +19,17 @@ Scenario: As a user, I am shown error states if consumption fails
     And Error responses are returned
     Then I should be shown error messages for those consumption failures
 
+Scenario: As a user, I can interact and be shown the currenly selected message
+    Given I have a Consumer panel
+    And I have received "5" messages already
+    When I interact with message "2"
+    Then Message "2" is shown as selected
+
 Scenario: As a user, I can see what has been consumed so far
     Given I have a Consumer panel 
     And I have received "30" messages already
     When I start the consumer
     And responses are returned
     Then I should be able to see the last "30" messages that have been consumed
+
 

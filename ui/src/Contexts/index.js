@@ -1,7 +1,2 @@
-const ConfigContext = require('./ConfigContext/ConfigContext.context.js');
-
-module.exports = {
-  ConfigContext: ConfigContext.default,
-  ConfigContextProvider: ConfigContext.default.Provider,
-  ConfigContextConsumer: ConfigContext.default.Consumer,
-};
+export * from './ConfigContext/ConfigContext.context.js';
+export * from './SelectedMessage/SelectedMessage.context.js';

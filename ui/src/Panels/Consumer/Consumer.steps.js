@@ -1,5 +1,11 @@
 import React from 'react';
-import { render, waitFor, fireEvent } from 'TestUtils';
+import {
+  render,
+  waitFor,
+  fireEvent,
+  confirmHasClassNames,
+  within,
+} from 'TestUtils';
 import { act } from 'react-dom/test-utils';
 import { Consumer } from './index.js';
 import { consumerMockWebsocketForTest } from './Consumer.assets.js';
@@ -133,6 +139,59 @@ export const stepDefs = (cucumber) => {
           );
           expect(getByText(`${count + 1}`)).toBeInTheDocument();
         });
+      });
+    }
+  );
+
+  cucumber.defineRule(
+    'I interact with message {string}',
+    async (world, count) => {
+      await act(async () => {
+        const { getAllByTestId } = world.component;
+        const messageWanted = Number(count);
+        let messageToInteractWith;
+        // wait for it to appear
+        await waitFor(() => {
+          expect(
+            getAllByTestId('consumer_consumed_message').length
+          ).toBeGreaterThan(messageWanted);
+          const message = getAllByTestId('consumer_consumed_message')[
+            messageWanted - 1
+          ];
+          messageToInteractWith = within(message).getByRole('button');
+        });
+        // click it
+        fireEvent.click(messageToInteractWith);
+      });
+    }
+  );
+
+  cucumber.defineRule(
+    'Message {string} is shown as selected',
+    async (world, count) => {
+      await act(async () => {
+        const { getAllByTestId } = world.component;
+        const messageWanted = Number(count);
+        // wait for it to appear
+        await waitFor(() => {
+          expect(
+            getAllByTestId('consumer_consumed_message').length
+          ).toBeGreaterThan(messageWanted);
+        });
+        const message = getAllByTestId('consumer_consumed_message')[
+          messageWanted - 1
+        ];
+        expect(message).toBeInTheDocument();
+        // confirm it has the classname expected
+        expect(
+          within(message).getByText(
+            confirmHasClassNames(
+              'Message',
+              'Message--consumer',
+              'Message--consumer-selected'
+            )
+          )
+        ).toBeInTheDocument();
       });
     }
   );

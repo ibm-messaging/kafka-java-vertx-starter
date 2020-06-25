@@ -8,8 +8,8 @@ describe('ConfigContext tests', () => {
       <ConfigContextConsumer>
         {(config) => {
           expect(config.topic).toBe('topic');
-          expect(config.producerPath).toBe('producerPath');
-          expect(config.consumerPath).toBe('consumerPath');
+          expect(config.producerPath).toBe('/testProducerPath');
+          expect(config.consumerPath).toBe('/testConsumerPath');
         }}
       </ConfigContextConsumer>
     );

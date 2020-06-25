@@ -25,6 +25,7 @@ module.exports = (_, argv) => {
     template: PUBLIC_DIR + '/index.html',
     title: 'Kafka Java Vertx Starter UI',
     config: devMode ? MOCK_SERVER_CONFIG : REAL_SERVER_CONFIG,
+    favicon: PUBLIC_DIR + '/favicon.ico',
   };
 
   const cssPluginConfiguration = {
@@ -89,6 +90,14 @@ module.exports = (_, argv) => {
                 publicPath: '/fonts/',
                 outputPath: '/fonts/',
               },
+            },
+          ],
+        },
+        {
+          test: /\.(jpg|gif|png|svg)$/,
+          use: [
+            {
+              loader: 'file-loader',
             },
           ],
         },

@@ -12,7 +12,7 @@ $font-prefix: '~@ibm/plex'; // path to where the font files are
 $carbon--theme: $carbon--theme--g100;
 @import '@carbon/type/scss/styles';
 @import '@carbon/type/scss/font-family';
-@import 'carbon-components/scss/globals/scss/_css--helpers';
+@import 'carbon-components/scss/globals/grid/grid';
 @import 'carbon-components/scss/components/tag/tag';
 @import 'carbon-components/scss/components/tile/tile';
 @import 'carbon-components/scss/components/button/button';

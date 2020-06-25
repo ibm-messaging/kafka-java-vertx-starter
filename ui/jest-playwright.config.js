@@ -1,13 +1,13 @@
 module.exports = {
-  server: [
+  serverOptions: [
     {
       command: 'npm run start',
       port: 8080,
       launchTimeout: 30000,
     },
   ],
-  launchBrowserApp: {
+  launchOptions: {
     headless: true,
   },
-  browsers: ['chromium', 'firefox', 'webkit'],
+  browsers: ['firefox', 'webkit', 'chromium'],
 };

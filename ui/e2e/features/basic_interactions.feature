@@ -3,9 +3,9 @@ Feature: Basic Interactions
 Background:
     Given I am on the homepage
 
-Scenario: I can start producing
-    When I start the producer
-    Then a message appears in the producer list
+# Scenario: I can start producing
+#     When I start the producer
+#     Then a message appears in the producer list
 
 # Scenario: I can pause and restart producing
 #     When I start the producer
@@ -19,10 +19,11 @@ Scenario: I can start producing
 #     And I start the producer
 #     Then a message appears in the producer list with payload "test"
 
-# Scenario: I can start consuming
-#     When I start the producer
-#     And I start the consumer
-#     Then a message appears in the consumer list
+Scenario: I can start consuming
+    Then I see no messages have been consumed
+    # When I start the producer
+    And I start the consumer
+    # Then a message appears in the consumer list
 
 # Scenario: I can pause and restart consuming
 #     When I start the producer

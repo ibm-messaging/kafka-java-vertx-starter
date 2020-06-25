@@ -43,3 +43,11 @@ testing.
 - MockWebSocket - a class that can be used in place of a real WebSocket.
 - `sinon` is imported fully from this set of helpers - useful for items such
 as controlling time.
+
+## Special helpers
+
+The following are helper functions which are NOT exported as a part of 
+TestUtils, but are available for use in special cases:
+
+- `common_stepdefs.testutils` - common RTL cucumber step defintions
+- `mockfile.testutils` - used to stub out binary files at test time

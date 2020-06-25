@@ -1,7 +1,7 @@
 import React from 'react';
 import { ProducerMessage, ConsumerMessage } from './index.js';
 import { CONSUMER, PRODUCER } from './Message.assets.js';
-import { render, fireEvent } from 'TestUtils';
+import { render, fireEvent, confirmHasClassNames } from 'TestUtils';
 
 describe('Message Element component', () => {
   const testClassName = 'testCssClass';
@@ -21,9 +21,6 @@ describe('Message Element component', () => {
   const testError = {
     message: 'Test error',
   };
-
-  const confirmHasClassNames = (...classNamesExpected) => (content, node) =>
-    classNamesExpected.every((className) => node.classList.contains(className)); // has all the expected classnames
 
   describe('ConsumerMessage component', () => {
     it('renders the expected component', () => {

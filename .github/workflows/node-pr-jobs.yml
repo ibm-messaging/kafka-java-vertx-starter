@@ -64,6 +64,8 @@ jobs:
         working-directory: ui
     steps:
       - uses: actions/checkout@v2
+      - name: Increase file watcher limit
+        run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
       - uses: actions/setup-node@v1
         with:
           node-version: 12.x

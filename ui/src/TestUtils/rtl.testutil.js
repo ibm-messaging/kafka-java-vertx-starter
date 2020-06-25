@@ -9,19 +9,21 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import { renderHook, act } from '@testing-library/react-hooks';
-import { ConfigContextProvider } from 'Contexts';
+import { ConfigContextProvider, SelectedMessageProvider } from 'Contexts';
 
-const mockConfig = {
+const mockAppConfig = {
   topic: 'topic',
-  producerPath: 'producerPath',
-  consumerPath: 'consumerPath',
+  producerPath: '/testProducerPath',
+  consumerPath: '/testConsumerPath',
 };
 
 // eslint-disable-next-line react/prop-types
 const AllTheProviders = ({ children }) => {
   // Wrap children with any contexts/providers we end up having
   return (
-    <ConfigContextProvider value={mockConfig}>{children}</ConfigContextProvider>
+    <ConfigContextProvider value={mockAppConfig}>
+      <SelectedMessageProvider>{children}</SelectedMessageProvider>
+    </ConfigContextProvider>
   );
 };
 
@@ -68,6 +70,9 @@ const customRenderHook = (callback) => {
 
 const mountHook = (hook, ...args) => customRenderHook(() => hook(...args));
 
+const confirmHasClassNames = (...classNamesExpected) => (content, node) =>
+  classNamesExpected.every((className) => node.classList.contains(className)); // has all the expected classnames
+
 export * from '@testing-library/react';
 export * from '@testing-library/jest-dom/extend-expect';
 export {
@@ -76,4 +81,6 @@ export {
   containsTextContentGenerator,
   act,
   mountHook,
+  mockAppConfig,
+  confirmHasClassNames,
 };

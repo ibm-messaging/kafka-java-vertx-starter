@@ -2,6 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
+import { idAttributeGenerator } from 'Utils';
 
 import { useTranslate } from 'ReactCustomHooks';
 import { CONSUMER, PRODUCER, translations } from './Messages.assets.js';
@@ -29,7 +30,10 @@ const Messages = (props) => {
       {hasChildren ? (
         children
       ) : (
-        <div className={clsx('Messages__empty', `Messages__empty--${usage}`)}>
+        <div
+          {...idAttributeGenerator('messages_empty')}
+          className={clsx('Messages__empty', `Messages__empty--${usage}`)}
+        >
           <div className={'Messages__empty-title'}>
             <Subheading>{translate(titleTranslationKey)}</Subheading>
           </div>

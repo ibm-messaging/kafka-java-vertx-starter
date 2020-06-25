@@ -1,10 +1,10 @@
 // used in storybook/tests to emulate a socket/the backend behind it
 import { CONSTANTS, NO_OP } from 'Utils';
 
-const successShape = (custom = 'Storybook!') => ({
+const successShape = (offset = 0, custom = 'Storybook!') => ({
   topic: 'my_topic',
   partition: 0,
-  offset: 0,
+  offset,
   timestamp: Date.now(),
   value: custom,
 });
@@ -58,6 +58,7 @@ export const controlledWebsocket = (
 ) => {
   let eventListeners = {};
   let running = false;
+  let offset = 0;
 
   return {
     getSocket: () => ({
@@ -90,7 +91,7 @@ export const controlledWebsocket = (
     triggerClose: () => eventListeners.close(),
     sendPayload: (custom) =>
       eventListeners.message &&
-      sendMessage(eventListeners.message)(successShape(custom)),
+      sendMessage(eventListeners.message)(successShape(offset++, custom)),
     sendErrorPayload: () =>
       eventListeners.message && sendMessage(eventListeners.message)(errorShape),
   };

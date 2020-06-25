@@ -79,6 +79,9 @@ public class WebSocketServer extends AbstractVerticle {
     final ThymeleafTemplateEngine engine = ThymeleafTemplateEngine.create(vertx);
 
     router.routeWithRegex(".*js").handler(StaticHandler.create());
+    router.routeWithRegex(".*css").handler(StaticHandler.create());
+    router.routeWithRegex(".*svg").handler(StaticHandler.create());
+    router.routeWithRegex(".*ico").handler(StaticHandler.create());
 
     router.route().handler(ctx -> {
       JsonObject data = new JsonObject();

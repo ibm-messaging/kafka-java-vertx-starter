@@ -10,7 +10,11 @@ module.exports = {
     '^.+\\.feature$': 'gherkin-jest',
     '^.+\\.js[x]?$': 'babel-jest',
   },
-  moduleNameMapper: jestModuleMapper,
+  moduleNameMapper: {
+    // must go first so tests stub out non js files
+    '/*\\.(svg|ico)$': '<rootDir>/src/TestUtils/mockfile.testutils.js',
+    ...jestModuleMapper,
+  },
   testPathIgnorePatterns: [
     '/node_modules/',
     '/dist/',
