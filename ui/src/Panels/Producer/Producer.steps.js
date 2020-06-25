@@ -190,7 +190,34 @@ export const stepDefs = (cucumber) => {
   );
 
   cucumber.defineRule(
-    'I interact with produced message {string}',
+    'I hover on produced message {string}',
+    async (world, count) => {
+      await act(async () => {
+        const { getAllByTestId } = world.component;
+        const messageWanted = Number(count);
+        let messageToInteractWith;
+        // wait for it to appear
+        await waitFor(() => {
+          expect(
+            getAllByTestId('producer_produced_message').length
+          ).toBeGreaterThan(messageWanted);
+          const message = getAllByTestId('producer_produced_message')[
+            messageWanted - 1
+          ];
+
+          messageToInteractWith = within(message).getByTestId(
+            'produced_message_tile'
+          );
+          expect(messageToInteractWith).toBeInTheDocument();
+        });
+        // hover on it
+        fireEvent.mouseOver(messageToInteractWith);
+      });
+    }
+  );
+
+  cucumber.defineRule(
+    'I click on produced message {string}',
     async (world, count) => {
       await act(async () => {
         const { getAllByTestId } = world.component;

@@ -11,4 +11,7 @@
     &--code {
         @include carbon--type-style('code-01');
     }
+    &--label {
+        @include carbon--type-style('label-01');
+    }
 }

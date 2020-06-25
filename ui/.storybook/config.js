@@ -1,3 +1,4 @@
+import React from 'react';
 import { configure, addDecorator, addParameters } from '@storybook/react';
 import { addReadme } from 'storybook-readme';
 
@@ -16,6 +17,7 @@ function loadStories() {
   const req = require.context('../src', true, /\.stories\.js$/);
   req.keys().forEach((filename) => req(filename));
 }
-
+// add 5 rem padding around all stories
+addDecorator((story) => <div style={{ margin: '5rem' }}>{story()}</div>);
 addDecorator(addReadme);
 configure(loadStories, module);

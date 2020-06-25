@@ -19,13 +19,13 @@ const Counter = (props) => {
 
   return (
     <div {...others} className={classesToApply}>
-      <div className={'Counter__title'}>
+      <div className={'Counter Counter__title'}>
         <Subheading>{title}</Subheading>
       </div>
-      <div className={'Counter__subtitle'}>
-        <Body>{subtitle}</Body>
+      <div>
+        <Body className={'Counter Counter__subtitle'}>{subtitle}</Body>
       </div>
-      <div className={'Counter__count'}>{countValue}</div>
+      <div className={'Counter Counter__count'}>{countValue}</div>
     </div>
   );
 };

@@ -28,13 +28,15 @@ Scenario: As a user, I am shown error states if production fails
 
 Scenario: As a user, I can interact and be shown the currently selected message
     Given I have a Producer panel
-    And I have produced "5" messages already
-    When I interact with produced message "2"
+    And I have produced "4" messages already
+    When I click on produced message "2"
     Then produced message "2" is shown as selected
+    When I hover on produced message "3"
+    Then produced message "3" is shown as selected
 
 Scenario: As a user, I can see what has been produced so far
     Given I have a Producer panel
-    And I have produced "5" messages already
+    And I have produced "4" messages already
     When I start the producer
     And responses are returned
-    Then I should be able to see the last "5" messages that have been produced
+    Then I should be able to see the last "4" messages that have been produced

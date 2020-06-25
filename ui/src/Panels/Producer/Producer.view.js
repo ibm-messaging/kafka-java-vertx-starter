@@ -62,13 +62,11 @@ const Producer = (props) => {
         title={translate('MESSAGES_PRODUCED', {}, true)}
         subtitle={translate('FROM_TOPIC', { topic }, true)}
         count={totalSuccessMessages}
-        className={'Producer__count'}
       />
       <div className={'Producer__control'}>
         <TextInput
           {...idAttributeGenerator('producer_value_input')}
           defaultValue={translate('MESSAGE_VALUE_DEFAULT', {}, true)}
-          size={'xl'}
           id={'producer_value_input'}
           labelText={translate('MESSAGE_VALUE_LABEL')}
           hideLabel
@@ -80,6 +78,7 @@ const Producer = (props) => {
         <Button
           disabled={!isReady}
           onClick={onButtonClick}
+          size={'field'}
           {...idAttributeGenerator('producer_button')}
         >
           {isRunning
@@ -134,7 +133,7 @@ Producer.propTypes = {
 };
 
 Producer.defaultProps = {
-  maxNumberOfMessages: 5,
+  maxNumberOfMessages: 4,
   topic: 'PROVIDE_ME',
 };
 

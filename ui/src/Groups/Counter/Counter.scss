@@ -1,5 +1,18 @@
 .Counter {
+
+    &__subtitle {
+        color: $text-02;
+        font-weight: carbon--font-weight('regular');
+        letter-spacing: 0;
+        font-size: 1rem;
+        line-height: 1.375rem;
+    }
+
     &__count {
-        @include carbon--type-style('productive-heading-06');
+        font-weight: carbon--font-weight('regular');
+        letter-spacing: 0;
+        font-size: carbon--mini-units(10);
+        line-height: carbon--mini-units(12);
+        margin-bottom: $layout-02;
     }
 }

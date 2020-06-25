@@ -5,10 +5,12 @@ import {
   Subheading,
   Body,
   Code,
+  Label,
   HEADING,
   SUBHEADING,
   BODY,
   CODE,
+  LABEL,
 } from './index.js';
 import { render } from 'TestUtils';
 
@@ -18,6 +20,7 @@ describe('Text Element component', () => {
     SUBHEADING: 'Text--subheading',
     BODY: 'Text--body',
     CODE: 'Text--code',
+    LABEL: 'Text--label',
   };
   const text = 'test text here';
   const testClassName = 'testCssClass';
@@ -84,7 +87,18 @@ describe('Text Element component', () => {
     ).toBeInTheDocument();
   });
 
-  [HEADING, SUBHEADING, BODY, CODE].forEach((typeToTest) =>
+  it('with Label HOC wrapper provides the expected styling', () => {
+    // false posiitive - confusing label with component called Label
+    // eslint-disable-next-line jsx-a11y/label-has-for
+    const { getByText } = render(<Label>{text}</Label>);
+    expect(
+      getByText(
+        confirmHasTextAndClassName(text, expectedClassNamesForType[LABEL])
+      )
+    ).toBeInTheDocument();
+  });
+
+  [HEADING, SUBHEADING, BODY, CODE, LABEL].forEach((typeToTest) =>
     describe(`renders the expected content when passed the '${typeToTest}' type property with`, () => {
       it('child content', () => {
         const { getByText } = render(<Text type={typeToTest}>{text}</Text>);

@@ -15,9 +15,14 @@ const renderHelper = (
 ) => () => {
   const className = text('Custom CSS classname', defaultClassName);
   let props = {
-    children: messages.map((msg, index) => <ChildComponent key={`m-${index}`} error={ msg.status === STATUS_ERROR
-      ? { message: 'Error!', }
-      : undefined} message={msg}/>),
+    children: messages.map((msg, index) => (
+      <ChildComponent
+        key={`m-${index}`}
+        error={msg.status === STATUS_ERROR ? { message: 'Error!' } : undefined}
+        message={msg.status !== STATUS_ERROR ? msg : undefined}
+        isFirst={index === 0}
+      />
+    )),
     className,
   };
 

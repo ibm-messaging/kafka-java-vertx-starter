@@ -1,6 +1,6 @@
 # Text
 
-This component acts as a styling component - ie it applies one of 4 styles to
+This component acts as a styling component - ie it applies one of 5 styles to
 a given string of text. The component is exported directly with the below
 properties, or as a named, pre styled component. For a full set of components
 provided, see the [example usage](#example-usage) section.
@@ -57,3 +57,4 @@ The full set of exposed components and constants are as follows:
 - `SUBHEADING` - subheading type constant
 - `BODY` - body type constant
 - `CODE` - code type constant
+- `LABEL` - label type constant

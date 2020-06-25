@@ -144,7 +144,7 @@ export const stepDefs = (cucumber) => {
   );
 
   cucumber.defineRule(
-    'I interact with message {string}',
+    'I click on consumed message {string}',
     async (world, count) => {
       await act(async () => {
         const { getAllByTestId } = world.component;
@@ -167,7 +167,30 @@ export const stepDefs = (cucumber) => {
   );
 
   cucumber.defineRule(
-    'Message {string} is shown as selected',
+    'I hover on consumed message {string}',
+    async (world, count) => {
+      await act(async () => {
+        const { getAllByTestId } = world.component;
+        const messageWanted = Number(count);
+        let messageToInteractWith;
+        // wait for it to appear
+        await waitFor(() => {
+          expect(
+            getAllByTestId('consumer_consumed_message').length
+          ).toBeGreaterThan(messageWanted);
+          const message = getAllByTestId('consumer_consumed_message')[
+            messageWanted - 1
+          ];
+          messageToInteractWith = within(message).getByRole('button');
+        });
+        // hover on it
+        fireEvent.mouseOver(messageToInteractWith);
+      });
+    }
+  );
+
+  cucumber.defineRule(
+    'consumed message {string} is shown as selected',
     async (world, count) => {
       await act(async () => {
         const { getAllByTestId } = world.component;

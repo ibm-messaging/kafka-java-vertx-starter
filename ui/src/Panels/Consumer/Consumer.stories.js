@@ -3,6 +3,7 @@ import { storiesOf } from '@storybook/react';
 import { withKnobs, number } from '@storybook/addon-knobs';
 import { withInfo } from '@storybook/addon-info';
 import { Consumer } from './index.js';
+import { SelectedMessageProvider } from 'Contexts';
 import ConsumerReadme from './README.md';
 
 import { consumerMockWebsocket } from './Consumer.assets.js';
@@ -10,11 +11,13 @@ import { consumerMockWebsocket } from './Consumer.assets.js';
 const renderHelper = () => () => {
   const count = number('Count', 30);
   return (
-    <Consumer
-      maxNumberOfMessages={count}
-      topic={'storybook_example_topic'}
-      getConsumerWebsocket={consumerMockWebsocket}
-    />
+    <SelectedMessageProvider>
+      <Consumer
+        maxNumberOfMessages={count}
+        topic={'storybook_example_topic'}
+        getConsumerWebsocket={consumerMockWebsocket}
+      />
+    </SelectedMessageProvider>
   );
 };
 

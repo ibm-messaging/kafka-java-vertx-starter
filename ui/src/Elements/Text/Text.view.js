@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 
-import { HEADING, SUBHEADING, BODY, CODE } from './Text.assets.js';
+import { HEADING, SUBHEADING, BODY, CODE, LABEL } from './Text.assets.js';
 
 const Text = (props) => {
   const { type, className, children, ...others } = props;
@@ -23,6 +23,9 @@ const Text = (props) => {
       break;
     case CODE:
       typeModifier = 'code';
+      break;
+    case LABEL:
+      typeModifier = 'label';
       break;
   }
 
@@ -74,5 +77,6 @@ const Heading = withTypeStyle(HEADING, 'Heading');
 const Subheading = withTypeStyle(SUBHEADING, 'Subheading');
 const Body = withTypeStyle(BODY, 'Body');
 const Code = withTypeStyle(CODE, 'Code');
+const Label = withTypeStyle(LABEL, 'Label');
 
-export { Text, Heading, Subheading, Body, Code };
+export { Text, Heading, Subheading, Body, Code, Label };

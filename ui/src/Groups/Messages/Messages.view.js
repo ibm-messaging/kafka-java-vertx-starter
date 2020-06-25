@@ -34,8 +34,10 @@ const Messages = (props) => {
           {...idAttributeGenerator('messages_empty')}
           className={clsx('Messages__empty', `Messages__empty--${usage}`)}
         >
-          <div className={'Messages__empty-title'}>
-            <Subheading>{translate(titleTranslationKey)}</Subheading>
+          <div className={'Messages__empty-title-container'}>
+            <Subheading className={'Messages__empty-title'}>
+              {translate(titleTranslationKey)}
+            </Subheading>
           </div>
           <div className={'Messages__empty-body'}>
             <Body>{translate(bodyTranslationKey)}</Body>

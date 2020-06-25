@@ -6,7 +6,7 @@ Scenario: Displays producer panel
         | producer | true |
         | websocketFactory | MOCK_SOCKET_FACTORY |
     And I have an instance of App
-    Then the page contains "Producer here for topic at /testProducerPath"
+    Then the page contains "Messages produced"
 
 Scenario: Hides producer panel
     Given the following properties
@@ -14,7 +14,7 @@ Scenario: Hides producer panel
         | producer | false |
         | websocketFactory | MOCK_SOCKET_FACTORY |
     And I have an instance of App
-    Then the page does not contain "Producer here for topic at /testProducerPath"
+    Then the page does not contain "Messages produced"
 
 Scenario: Displays consumer panel
     Given the following properties

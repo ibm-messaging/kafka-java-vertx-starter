@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/label-has-for */ // false positive
 /* eslint-disable react/no-multi-comp */ // disabled as we have a hoc funtion in file
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -14,7 +15,7 @@ import { CheckmarkFilled16, ErrorFilled16 } from '@carbon/icons-react';
 import { isEmpty, isFunction } from 'lodash-es';
 import clsx from 'clsx';
 
-import { Body } from 'Elements';
+import { Label } from 'Elements';
 import { useTranslate } from 'ReactCustomHooks';
 import { CONSUMER, PRODUCER, translations } from './Message.assets.js';
 import { idAttributeGenerator } from 'Utils';
@@ -48,16 +49,22 @@ const Message = (props) => {
       translate,
       message,
       isFirst,
-      onInteraction
+      onInteraction,
+      isSelected
     );
   } else {
-    messageJSX = renderProducerMessageTile(translate, message, onInteraction);
+    messageJSX = renderProducerMessageTile(
+      translate,
+      message,
+      onInteraction,
+      isSelected
+    );
   }
 
   let firstTagJSX;
   if (isFirst) {
     firstTagJSX = (
-      <div>
+      <div className={`Message__first-container`}>
         <Tag className={`Message__tag-${usage}-first`}>
           {translate('NEWEST')}
         </Tag>
@@ -77,7 +84,8 @@ const renderConsumerMessageTile = (
   translate,
   message,
   isFirst,
-  onInteraction
+  onInteraction,
+  isSelected
 ) => {
   const { partition, offset, timestamp, value } = message;
 
@@ -86,25 +94,33 @@ const renderConsumerMessageTile = (
     <ExpandableTile
       expanded={isFirst}
       {...getInteractionHandler(onInteraction, CONSUMER, message)}
-      className={'Message__tile--consumer'}
+      className={clsx('Message__tile--consumer', {
+        [`Message__tile--consumer--selected`]: isSelected,
+      })}
       {...idAttributeGenerator('consumed_message_tile')}
     >
       <TileAboveTheFoldContent>
         <div className={'Message__consumer-details'}>
-          <div>
+          <div className={'Message__consumer-partition-offset-container'}>
             {renderValueWithLabel(translate('PARTITION'), partition)}
-            {renderValueWithLabel(translate('OFFSET'), offset)}
+            {renderValueWithLabel(
+              translate('OFFSET'),
+              offset,
+              'Message__consumer-partition-offset'
+            )}
           </div>
           <div>
             <div>
-              <Body>
+              <Label className={'Message__label'}>
                 {translate('CONSUMED_AT', {
                   timestamp: new Date(timestamp).toLocaleString(),
                 })}
-              </Body>
+              </Label>
             </div>
             <div>
-              <Body>{translate('SIZE', { bytesCount: valueSize })}</Body>
+              <Label className={'Message__label'}>
+                {translate('SIZE', { bytesCount: valueSize })}{' '}
+              </Label>
             </div>
           </div>
         </div>
@@ -118,22 +134,32 @@ const renderConsumerMessageTile = (
   );
 };
 
-const renderProducerMessageTile = (translate, message, onInteraction) => {
+const renderProducerMessageTile = (
+  translate,
+  message,
+  onInteraction,
+  isSelected
+) => {
   const { partition, offset } = message;
 
   return (
     <ClickableTile
       {...getInteractionHandler(onInteraction, PRODUCER, message)}
-      className={'Message__tile--producer'}
+      className={clsx(
+        'Message',
+        'Message__producer',
+        'Message__tile--producer',
+        {
+          [`Message__tile--producer--selected`]: isSelected,
+        }
+      )}
       {...idAttributeGenerator('produced_message_tile')}
     >
-      <div>
-        <CheckmarkFilled16
-          className={clsx('Message__icon', 'Message__icon--checkmark')}
-        />
-        {renderValueWithLabel(translate('PARTITION'), partition)}
-        {renderValueWithLabel(translate('OFFSET'), offset)}
-      </div>
+      <CheckmarkFilled16
+        className={clsx('Message__icon', 'Message__icon--checkmark')}
+      />
+      {renderValueWithLabel(translate('PARTITION'), partition)}
+      {renderValueWithLabel(translate('OFFSET'), offset)}
     </ClickableTile>
   );
 };
@@ -145,18 +171,18 @@ const renderErrorTile = (error) => {
       <ErrorFilled16
         className={clsx('Message__icon', 'Message__icon--error')}
       />
-      <div className={'Message__error-message'}>
-        <Body>{message}</Body>
+      <div>
+        <Label className={'Message__error-message'}>{message}</Label>
       </div>
     </Tile>
   );
 };
 
-const renderValueWithLabel = (label, value) => {
+const renderValueWithLabel = (label, value, additionalClasses) => {
   return (
-    <div className={'Message__labelled-value'}>
-      <div className={'Message__label'}>
-        <Body>{label}</Body>
+    <div className={clsx('Message__labelled-value', additionalClasses)}>
+      <div>
+        <Label className={'Message__label'}>{label}</Label>
       </div>
       <div className={'Message__value'}>{value}</div>
     </div>
@@ -168,6 +194,7 @@ const getInteractionHandler = (onInteraction, usage, message) => {
 
   if (isFunction(onInteraction)) {
     handlerProps.handleClick = (event) => onInteraction(event, usage, message);
+    handlerProps.onMouseEnter = (event) => onInteraction(event, usage, message);
   }
   return handlerProps;
 };

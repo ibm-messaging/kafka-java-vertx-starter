@@ -8,10 +8,12 @@ import {
   Subheading,
   Body,
   Code,
+  Label,
   HEADING,
   SUBHEADING,
   BODY,
   CODE,
+  LABEL,
 } from './index.js';
 import TextReadme from './README.md';
 
@@ -29,6 +31,7 @@ const renderHelper = (
         'Subheading text': SUBHEADING,
         'Body text': BODY,
         'Code text': CODE,
+        'Label text': LABEL,
       },
       BODY
     );
@@ -66,4 +69,5 @@ storiesOf('Elements/Text', module)
   .add('Heading component', renderHelper(Heading, 'Heading component'))
   .add('Subheading component', renderHelper(Subheading, 'Subheading component'))
   .add('Body component', renderHelper(Body, 'Body component'))
-  .add('Code component', renderHelper(Code, 'Code component'));
+  .add('Code component', renderHelper(Code, 'Code component'))
+  .add('Label component', renderHelper(Label, 'Label component'));
