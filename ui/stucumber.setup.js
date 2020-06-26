@@ -1,3 +1,7 @@
+/*
+ * (C) Copyright IBM Corp. 2020  All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ */
 import { cucumber } from 'gherkin-jest';
 import { HookType } from 'stucumber'; //Brought in via 'gherkin-jest'
 import { stepDefs as consumerStepDefs } from 'Panels/Consumer/Consumer.steps.js';

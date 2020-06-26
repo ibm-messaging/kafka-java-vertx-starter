@@ -1,11 +1,14 @@
 # Code style
 
-<To be added when liniting in pace>
+To ensure common style, we have implemented linting of both code and commit
+messages to enforce our chose style. In addition, we expect that all UI code
+contributed to this codebase will use/expect and follow the below guidance and 
+approaches:
 
-- BEM
-- SCSS imports of only what is used
-- Functional components
-- TDD/BDD
+- [BEM](http://getbem.com/) for styling
+- SCSS imports of only what is used/needed
+- Functional React components
+- TDD/BDD - done before/as a part of design of code changes
 - Storybook entries for all components
 - README for all components, shown in storybook
 - All components to have prop types w/documentation visible in storybook

@@ -1,3 +1,7 @@
+/*
+ * (C) Copyright IBM Corp. 2020  All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ */
 const stepDefs = (cucumber) => {
   cucumber.defineRule('I start the producer', async () => {
     await page.click('css=[aria-label="Start producing messages"]');

@@ -1,3 +1,7 @@
+/*
+ * (C) Copyright IBM Corp. 2020  All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ */
 /* eslint-disable react/display-name */
 import React, { useMemo, Fragment } from 'react';
 import { merge } from 'lodash-es';

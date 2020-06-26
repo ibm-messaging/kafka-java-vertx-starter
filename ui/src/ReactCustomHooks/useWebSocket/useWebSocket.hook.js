@@ -1,3 +1,7 @@
+/*
+ * (C) Copyright IBM Corp. 2020  All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ */
 import { useState, useEffect } from 'react';
 import { NO_OP, EMPTY_OBJ } from 'Utils';
 

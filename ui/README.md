@@ -90,7 +90,7 @@ tests to validate user stories.
 
 ## Codebase goals
 
-In setting up this UI codebase, we have aimed to satsify the following goals.
+In setting up this UI codebase, we have aimed to satisfy the following goals.
 We intend to stick to them, and so should you! :)
 
 - `master` is production - once it is merged, it's built and live

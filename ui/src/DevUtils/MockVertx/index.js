@@ -1,3 +1,7 @@
+/*
+ * (C) Copyright IBM Corp. 2020  All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ */
 // used to run in dev mode - websocket server hosted on port 7050 as proxied by webpack
 
 const { startMockVertx, defaultConfig } = require('./MockVertxServer.js');

@@ -19,12 +19,11 @@ following:
 ![Starter app topology](./ArchImages/Topology.jpg)
 
 When running the Jar file, a Vertx server will be started, which in turn will
-launch three verticles. One verticle will handle records being produced to
-Kafka, one verticle will handle records being consumed from Kafka, and finally
-the third verticle deployed will server the UI when requested, along with all
-supporting content, such as fonts and images. The producer and consumer 
-verticles are configured to access Kafka via configuration provided by the user
-at start up.
+launch two verticles. One verticle will handle records being produced to
+and consumed from Kafka, and the second verticle deployed will serve the UI 
+when requested, along with all supporting content, such as fonts and images. 
+The producer and consumer verticles are configured to access Kafka via 
+configuration provided by the user at start up.
 
 Once running, the user access the the endpoint serving UI content. This returns
 the index.html, which will in turn contain script and source tags which will
@@ -86,8 +85,8 @@ Producer (Panel):
 Consumer (Panel):
 ![Consumer component](./ArchImages/Consumer.jpeg)
 
-Status (Group):
-![Status component](./ArchImages/Status.jpeg)
+Counter (Group):
+![Counter component](./ArchImages/Counter.jpeg)
 
 Messages (Group):
 ![Messages component](./ArchImages/Messages.jpeg)

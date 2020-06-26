@@ -1,3 +1,7 @@
+/*
+ * (C) Copyright IBM Corp. 2020  All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ */
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { useWebSocket, STATUS, useToggle } from 'ReactCustomHooks';
 import { CONSTANTS } from 'Utils';

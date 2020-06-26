@@ -1,3 +1,7 @@
+/*
+ * (C) Copyright IBM Corp. 2020  All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ */
 import React from 'react';
 import { ProducerMessages, ConsumerMessages } from './index.js';
 import { testMessages, STATUS_ERROR } from './Messages.assets.js';

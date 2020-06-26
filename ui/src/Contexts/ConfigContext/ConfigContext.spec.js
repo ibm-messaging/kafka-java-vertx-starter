@@ -1,3 +1,7 @@
+/*
+ * (C) Copyright IBM Corp. 2020  All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ */
 import React from 'react';
 import { render } from '../../TestUtils/index.js';
 import { ConfigContextConsumer } from '../index.js';

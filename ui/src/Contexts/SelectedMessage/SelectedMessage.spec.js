@@ -1,3 +1,7 @@
+/*
+ * (C) Copyright IBM Corp. 2020  All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ */
 /* eslint-disable react/jsx-no-bind */
 import React from 'react';
 import { render, act, fireEvent } from '../../TestUtils/index.js';

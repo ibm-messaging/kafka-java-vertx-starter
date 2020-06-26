@@ -1,3 +1,7 @@
+/*
+ * (C) Copyright IBM Corp. 2020  All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ */
 import { idAttributeSelector, idAttributeGenerator } from './index.js';
 
 describe('idAttribute function tests', () => {

@@ -1,3 +1,7 @@
+/*
+ * (C) Copyright IBM Corp. 2020  All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ */
 import { controlledWebsocket } from 'DevUtils/MockWebsocket';
 import { CONSTANTS } from 'Utils';
 import { mockAppConfig } from './rtl.testutil.js';

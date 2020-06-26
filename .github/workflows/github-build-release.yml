@@ -19,7 +19,7 @@ jobs:
         with:
           java-version: 1.8
       - name: Build
-        run: mvn install
+        run: mvn package
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1

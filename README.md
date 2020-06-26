@@ -9,30 +9,10 @@ The app allows you to send records to a topic in Kafka called `demo` every two s
 Test out the app by connecting to the websocket endpoints (UI will be added soon!):
 
  - Make sure Kafka is running locally. (You can use the [quickstart guide](https://kafka.apache.org/quickstart))
- - Build the app: `mvn install`
- - Start the app: `java -jar target/demo-0.0.2-SNAPSHOT-all.jar`
- - Connect to `ws://localhost:8080/demoproduce` (e.g., using [websocat](https://github.com/vi/websocat))
- - Start sending records to Kafka by sending the following message to the websocket:
-    ```
-    {"action":"start"}
-    ```
-    The websocket will receive notifications every time the app sends a new record to Kafka.
- - Stop sending records by sending the following message to the websocket:
-    ```
-   {"action":"stop"}
-   ```
- - Disconnect from the produce websocket
- - Connect to `ws://localhost:8080/democonsume`
- - Start consuming from Kafka by sending the following message to the websocket:
-    ```
-    {"action":"start"}
-    ```
-   The websocket will receive information about all the consumed records.
- - Stop consuming records by sending the following message to the websocket:
-    ```
-   {"action":"stop"}
-   ```
- - Disconnect from the consume websocket
+ - Build the app: `mvn package`
+ - Start the app: `java -jar target/demo-all.jar`
+ - Connect to `http://localhost:8080/` to view the UI
+ - Use the buttons in the UI to produce and consume records
 
 ## Configuration
 
@@ -49,9 +29,9 @@ To increase the Kafka client logging level to info provide a system property at 
 
 To build this project you will need:
 
-- maven `mvn`
-- npm version 6.4.1 or later
-- node 10.15.0 or later
+- [Maven `mvn`](https://maven.apache.org/)
+- [npm version 6.4.1 or later](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+- [node 10.15.0 or later](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 
 ## Tool Configuration
 

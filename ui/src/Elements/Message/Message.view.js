@@ -1,3 +1,7 @@
+/*
+ * (C) Copyright IBM Corp. 2020  All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ */
 /* eslint-disable jsx-a11y/label-has-for */ // false positive
 /* eslint-disable react/no-multi-comp */ // disabled as we have a hoc funtion in file
 import React from 'react';
