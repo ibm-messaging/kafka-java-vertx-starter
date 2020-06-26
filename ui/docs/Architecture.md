@@ -19,10 +19,10 @@ following:
 ![Starter app topology](./ArchImages/Topology.jpg)
 
 When running the Jar file, a Vertx server will be started, which in turn will
-launch two verticles. One verticle will handle records being produced to
-and consumed from Kafka, and the second verticle deployed will serve the UI 
-when requested, along with all supporting content, such as fonts and images. 
-The producer and consumer verticles are configured to access Kafka via 
+launch two verticles. One verticle will handle records being produced to Kafka,
+and the second verticle deployed will consume records from Kafka, and serve the
+UI when requested, along with all supporting content, such as fonts and images. 
+The producer and consumer verticles are configured to access Kafka via
 configuration provided by the user at start up.
 
 Once running, the user access the the endpoint serving UI content. This returns
