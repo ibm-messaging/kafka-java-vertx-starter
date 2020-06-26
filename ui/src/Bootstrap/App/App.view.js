@@ -20,7 +20,7 @@ const App = (props) => {
   };
 
   return (
-    <div className={clsx('App', className)}>
+    <main className={clsx('App', className)}>
       <Grid>
         <ConfigContextConsumer>
           {({ topic, producerPath, consumerPath }) => (
@@ -86,7 +86,7 @@ const App = (props) => {
           )}
         </ConfigContextConsumer>
       </Grid>
-    </div>
+    </main>
   );
 };
 

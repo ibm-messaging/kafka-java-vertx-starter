@@ -6,7 +6,7 @@
 
   <groupId>kafka.vertx</groupId>
   <artifactId>demo</artifactId>
-  <version>0.0.2-SNAPSHOT</version>
+  <version>1.0.0</version>
 
   <properties>
     <kafka.version>2.3.0</kafka.version>

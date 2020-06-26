@@ -43,3 +43,23 @@ when a push is made to master.
 
 This workflow will lint all commit messages made on a branch that is in a pull
 request.
+
+#### github-build-release
+
+This workflow will, on push of a new `semver` tag to `master`, create a new 
+github release, and create a build of the Starter app using the commit which
+was tagged. A git tag can be created as follows:
+
+```
+git tag <semver version here>
+```
+
+followed by:
+
+```
+git push origin <semver version here>
+```
+
+This will then trigger the action. The release will use the tag as it's version
+number, and display the tagged commit's message as the description of the 
+release.
