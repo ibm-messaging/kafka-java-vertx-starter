@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "baseUrl": "src",
+    "paths": {
+      "Elements": ["./Elements/*"],
+      "Groups": ["./Groups/*"],
+      "Panels": ["./Panels/*"],
+      "ReactCustomHooks": ["./ReactCustomHooks/*"],
+      "Bootstrap": ["./Bootstrap/*"],
+      "DevUtils": ["./DevUtils/*"],
+      "TestUtils": ["./TestUtils/*"],
+      "Utils": ["./Utils/*"]
+    }
+  },
+  "exclude": ["node_modules"]
+}

@@ -1,0 +1,8 @@
+name: "Bundle size"
+description: "Check the size of the bundle"
+outputs:
+  bundle_size:
+    description: "Bundle size of webpack build"
+runs:
+  using: "docker"
+  image: "Dockerfile"

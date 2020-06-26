@@ -1,0 +1,10 @@
+{
+  "en": {
+    "NEWEST": "Newest",
+    "PARTITION": "Partition",
+    "OFFSET": "Offset",
+    "CONSUMED_AT": "Consumed at ${timestamp}",
+    "SIZE": "Size: ${bytesCount} B",
+    "PAYLOAD": "Payload"
+  }
+}

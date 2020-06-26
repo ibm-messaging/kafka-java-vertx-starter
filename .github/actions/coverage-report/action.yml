@@ -1,0 +1,8 @@
+name: "Coverage report"
+description: "Report test coverage"
+outputs:
+  test_coverage:
+    description: "Text for test coverage"
+runs:
+  using: "docker"
+  image: "Dockerfile"

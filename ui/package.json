@@ -1,0 +1,145 @@
+{
+  "name": "kafka-java-vertx-starter-ui",
+  "version": "1.0.0",
+  "description": "UI for the Kafka Java Vertx starter application",
+  "author": "",
+  "license": "Apache-2.0",
+  "private": true,
+  "sideEffects": false,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ibm-messaging/kafka-java-vertx-starter.git"
+  },
+  "scripts": {
+    "start": "run-p dev mock-vertx",
+    "dev": "webpack-dev-server --mode development",
+    "build": "webpack --mode production",
+    "mock-vertx": "node ./src/DevUtils/MockVertx",
+    "test": "jest",
+    "test:e2e": "jest -c jest.config.e2e.js",
+    "storybook": "start-storybook",
+    "build-storybook": "build-storybook -o .out",
+    "lint": "eslint .",
+    "prettier": "prettier --write ."
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "prettier --write",
+      "eslint --fix --cache"
+    ]
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "commitlint": {
+    "rules": {
+      "header-max-length": [
+        2,
+        "always",
+        72
+      ],
+      "body-max-line-length": [
+        2,
+        "always",
+        72
+      ],
+      "footer-max-length": [
+        2,
+        "always",
+        100
+      ],
+      "type-enum": [
+        2,
+        "always",
+        [
+          "feat",
+          "fix",
+          "docs",
+          "style",
+          "refactor",
+          "test",
+          "revert"
+        ]
+      ],
+      "type-empty": [
+        2,
+        "never"
+      ],
+      "references-empty": [
+        2,
+        "never"
+      ]
+    }
+  },
+  "dependencies": {
+    "@carbon/themes": "^10.14.0",
+    "@carbon/type": "^10.12.0",
+    "@ibm/plex": "^5.0.0",
+    "carbon-components": "^10.14.0",
+    "carbon-components-react": "^7.14.0",
+    "carbon-icons": "^7.0.7",
+    "clsx": "^1.1.1",
+    "lodash-es": "^4.17.15",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.10.2",
+    "@babel/preset-env": "^7.10.2",
+    "@babel/preset-react": "^7.10.1",
+    "@commitlint/cli": "^8.3.5",
+    "@ffmpeg-installer/ffmpeg": "^1.0.20",
+    "@storybook/addon-actions": "^5.3.19",
+    "@storybook/addon-centered": "^5.3.19",
+    "@storybook/addon-info": "^5.3.19",
+    "@storybook/addon-knobs": "^5.3.19",
+    "@storybook/addon-storysource": "^5.3.19",
+    "@storybook/react": "^5.3.19",
+    "@testing-library/jest-dom": "^5.10.1",
+    "@testing-library/react": "^10.3.0",
+    "@testing-library/react-hooks": "^3.3.0",
+    "@testing-library/user-event": "^12.0.1",
+    "babel-eslint": "^10.1.0",
+    "babel-jest": "^26.0.1",
+    "babel-loader": "^8.1.0",
+    "css-loader": "^3.6.0",
+    "eslint": "^7.3.1",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-import-resolver-webpack": "^0.12.1",
+    "eslint-plugin-import": "^2.21.2",
+    "eslint-plugin-jest-playwright": "^0.2.1",
+    "eslint-plugin-jsx-a11y": "^6.3.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "eslint-plugin-react": "^7.20.0",
+    "eslint-plugin-react-hooks": "^4.0.4",
+    "file-loader": "^6.0.0",
+    "gherkin-jest": "^0.24.0",
+    "html-webpack-plugin": "^4.3.0",
+    "husky": "^4.2.5",
+    "jest": "^26.0.1",
+    "jest-playwright-preset": "^1.0.0",
+    "lint-staged": "^10.2.11",
+    "mini-css-extract-plugin": "^0.9.0",
+    "npm-run-all": "^4.1.5",
+    "playwright": "^1.1.1",
+    "playwright-core": "^1.1.1",
+    "playwright-video": "^2.2.0",
+    "prettier": "^2.0.5",
+    "react-test-renderer": "^16.13.1",
+    "sass": "^1.26.8",
+    "sass-loader": "^8.0.2",
+    "sinon": "^9.0.2",
+    "storybook-readme": "^5.0.8",
+    "style-loader": "^1.2.1",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0",
+    "ws": "^7.3.0"
+  }
+}

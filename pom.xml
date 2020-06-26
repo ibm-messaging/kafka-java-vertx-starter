@@ -6,16 +6,16 @@
 
   <groupId>kafka.vertx</groupId>
   <artifactId>demo</artifactId>
-  <version>0.0.2-SNAPSHOT</version>
+  <version>1.0.0</version>
 
   <properties>
     <kafka.version>2.3.0</kafka.version>
     <vertx.version>4.0.0-milestone5</vertx.version>
     <logback.version>1.2.3</logback.version>
     <jackson-databind.version>2.10.2</jackson-databind.version>
-    <junit.version>5.6.0</junit.version>
+    <junit.version>5.6.2</junit.version>
     <hamcrest.version>2.2</hamcrest.version>
-    <maven.surefire.version>3.0.0-M4</maven.surefire.version>
+    <maven.surefire.version>3.0.0-M5</maven.surefire.version>
   </properties>
 
   <dependencyManagement>
@@ -53,6 +53,10 @@
     </dependency>
     <dependency>
       <groupId>io.vertx</groupId>
+      <artifactId>vertx-web-client</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.vertx</groupId>
       <artifactId>vertx-kafka-client</artifactId>
     </dependency>
     <dependency>
@@ -79,6 +83,10 @@
       <artifactId>hamcrest-core</artifactId>
       <version>${hamcrest.version}</version>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.vertx</groupId>
+      <artifactId>vertx-web-templ-thymeleaf</artifactId>
     </dependency>
   </dependencies>
 
@@ -110,7 +118,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
-        <version>3.2.2</version>
+        <version>3.2.4</version>
         <executions>
           <execution>
             <phase>package</phase>
@@ -134,6 +142,32 @@
               </artifactSet>
               <outputFile>${project.build.directory}/${project.artifactId}-all.jar
               </outputFile>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>com.github.eirslett</groupId>
+        <artifactId>frontend-maven-plugin</artifactId>
+        <version>1.10.0</version>
+        <executions>
+          <execution>
+            <id>install node and npm</id>
+            <goals>
+              <goal>install-node-and-npm</goal>
+            </goals>
+            <configuration>
+              <nodeVersion>v12.17.0</nodeVersion>
+              <npmVersion>6.14.4</npmVersion>
+            </configuration>
+          </execution>
+          <execution>
+            <id>npm run prebuild</id>
+            <goals>
+              <goal>npm</goal>
+            </goals>
+            <configuration>
+              <arguments>run prebuild</arguments>
             </configuration>
           </execution>
         </executions>

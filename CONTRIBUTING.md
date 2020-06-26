@@ -11,6 +11,22 @@ To contribute code or documentation, please submit a [pull request](https://gith
 A good way to familiarize yourself with the codebase and contribution process is
 to look for and tackle low-hanging fruit in the [issue tracker](https://github.com/ibm-messaging/kafka-java-vertx-starter/issues).
 
+## Commit message linting
+
+The format of your commit message should be as follows:
+
+```
+(feat|fix|docs|style|refactor|perf|test|chore): <subject>
+
+<body>
+
+(Resolves|Closes|Contributes to|Reverts): <issue link>
+
+Signed-off-by: <user>
+```
+
+It will automatically be checked by [husky](https://github.com/typicode/husky).
+
 ## Create issues...
 If you would like to implement a new feature, please [raise an issue](https://github.com/ibm-messaging/kafka-java-vertx-starter/issues)
 before sending a pull request so the feature can be discussed before you start working on it.

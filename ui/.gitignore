@@ -1,0 +1,7 @@
+.history
+node_modules
+dist
+coverage
+.eslintcache
+.vscode
+e2e/failure_output/**

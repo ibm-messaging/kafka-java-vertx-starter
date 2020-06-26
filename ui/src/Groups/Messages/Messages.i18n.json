@@ -1,0 +1,8 @@
+{
+  "en": {
+    "NO_MESSAGES_TITLE_PRODUCER": "No messages produced",
+    "NO_MESSAGES_BODY_PRODUCER": "Produce messages to Kafka to see them here.",
+    "NO_MESSAGES_TITLE_CONSUMER": "No messages consumed",
+    "NO_MESSAGES_BODY_CONSUMER": "Consume messages from Kafka to see them here."
+  }
+}

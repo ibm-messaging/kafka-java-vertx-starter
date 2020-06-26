@@ -1,0 +1,137 @@
+{
+  "extends": [
+    "eslint:recommended",
+    "plugin:import/errors",
+    "plugin:import/warnings",
+    "plugin:react/recommended",
+    "prettier",
+    "plugin:jest-playwright/recommended",
+    "plugin:react-hooks/recommended"
+  ],
+  "plugins": ["react", "jsx-a11y", "prettier"],
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "env": {
+    "es6": true,
+    "browser": true,
+    "jest": true,
+    "node": true
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    },
+    "import/resolver": "webpack"
+  },
+  "parser": "babel-eslint",
+  "rules": {
+    "prettier/prettier": "error",
+    "strict": [2, "global"],
+    "curly": 2,
+    "no-console": 2,
+    "no-debugger": 2,
+    "no-var": 2,
+    "eol-last": 0,
+    "no-unused-vars": 2,
+    "no-underscore-dangle": 0,
+    "no-alert": 2,
+    "no-lone-blocks": 1,
+    "no-warning-comments": 1,
+    "no-sync": 1,
+    "no-empty-function": 2,
+    "import/extensions": [
+      2,
+      "always",
+      {
+        "ignorePackages": true
+      }
+    ],
+    "valid-jsdoc": [2, {}],
+    "default-case": 2,
+    "handle-callback-err": 2,
+    "no-lonely-if": 2,
+    "no-self-compare": 2,
+    "no-throw-literal": 2,
+    "react/display-name": [
+      1,
+      {
+        "ignoreTranspilerName": false
+      }
+    ],
+    "react/forbid-prop-types": [
+      1,
+      {
+        "forbid": ["any"]
+      }
+    ],
+    "react/jsx-boolean-value": 1,
+    "react/jsx-closing-bracket-location": 0,
+    "react/jsx-indent-props": 0,
+    "react/jsx-key": 1,
+    "react/jsx-max-props-per-line": 0,
+    "react/jsx-no-bind": 1,
+    "react/jsx-no-duplicate-props": 1,
+    "react/jsx-no-literals": 0,
+    "react/jsx-no-undef": 1,
+    "react/jsx-pascal-case": 1,
+    "react/jsx-sort-prop-types": 0,
+    "react/jsx-sort-props": 0,
+    "react/jsx-uses-react": 1,
+    "react/jsx-uses-vars": 1,
+    "react/jsx-filename-extension": [
+      1,
+      {
+        "extensions": [".js", ".jsx"]
+      }
+    ],
+    "react/jsx-no-target-blank": 2,
+    "react/no-danger": 1,
+    "react/no-did-mount-set-state": 1,
+    "react/no-did-update-set-state": 1,
+    "react/no-direct-mutation-state": 1,
+    "react/no-multi-comp": 1,
+    "react/no-set-state": 0,
+    "react/no-unknown-property": 1,
+    "react/prefer-es6-class": 1,
+    "react/prop-types": 1,
+    "react/react-in-jsx-scope": 1,
+    "react/self-closing-comp": 1,
+    "react/sort-comp": 1,
+    "jsx-a11y/click-events-have-key-events": 1,
+    "jsx-a11y/alt-text": 1,
+    "jsx-a11y/anchor-has-content": 1,
+    "jsx-a11y/anchor-is-valid": 1,
+    "jsx-a11y/aria-proptypes": 1,
+    "jsx-a11y/aria-props": 1,
+    "jsx-a11y/aria-role": 1,
+    "jsx-a11y/aria-unsupported-elements": 1,
+    "jsx-a11y/iframe-has-title": 1,
+    "jsx-a11y/img-redundant-alt": 1,
+    "jsx-a11y/interactive-supports-focus": 1,
+    "jsx-a11y/label-has-for": [
+      2,
+      {
+        "components": ["Label"],
+        "required": {
+          "some": ["nesting", "id"]
+        },
+        "allowChildren": false
+      }
+    ],
+    "jsx-a11y/heading-has-content": 1,
+    "jsx-a11y/mouse-events-have-key-events": 1,
+    "jsx-a11y/no-autofocus": 1,
+    "jsx-a11y/no-onchange": 1,
+    "jsx-a11y/no-redundant-roles": 1,
+    "jsx-a11y/no-static-element-interactions": 1,
+    "jsx-a11y/role-has-required-aria-props": 1,
+    "jsx-a11y/role-supports-aria-props": 1,
+    "jsx-a11y/scope": 1,
+    "jsx-a11y/tabindex-no-positive": 1
+  }
+}

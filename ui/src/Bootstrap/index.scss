@@ -1,0 +1,46 @@
+/*
+ * (C) Copyright IBM Corp. 2020  All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+*/
+// disable carbon font style import
+$css--font-face: false;
+$css--plex: false;
+
+// import plex fonts ourselves
+$font-prefix: '~@ibm/plex'; // path to where the font files are
+@import '~@ibm/plex/scss/ibm-plex.scss'; // import scss to load them
+
+// Import Carbon styles (individually) here
+@import "@carbon/themes/scss/themes";
+// default to the g100 theme
+$carbon--theme: $carbon--theme--g100;
+@import '@carbon/type/scss/styles';
+@import '@carbon/type/scss/font-family';
+@import 'carbon-components/scss/globals/grid/grid';
+@import 'carbon-components/scss/components/tag/tag';
+@import 'carbon-components/scss/components/tile/tile';
+@import 'carbon-components/scss/components/button/button';
+@import 'carbon-components/scss/components/text-input/text-input';
+
+// include global changes to styling
+body {
+    @include carbon--type-style('body-short-01');
+    color: $text-01;
+    background-color: $ui-background;
+    line-height: 1;
+}
+
+@include carbon--theme($carbon--theme--g90) {
+
+    @include tile();
+    
+}
+
+// Import all other .scss files here
+@import 'Elements/Message/Message.scss';
+@import 'Elements/Text/Text.scss';
+@import 'Groups/Counter/Counter.scss';
+@import 'Groups/Messages/Messages.scss';
+@import 'Panels/Consumer/Consumer.scss';
+@import 'Panels/Producer/Producer.scss';
+@import 'Bootstrap/App/App.scss';

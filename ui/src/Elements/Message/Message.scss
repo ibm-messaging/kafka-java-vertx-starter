@@ -1,0 +1,131 @@
+/*
+ * (C) Copyright IBM Corp. 2020  All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+*/
+.Message {
+    display: flex;
+    flex-direction: column;
+    min-width: unset;
+    position: relative;
+
+    &__error-message {
+        color: $text-02;
+    }
+
+    &__consumer-details {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    &__tile--producer {
+        padding: $spacing-05;
+    }
+
+    &__tile--producer,
+    &__tile--consumer {
+        &--selected {
+            @include carbon--theme($carbon--theme--g90) {
+            background: $hover-ui;
+            }
+        }
+    }
+
+    &__tile--producer, &__tile--error {
+        height: 100%;
+    }
+
+    &__icon {
+        margin-bottom: $spacing-02;
+        &--checkmark {
+            fill: $icon-02;
+        }
+
+        &--error {
+            fill: $support-01;
+        }
+    }
+
+    &__consumer {
+
+        &-partition-offset {
+            margin-left: $layout-02;
+            &-container {
+                display: flex;
+                flex-direction: row;
+                flex-wrap: nowrap;
+            }
+        }      
+
+        &-payload {
+            margin-top: $layout-01;
+        }
+    }
+
+    &__labelled-value {
+        margin-bottom: $spacing-02;
+        &:last-of-type() {
+          margin-bottom: 0;
+        }
+    }
+
+    &--producer {
+        align-self: flex-end;
+        height: 100%;
+    }
+
+    &--producer-first,
+    &--consumer-first {
+        position: relative;
+    }
+
+    &--producer:nth-of-type(2):before {
+        position: absolute;
+        display: block;
+        content: " ";
+        background: $ui-background;
+        width: 100%;
+        top: -$spacing-01;
+        bottom: -$spacing-01;
+    }
+
+    &--consumer:nth-of-type(2):before {
+        position: absolute;
+        display: block;
+        content: " ";
+        background: $ui-01;
+        height: 100%;
+        left: -$spacing-01;
+        right: -$spacing-01;
+    }
+
+    &__first-container {
+        position: absolute;
+        top: carbon--mini-units(-2.4);
+        bottom: -$spacing-03;
+        right: -$spacing-03;
+        left: -$spacing-03;
+        border: $spacing-01 solid $ui-02;
+    }
+
+    &__tag-consumer-first,
+    &__tag-producer-first {
+        position: relative;
+        margin-left: $spacing-05;
+        top: -$spacing-05;
+    }
+
+    &__label {
+        color: $text-02;
+    }
+
+    &__value {
+        @include carbon--type-style("body-short-01");
+        color: $text-01;
+        max-width: carbon--mini-units(64);
+    }
+
+    &--producer-first &__icon--checkmark {
+        fill: $support-02;
+    }
+}

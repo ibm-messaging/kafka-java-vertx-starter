@@ -1,3 +1,21 @@
-target
+# IDE ignores
+.history
 .idea
 *.iml
+.settings
+.vscode
+.classpath
+.project
+.DS_Store
+
+# Java ignores
+target
+src/main/resources/webroot/*
+
+# UI ignores
+node/
+ui/dist
+**/node_modules
+coverage/
+**/.out/
+ui/.eslintcache

@@ -1,0 +1,24 @@
+name: Git
+
+on: [pull_request]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    name: Lint Commit Messages
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: Use Node.js 12.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+      - name: Fetch origin
+        run: git fetch origin
+      - name: Event Sender
+        run: echo ${{ github.event.sender.login }}
+      - name: Lint commit message
+        if: ${{ github.event.sender.login != 'dependabot[bot]' }}
+        run: npx commitlint --from origin/${{ github.base_ref }} --to HEAD -g ./ui/package.json

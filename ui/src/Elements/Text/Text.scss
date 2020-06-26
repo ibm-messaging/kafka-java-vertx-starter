@@ -1,0 +1,21 @@
+/*
+ * (C) Copyright IBM Corp. 2020  All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+*/
+.Text {
+    &--heading {
+        @include carbon--type-style('productive-heading-06');
+    }
+    &--subheading {
+        @include carbon--type-style('productive-heading-02');
+    }
+    &--body {
+        @include carbon--type-style('body-short-01');
+    }
+    &--code {
+        @include carbon--type-style('code-01');
+    }
+    &--label {
+        @include carbon--type-style('label-01');
+    }
+}
