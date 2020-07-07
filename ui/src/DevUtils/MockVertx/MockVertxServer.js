@@ -232,7 +232,7 @@ const defaultConfig = {
   // consume records endpoint
   consumeEndpoint: CONSUME_ENDPOINT,
   // enable/disable extra logging
-  enableLog: true,
+  enableLog: false,
   // one record will be produced every produceRate ms
   produceRate: TICK_RATE,
   // name of the topic being produced/consumed
