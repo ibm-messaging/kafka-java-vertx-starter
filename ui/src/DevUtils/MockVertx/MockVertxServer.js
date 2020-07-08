@@ -181,9 +181,10 @@ const generateHandlers = (
   { produceEndpoint, consumeEndpoint, ...modelConfigs },
   otherEventHandlers = {}
 ) => {
-  const { handleProduceMessage, handleConsumeMessage } = generateModelForConfig(
-    modelConfigs
-  );
+  const {
+    handleProduceMessage,
+    handleConsumeMessage,
+  } = generateModelForConfig({ ...modelConfigs });
   return handleWebsocketEvents({
     ...otherEventHandlers,
     message: ({ calledWith, url, ws }) => {
@@ -197,6 +198,25 @@ const generateHandlers = (
           break;
         default:
           break;
+      }
+    },
+    close: ({ url }) => {
+      // Send a stop message to stop the consumer or producer when the socket closes
+      const stopMessage = { action: 'stop' };
+      switch (url) {
+        case produceEndpoint:
+          handleProduceMessage(stopMessage);
+          break;
+        case consumeEndpoint:
+          handleConsumeMessage(stopMessage);
+          break;
+        default:
+          break;
+      }
+
+      // Call any other close handlers
+      if (otherEventHandlers.close) {
+        otherEventHandlers.close({ url });
       }
     },
   });

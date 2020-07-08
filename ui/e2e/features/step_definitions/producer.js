@@ -2,61 +2,79 @@
  * (C) Copyright IBM Corp. 2020  All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0
  */
+import { getSelector } from './utils.js';
+
 const stepDefs = (cucumber) => {
   cucumber.defineRule('I start the producer', async () => {
-    await page.click('css=[aria-label="Start producing messages"]');
+    await page.waitForSelector(
+      `${getSelector('producer_button')} >> text="Start producing"`
+    );
+    await page.click(getSelector('producer_button'));
   });
 
   cucumber.defineRule('I stop the producer', async () => {
-    await page.click('css=[aria-label="Stop producing messages"]');
-  });
-
-  cucumber.defineRule('a message appears in the producer list', async () => {
-    await page.waitForSelector('css=[aria-label="Produced message"]');
+    await page.waitForSelector(
+      `${getSelector('producer_button')} >> text="Stop producing"`
+    );
+    await page.click(getSelector('producer_button'));
   });
 
   cucumber.defineRule(
-    'I set the payload to {string}',
-    async (world, payload) => {
-      await page.fill('*label >> text="Message payload"', payload);
-    }
-  );
-
-  cucumber.defineRule(
-    'a message appears in the producer list with payload {string}',
-    async (world, content) => {
+    'a message appears in the producer list',
+    async (world) => {
       world.producedMessage = await page.waitForSelector(
-        `css=[aria-label="Produced message"] >> text="${content}"`
+        getSelector('producer_produced_message')
       );
     }
   );
 
-  cucumber.defineRule('I hover over that message', async (world) => {
+  cucumber.defineRule(
+    'I set the payload to {string}',
+    async (world, payload) => {
+      await page.fill(getSelector('producer_value_input'), payload);
+      await page.waitForSelector(getSelector('producer_value_input'));
+    }
+  );
+
+  cucumber.defineRule('I hover over the produced message', async (world) => {
     const { producedMessage } = world;
-    producedMessage.hover();
+    await producedMessage.hover();
   });
 
-  cucumber.defineRule('the produced message is highlighted', async (world) => {
-    const { consumedMessage } = world;
-    const offset = await consumedMessage.textContent('data-test-id=offset');
-    const partition = await consumedMessage.textContent(
-      'data-test-id=partition'
-    );
-    const producedMessage = await page.$eval(
-      'css=[aria-label="Produced message"]',
-      async (messages, { offset: cOffset, partition: cPartition }) => {
-        return messages.find(async (messageEl) => {
-          const offset = await messageEl.textContent('data-test-id=offset');
-          const partition = await consumedMessage.textContent(
-            'data-test-id=partition'
-          );
-          return offset === cOffset && partition === cPartition;
-        });
-      },
-      { offset, partition }
-    );
+  cucumber.defineRule('the consumed message is highlighted', async (world) => {
+    const { producedMessage } = world;
+    const offset = await (
+      await producedMessage.$(getSelector('offset'))
+    ).textContent();
+    const partition = await (
+      await producedMessage.$(getSelector('partition'))
+    ).textContent();
+
+    const consumedMessage = (
+      await page.$$(getSelector('consumer_consumed_message'))
+    ).find(async (messageElement) => {
+      let cOffset, cPartition;
+      try {
+        cOffset = await (
+          await messageElement.$(getSelector('offset'))
+        ).textContent();
+        cPartition = await (
+          await messageElement.$(getSelector('partition'))
+        ).textContent();
+      } catch (error) {
+        // the message element may get removed while async calls
+        // are running if there are more messages than are displayed or
+        // a test completes, hence this try/catch block.
+      }
+
+      return offset === cOffset && partition === cPartition;
+    });
+
+    expect(consumedMessage).not.toBeUndefined();
     expect(
-      (await producedMessage.getAttribute('class')).contains('highlighted')
+      (await consumedMessage.getAttribute('class')).includes(
+        'Message--consumer-selected'
+      )
     ).toBe(true);
   });
 };

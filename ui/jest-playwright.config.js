@@ -13,5 +13,5 @@ module.exports = {
   launchOptions: {
     headless: true,
   },
-  browsers: ['firefox', 'webkit', 'chromium'],
+  browsers: ['firefox', 'chromium'],
 };
