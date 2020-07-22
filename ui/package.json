@@ -64,7 +64,8 @@
           "style",
           "refactor",
           "test",
-          "revert"
+          "revert",
+          "chore"
         ]
       ],
       "type-empty": [
