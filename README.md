@@ -32,6 +32,7 @@ To build this project you will need:
 - [Maven `mvn`](https://maven.apache.org/)
 - [npm version 6.4.1 or later](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 - [node 10.15.0 or later](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+- [Java 8 or Java 11](https://adoptopenjdk.net)
 
 ## Tool Configuration
 
