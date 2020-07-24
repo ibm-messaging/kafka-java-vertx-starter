@@ -21,7 +21,7 @@ const TOPIC_NAME = config.topic;
 const NUMBER_OF_PARTITIONS = 1;
 const PLACEHOLDER_PAYLOAD = 'Hello world';
 const TICK_RATE = 2000;
-const ERROR_CHANCE = 5;
+const ERROR_CHANCE = -1; // -1 = no errors, 0 -> 100 % chance of an error occuring
 
 // Private helper functions
 
