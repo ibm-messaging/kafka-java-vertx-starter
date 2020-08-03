@@ -93,7 +93,7 @@ public class WebSocketServer extends AbstractVerticle {
     return vertx.createHttpServer()
       .requestHandler(router)
       .webSocketHandler(this::handleWebSocket)
-      .listen(8080, "localhost")
+      .listen(8080)
       .onSuccess(ok -> logger.info("🚀 WebSocketServer started"))
       .onFailure(err -> logger.error("❌ WebSocketServer failed to listen", err));
   }
