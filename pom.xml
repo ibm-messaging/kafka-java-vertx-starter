@@ -13,7 +13,7 @@
     <vertx.version>4.0.0-milestone5</vertx.version>
     <logback.version>1.2.3</logback.version>
     <jackson-databind.version>2.11.2</jackson-databind.version>
-    <junit.version>5.6.2</junit.version>
+    <junit.version>5.7.0</junit.version>
     <hamcrest.version>2.2</hamcrest.version>
     <maven.surefire.version>3.0.0-M5</maven.surefire.version>
   </properties>
