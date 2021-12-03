@@ -8,7 +8,6 @@ name: Build and create release
 jobs:
   build:
     name: Build and upload release binary
-    if: github.event.base_ref == 'refs/heads/master' # only run if on master branch
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
