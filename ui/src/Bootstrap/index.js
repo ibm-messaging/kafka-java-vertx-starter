@@ -13,7 +13,7 @@ let config = JSON.parse(
 );
 
 const returnWebsocketForEndpoint = (path) => () =>
-  new WebSocket(`ws://localhost:8080${path}`);
+  new WebSocket(`ws://${window.location.host}${path}`);
 
 ReactDOM.render(
   <React.StrictMode>
