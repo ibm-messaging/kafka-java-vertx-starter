@@ -80,7 +80,7 @@
   },
   "dependencies": {
     "@carbon/themes": "^10.36.0",
-    "@carbon/type": "^10.35.0",
+    "@carbon/type": "^11.5.0",
     "@ibm/plex": "^5.2.1",
     "carbon-components": "^10.37.0",
     "carbon-components-react": "^7.43.0",
