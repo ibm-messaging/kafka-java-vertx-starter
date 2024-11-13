@@ -22,3 +22,4 @@ jobs:
       - name: Lint commit message
         if: ${{ github.event.sender.login != 'dependabot[bot]' }}
         run: npx commitlint --from origin/${{ github.base_ref }} --to HEAD -g ./ui/package.json
+
