@@ -6,15 +6,15 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     name: Lint Commit Messages
-
+    
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha }}
-      - name: Use Node.js 12.x
-        uses: actions/setup-node@v1
+      - name: Use Node.js 20.x
+        uses: actions/setup-node@v4
         with:
-          node-version: 12.x
+          node-version: 20
       - name: Fetch origin
         run: git fetch origin
       - name: Event Sender
@@ -22,3 +22,4 @@ jobs:
       - name: Lint commit message
         if: ${{ github.event.sender.login != 'dependabot[bot]' }}
         run: npx commitlint --from origin/${{ github.base_ref }} --to HEAD -g ./ui/package.json
+
