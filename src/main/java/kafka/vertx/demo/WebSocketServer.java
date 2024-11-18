@@ -11,6 +11,7 @@ import io.vertx.core.Promise;
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.core.http.HttpServer;
+import io.vertx.core.http.HttpServerOptions;
 import io.vertx.core.http.ServerWebSocket;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
@@ -90,7 +91,7 @@ public class WebSocketServer extends AbstractVerticle {
   }
 
   private Future<HttpServer> startWebSocket(Router router) {
-    return vertx.createHttpServer()
+    return vertx.createHttpServer(new HttpServerOptions().setRegisterWebSocketWriteHandlers(true))
       .requestHandler(router)
       .webSocketHandler(this::handleWebSocket)
       .listen(8080)
