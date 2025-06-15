@@ -9,7 +9,7 @@
   <version>1.1.4</version>
 
   <properties>
-    <vertx.version>4.5.14</vertx.version>
+    <vertx.version>4.5.15</vertx.version>
     <logback.version>1.5.11</logback.version>
     <jackson-databind.version>2.16.1</jackson-databind.version>
     <junit.version>5.9.2</junit.version>
@@ -94,6 +94,10 @@
       <resource>
         <directory>src/main/resources</directory>
         <filtering>true</filtering>
+        <excludes>
+          <exclude>**/*.woff2</exclude>
+          <exclude>**/*.woff</exclude>
+        </excludes>
       </resource>
     </resources>
     <pluginManagement>
