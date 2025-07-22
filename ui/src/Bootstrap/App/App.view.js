@@ -11,7 +11,7 @@ import { NO_OP } from 'Utils';
 import { Grid, Column, Row } from 'carbon-components-react';
 import translations from './i18n.json';
 import { PropTypes } from 'prop-types';
-import clsx from 'clsx';
+import cx from 'clsx';
 
 import es_logo from 'Images/es_logo.svg';
 
@@ -24,7 +24,7 @@ const App = (props) => {
   };
 
   return (
-    <main className={clsx('App', className)}>
+    <main className={cx('App', className)}>
       <Grid>
         <ConfigContextConsumer>
           {({ topic, producerPath, consumerPath }) => (

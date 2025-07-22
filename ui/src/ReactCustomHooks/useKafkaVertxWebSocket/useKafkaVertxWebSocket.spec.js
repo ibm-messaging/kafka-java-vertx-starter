@@ -211,12 +211,8 @@ describe('useKafkaVertxWebSocket hook', () => {
       fakeTime.tick(debounceTimer);
     });
 
-    let {
-      metadata,
-      messages,
-      totalSuccessMessages,
-      totalErrorMessages,
-    } = getResultFromHook();
+    let { metadata, messages, totalSuccessMessages, totalErrorMessages } =
+      getResultFromHook();
 
     // expect no change in externals
 
@@ -253,12 +249,8 @@ describe('useKafkaVertxWebSocket hook', () => {
       fakeTime.tick(debounceTimer);
     });
 
-    let {
-      metadata,
-      messages,
-      totalSuccessMessages,
-      totalErrorMessages,
-    } = getResultFromHook();
+    let { metadata, messages, totalSuccessMessages, totalErrorMessages } =
+      getResultFromHook();
 
     expect(metadata).toEqual({});
     expect(messages).toEqual([]);
@@ -288,12 +280,8 @@ describe('useKafkaVertxWebSocket hook', () => {
       fakeTime.tick(debounceTimer);
     });
 
-    let {
-      metadata,
-      messages,
-      totalSuccessMessages,
-      totalErrorMessages,
-    } = getResultFromHook();
+    let { metadata, messages, totalSuccessMessages, totalErrorMessages } =
+      getResultFromHook();
 
     expect(metadata).toEqual(metadataShape);
     expect(messages).toEqual([]);
@@ -331,12 +319,8 @@ describe('useKafkaVertxWebSocket hook', () => {
       fakeTime.tick(debounceTimer);
     });
 
-    let {
-      metadata,
-      messages,
-      totalSuccessMessages,
-      totalErrorMessages,
-    } = getResultFromHook();
+    let { metadata, messages, totalSuccessMessages, totalErrorMessages } =
+      getResultFromHook();
 
     expect(metadata).toEqual({});
     expect(messages).toEqual([expectedMessageShape]);
@@ -378,12 +362,8 @@ describe('useKafkaVertxWebSocket hook', () => {
       fakeTime.tick(debounceTimer);
     });
 
-    let {
-      metadata,
-      messages,
-      totalSuccessMessages,
-      totalErrorMessages,
-    } = getResultFromHook();
+    let { metadata, messages, totalSuccessMessages, totalErrorMessages } =
+      getResultFromHook();
 
     expect(metadata).toEqual({});
     // newest first

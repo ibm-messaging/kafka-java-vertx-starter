@@ -7,7 +7,7 @@ import { CONSTANTS } from 'Utils';
 import {
   storybookWebsocket,
   controlledWebsocket,
-} from 'DevUtils/MockWebsocket';
+} from 'DevUtils/MockWebsocket/index.js';
 
 export { translations };
 

@@ -5,7 +5,7 @@
 /* eslint-disable react/jsx-no-bind */
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import clsx from 'clsx';
+import cx from 'clsx';
 import { debounce, get } from 'lodash-es';
 
 import { translations } from './Producer.assets.js';
@@ -28,18 +28,12 @@ const Producer = (props) => {
     className,
     ...others
   } = props;
-  const classesToApply = clsx('Producer', { [className]: className });
+  const classesToApply = cx('Producer', { [className]: className });
 
   const translate = useTranslate(translations);
   const [producerRunning, toggleProducerRunning] = useToggle(false);
-  const {
-    start,
-    stop,
-    isReady,
-    isRunning,
-    messages,
-    totalSuccessMessages,
-  } = useKafkaVertxWebSocket(getProducerWebsocket, maxNumberOfMessages);
+  const { start, stop, isReady, isRunning, messages, totalSuccessMessages } =
+    useKafkaVertxWebSocket(getProducerWebsocket, maxNumberOfMessages);
   const [messageValue, setMessageValue] = useState(
     translate('MESSAGE_VALUE_DEFAULT', {}, true)
   );
@@ -96,7 +90,7 @@ const Producer = (props) => {
             {({ updateSelectedMessage, isSameAsSelected }) => {
               return (
                 <ProducerMessage
-                  className={clsx('Producer__message', {
+                  className={cx('Producer__message', {
                     ['Producer__message--first']: index === 0,
                   })}
                   {...idAttributeGenerator('producer_produced_message')}

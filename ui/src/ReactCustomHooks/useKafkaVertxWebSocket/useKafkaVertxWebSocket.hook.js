@@ -7,32 +7,34 @@ import { useWebSocket, STATUS, useToggle } from 'ReactCustomHooks';
 import { CONSTANTS } from 'Utils';
 import { throttle } from 'lodash-es';
 
-const onMessage = (messageBuffer, updateMetadata, triggerBufferFlush) => ({
-  data = '{"empty": true}',
-}) => {
-  try {
-    const content = JSON.parse(data);
-    if (!content.empty) {
-      // check if we have a metadata response
-      if (
-        content.tickRate &&
-        (content.consumerStarted || content.producerStarted)
-      ) {
-        updateMetadata(content);
-      } else {
-        // must be a message response. As messages can happen very quickly, we throttle state updates, and store new messages in a buffer
-        // we are modifying refs here - hence the .current
-        messageBuffer.current.push(content);
-        triggerBufferFlush();
+const onMessage =
+  (messageBuffer, updateMetadata, triggerBufferFlush) =>
+  ({ data = '{"empty": true}' }) => {
+    try {
+      const content = JSON.parse(data);
+      if (!content.empty) {
+        // check if we have a metadata response
+        if (
+          content.tickRate &&
+          (content.consumerStarted || content.producerStarted)
+        ) {
+          updateMetadata(content);
+        } else {
+          // must be a message response. As messages can happen very quickly, we throttle state updates, and store new messages in a buffer
+          // we are modifying refs here - hence the .current
+          messageBuffer.current.push(content);
+          triggerBufferFlush();
+        }
       }
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error(
+        `Error occured while parsing onMessageResponse. Error was:`
+      );
+      // eslint-disable-next-line no-console
+      console.dir(err);
     }
-  } catch (err) {
-    // eslint-disable-next-line no-console
-    console.error(`Error occured while parsing onMessageResponse. Error was:`);
-    // eslint-disable-next-line no-console
-    console.dir(err);
-  }
-};
+  };
 
 const useManagedMessageState = (maxMessageNumber) => {
   const [messageState, updateMessageState] = useState({
@@ -94,9 +96,8 @@ const useKafkaVertxWebSocket = (
   bufferDebouceTimeout = 1000,
   defaultStartContent = {}
 ) => {
-  const [messageState, updateMessageStateWithBuffer] = useManagedMessageState(
-    maxMessageNumber
-  );
+  const [messageState, updateMessageStateWithBuffer] =
+    useManagedMessageState(maxMessageNumber);
   const [hasStarted, toggleHasStarted] = useToggle(false);
   const messageBuffer = useRef([]);
   const [metadata, setMetadata] = useState({});

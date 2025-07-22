@@ -17,7 +17,7 @@ import {
 } from 'carbon-components-react';
 import { CheckmarkFilled16, ErrorFilled16 } from '@carbon/icons-react';
 import { isEmpty, isFunction } from 'lodash-es';
-import clsx from 'clsx';
+import cx from 'clsx';
 
 import { Label } from 'Elements';
 import { useTranslate } from 'ReactCustomHooks';
@@ -36,7 +36,7 @@ const Message = (props) => {
     ...others
   } = props;
 
-  const classesToApply = clsx('Message', `Message--${usage}`, {
+  const classesToApply = cx('Message', `Message--${usage}`, {
     [`Message--${usage}-first`]: isFirst,
     [`Message--${usage}-selected`]: isSelected,
     [`Message--${usage}-error`]: error,
@@ -98,7 +98,7 @@ const renderConsumerMessageTile = (
     <ExpandableTile
       expanded={isFirst}
       {...getInteractionHandler(onInteraction, CONSUMER, message)}
-      className={clsx('Message__tile--consumer', {
+      className={cx('Message__tile--consumer', {
         [`Message__tile--consumer--selected`]: isSelected,
       })}
       {...idAttributeGenerator('consumed_message_tile')}
@@ -154,18 +154,13 @@ const renderProducerMessageTile = (
   return (
     <ClickableTile
       {...getInteractionHandler(onInteraction, PRODUCER, message)}
-      className={clsx(
-        'Message',
-        'Message__producer',
-        'Message__tile--producer',
-        {
-          [`Message__tile--producer--selected`]: isSelected,
-        }
-      )}
+      className={cx('Message', 'Message__producer', 'Message__tile--producer', {
+        [`Message__tile--producer--selected`]: isSelected,
+      })}
       {...idAttributeGenerator('produced_message_tile')}
     >
       <CheckmarkFilled16
-        className={clsx('Message__icon', 'Message__icon--checkmark')}
+        className={cx('Message__icon', 'Message__icon--checkmark')}
       />
       {renderValueWithLabel(translate('PARTITION'), partition, 'partition')}
       {renderValueWithLabel(translate('OFFSET'), offset, 'offset')}
@@ -177,9 +172,7 @@ const renderErrorTile = (error) => {
   const { message } = error;
   return (
     <Tile className={'Message__tile--error'}>
-      <ErrorFilled16
-        className={clsx('Message__icon', 'Message__icon--error')}
-      />
+      <ErrorFilled16 className={cx('Message__icon', 'Message__icon--error')} />
       <div>
         <Label className={'Message__error-message'}>{message}</Label>
       </div>
@@ -189,7 +182,7 @@ const renderErrorTile = (error) => {
 
 const renderValueWithLabel = (label, value, idAttribute, additionalClasses) => {
   return (
-    <div className={clsx('Message__labelled-value', additionalClasses)}>
+    <div className={cx('Message__labelled-value', additionalClasses)}>
       <div>
         <Label className={'Message__label'}>{label}</Label>
       </div>

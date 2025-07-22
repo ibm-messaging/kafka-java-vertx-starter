@@ -5,7 +5,7 @@
 /* eslint-disable react/no-multi-comp */ // disabled as we have a hoc funtion in file
 import React from 'react';
 import PropTypes from 'prop-types';
-import clsx from 'clsx';
+import cx from 'clsx';
 import { idAttributeGenerator } from 'Utils';
 
 import { useTranslate } from 'ReactCustomHooks';
@@ -16,7 +16,7 @@ const Messages = (props) => {
   const { usage, className, children, ...others } = props;
   // check if we have any child elements. If not, empty state
   const hasChildren = React.Children.count(children) > 0;
-  const classesToApply = clsx('Messages', `Messages--${usage}`, {
+  const classesToApply = cx('Messages', `Messages--${usage}`, {
     [className]: className,
     [`Messages--${usage}-empty`]: !hasChildren,
   });
@@ -36,7 +36,7 @@ const Messages = (props) => {
       ) : (
         <div
           {...idAttributeGenerator('messages_empty')}
-          className={clsx('Messages__empty', `Messages__empty--${usage}`)}
+          className={cx('Messages__empty', `Messages__empty--${usage}`)}
         >
           <div className={'Messages__empty-title-container'}>
             <Subheading className={'Messages__empty-title'}>

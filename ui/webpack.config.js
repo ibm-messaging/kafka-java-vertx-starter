@@ -4,7 +4,7 @@
  */
 const path = require('path');
 const miniCssExtractPlugin = require('mini-css-extract-plugin');
-const { webpackAliases } = require('./moduleAliases');
+const { webpackAliases } = require('./moduleAliases.js');
 const babelPresets = require('./babelPresets.js');
 const {
   getDevWebpackProxyConfigForMockVertx,

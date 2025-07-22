@@ -74,8 +74,10 @@ const customRenderHook = (callback) => {
 
 const mountHook = (hook, ...args) => customRenderHook(() => hook(...args));
 
-const confirmHasClassNames = (...classNamesExpected) => (content, node) =>
-  classNamesExpected.every((className) => node.classList.contains(className)); // has all the expected classnames
+const confirmHasClassNames =
+  (...classNamesExpected) =>
+  (content, node) =>
+    classNamesExpected.every((className) => node.classList.contains(className)); // has all the expected classnames
 
 export * from '@testing-library/react';
 export * from '@testing-library/jest-dom/extend-expect';

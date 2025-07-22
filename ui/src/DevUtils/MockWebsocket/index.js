@@ -27,10 +27,12 @@ const consumerMetadata = {
   consumerStarted: true,
 };
 
-// eslint-disable-next-line no-console
-const sendMessage = (sendFn = () => console.error('No message function!')) => (
-  content
-) => sendFn({ data: JSON.stringify(content) });
+const sendMessage =
+  (
+    sendFn = () => console.error('No message function!') // eslint-disable-line no-console
+  ) =>
+  (content) =>
+    sendFn({ data: JSON.stringify(content) });
 
 export const storybookWebsocket = (
   responseType = CONSTANTS.PRODUCER,

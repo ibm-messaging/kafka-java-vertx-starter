@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 const { mkdir } = require('fs').promises;
-const PlaywrightEnvironment = require('jest-playwright-preset/lib/PlaywrightEnvironment')
-  .default;
+const PlaywrightEnvironment =
+  require('jest-playwright-preset/lib/PlaywrightEnvironment').default;
 const { saveVideo } = require('playwright-video');
 
 class CustomEnvironment extends PlaywrightEnvironment {

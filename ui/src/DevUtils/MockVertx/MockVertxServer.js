@@ -26,17 +26,19 @@ const ERROR_CHANCE = -1; // -1 = no errors, 0 -> 100 % chance of an error occuri
 // Private helper functions
 
 // maps an object of event/handler pairs (config) to the websocket server
-const handleWebsocketEvents = (config = {}) => (ws, { url }) => {
-  Object.entries(config).forEach(([event, handler]) => {
-    ws.on(event, (...args) =>
-      handler({
-        calledWith: args,
-        url,
-        ws,
-      })
-    );
-  });
-};
+const handleWebsocketEvents =
+  (config = {}) =>
+  (ws, { url }) => {
+    Object.entries(config).forEach(([event, handler]) => {
+      ws.on(event, (...args) =>
+        handler({
+          calledWith: args,
+          url,
+          ws,
+        })
+      );
+    });
+  };
 
 // generator for a simple logger
 const generateLogger = (enabled = false) =>
@@ -181,10 +183,9 @@ const generateHandlers = (
   { produceEndpoint, consumeEndpoint, ...modelConfigs },
   otherEventHandlers = {}
 ) => {
-  const {
-    handleProduceMessage,
-    handleConsumeMessage,
-  } = generateModelForConfig({ ...modelConfigs });
+  const { handleProduceMessage, handleConsumeMessage } = generateModelForConfig(
+    { ...modelConfigs }
+  );
   return handleWebsocketEvents({
     ...otherEventHandlers,
     message: ({ calledWith, url, ws }) => {

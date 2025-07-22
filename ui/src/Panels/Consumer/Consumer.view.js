@@ -5,7 +5,7 @@
 /* eslint-disable react/jsx-no-bind */
 import React from 'react';
 import PropTypes from 'prop-types';
-import clsx from 'clsx';
+import cx from 'clsx';
 
 import { translations } from './Consumer.assets.js';
 import { CONSTANTS, idAttributeGenerator } from 'Utils';
@@ -27,18 +27,12 @@ const Consumer = (props) => {
     className,
     ...others
   } = props;
-  const classesToApply = clsx('Consumer', { [className]: className });
+  const classesToApply = cx('Consumer', { [className]: className });
 
   const translate = useTranslate(translations);
   const [consumerRunning, toggleConsumerRunning] = useToggle(false);
-  const {
-    start,
-    stop,
-    isReady,
-    isRunning,
-    messages,
-    totalSuccessMessages,
-  } = useKafkaVertxWebSocket(getConsumerWebsocket, maxNumberOfMessages);
+  const { start, stop, isReady, isRunning, messages, totalSuccessMessages } =
+    useKafkaVertxWebSocket(getConsumerWebsocket, maxNumberOfMessages);
 
   const onButtonClick = () => {
     if (consumerRunning) {
