@@ -14,10 +14,10 @@ jobs:
         working-directory: ui
     steps:
       - uses: actions/checkout@v4
-      - name: Use Node.js 12.x
+      - name: Use Node.js 18.x
         uses: actions/setup-node@v3
         with:
-          node-version: 12.x
+          node-version: 18.x
       - name: Install Dependencies
         run: npm ci
       - name: Build
@@ -48,17 +48,17 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - name: Use Node.js 12.x
+      - name: Use Node.js 18.x
         uses: actions/setup-node@v3
         with:
-          node-version: 12.x
+          node-version: 18.x
       - name: Install Dependencies
         run: npm ci
       - name: Code lint
         run: npm run lint
 
   e2e-tests:
-    runs-on: ubuntu-latest # or macos-latest, windows-latest
+    runs-on: ubuntu-22.04 # or macos-latest, windows-latest
     defaults:
       run:
         working-directory: ui
@@ -68,7 +68,7 @@ jobs:
         run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
       - uses: actions/setup-node@v3
         with:
-          node-version: 12.x
+          node-version: 18.x
       - uses: microsoft/playwright-github-action@v1.0.0
       - name: Install dependencies
         run: npm ci
