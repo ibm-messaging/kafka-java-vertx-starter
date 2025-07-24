@@ -22,7 +22,7 @@ jobs:
         run: npm ci
       - name: Build
         run: npm run build
-      - name: Caluclate bundle size
+      - name: Calculate bundle size
         id: bundle
         uses: ./.github/actions/bundle
       - name: Test
@@ -74,7 +74,7 @@ jobs:
         run: npm ci
       - name: run tests
         run: npm run test:e2e
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: failures
