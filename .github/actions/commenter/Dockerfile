@@ -1,4 +1,4 @@
-FROM node:slim
+FROM node:12-slim
 
 COPY index.js .
 COPY package.json .

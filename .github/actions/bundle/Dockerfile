@@ -1,4 +1,4 @@
-FROM node:slim
+FROM node:12-slim
 
 COPY index.js .
 COPY package.json .
@@ -6,4 +6,4 @@ COPY package-lock.json .
 
 RUN npm install
 
-ENTRYPOINT ["node", "/index.js"];
+ENTRYPOINT ["node", "/index.js"]
