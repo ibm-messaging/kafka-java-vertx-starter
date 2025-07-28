@@ -13,7 +13,7 @@ jobs:
       run:
         working-directory: ui
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v3
       - name: Use Node.js 12.x
         uses: actions/setup-node@v3
         with:
@@ -69,11 +69,12 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 12.x
-      - uses: microsoft/playwright-github-action@v1.0.0
       - name: Install dependencies
         run: npm ci
+      - name: Install playwright browsers
+        run: npx playwright install --with-deps
       - name: run tests
-        run: npm run test:e2e
+        run: npx playwright test:e2e
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
