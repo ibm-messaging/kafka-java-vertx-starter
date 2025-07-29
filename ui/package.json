@@ -16,7 +16,7 @@
     "build": "webpack --mode production",
     "mock-vertx": "node ./src/DevUtils/MockVertx",
     "test": "jest",
-    "test:e2e": "jest -c jest.config.e2e.js",
+    "test:e2e": "NODE_OPTIONS=--no-deprecation jest -c jest.config.e2e.js",
     "storybook": "start-storybook",
     "build-storybook": "build-storybook -o .out",
     "lint": "eslint .",
