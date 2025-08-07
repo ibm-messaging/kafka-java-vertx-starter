@@ -14,6 +14,9 @@
     "sourceType": "module",
     "ecmaFeatures": {
       "jsx": true
+    },
+    "babelOptions": {
+      "presets": ["@babel/preset-env", "@babel/preset-react"]
     }
   },
   "env": {
@@ -28,7 +31,7 @@
     },
     "import/resolver": "webpack"
   },
-  "parser": "babel-eslint",
+  "parser": "@babel/eslint-parser",
   "rules": {
     "prettier/prettier": "error",
     "strict": [2, "global"],
