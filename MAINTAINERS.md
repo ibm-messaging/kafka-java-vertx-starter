@@ -1,4 +1,5 @@
 # MAINTAINERS
 
-Kate Stanley - katheris@uk.ibm.com
-Grace Jansen - grace.jansen1@ibm.com
+Aswin A - Aswin.A@ibm.com
+Graeme McRobert - mcrobert@uk.ibm.com
+Neeraj Laad - neeraj.laad@uk.ibm.com
