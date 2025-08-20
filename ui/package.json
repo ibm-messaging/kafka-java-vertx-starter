@@ -90,6 +90,9 @@
     "react": "^16.14.0",
     "react-dom": "^16.14.0"
   },
+  "overrides": {
+    "color-string": "1.5.5"
+  },
   "devDependencies": {
     "@babel/core": "^7.28.0",
     "@babel/eslint-parser": "^7.28.0",
