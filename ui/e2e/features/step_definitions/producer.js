@@ -32,6 +32,7 @@ const stepDefs = (cucumber) => {
     'I set the payload to {string}',
     async (world, payload) => {
       await page.fill(getSelector('producer_value_input'), payload);
+      await page.waitForTimeout(150);
       await page.waitForSelector(getSelector('producer_value_input'));
     }
   );
