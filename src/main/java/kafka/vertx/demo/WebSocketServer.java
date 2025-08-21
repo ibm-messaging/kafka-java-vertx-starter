@@ -17,14 +17,12 @@ import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.StaticHandler;
 import io.vertx.ext.web.templ.thymeleaf.ThymeleafTemplateEngine;
-import io.vertx.kafka.client.common.TopicPartition;
 import io.vertx.kafka.client.consumer.KafkaConsumer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
-import java.util.Set;
 
 public class WebSocketServer extends AbstractVerticle {
 
@@ -70,7 +68,7 @@ public class WebSocketServer extends AbstractVerticle {
       JsonObject props = new JsonObject();
 
       String topic = config.getString("topic");
-      
+
       props.put("topic", topic);
       props.put("producerPath", PRODUCE_PATH);
       props.put("consumerPath", CONSUME_PATH);
@@ -94,7 +92,7 @@ public class WebSocketServer extends AbstractVerticle {
     return vertx.createHttpServer(new HttpServerOptions().setRegisterWebSocketWriteHandlers(true))
       .requestHandler(router)
       .webSocketHandler(this::handleWebSocket)
-      .listen(8080)
+      .listen(8080, "0.0.0.0")
       .onSuccess(ok -> logger.info("🚀 WebSocketServer started"))
       .onFailure(err -> logger.error("❌ WebSocketServer failed to listen", err));
   }
@@ -140,11 +138,8 @@ public class WebSocketServer extends AbstractVerticle {
 
   private void handleConsumeSocket(ServerWebSocket webSocket) {
     KafkaConsumer<String, JsonObject> kafkaConsumer = KafkaConsumer.create(vertx, kafkaConfig);
-
     kafkaConsumer.exceptionHandler(err -> logger.error("Kafka error", err));
-
     String topic = kafkaConfig.get(Main.TOPIC_KEY);
-    TopicPartition topicPartition = new TopicPartition().setTopic(topic);
 
     kafkaConsumer.handler(record -> {
       JsonObject payload = new JsonObject()
@@ -157,16 +152,21 @@ public class WebSocketServer extends AbstractVerticle {
       vertx.eventBus().send(webSocket.textHandlerID(), payload.encode());
     });
 
+    kafkaConsumer.subscribe(topic)
+        .onSuccess(v -> {
+          logger.info("Subscribed to {}", topic);
+        })
+        .onFailure(err -> logger.error("Could not subscribe to {}", topic, err));
+
     webSocket.handler(buffer -> {
       String action = buffer.toJsonObject().getString(ACTION, "none");
+
       if (START_ACTION.equals(action)) {
-        kafkaConsumer.subscription()
-          .compose(sub -> (sub.size() > 0) ? kafkaConsumer.resume(topicPartition) : kafkaConsumer.subscribe(topic))
-            .onSuccess(ok -> logger.info("Subscribed to {}", topic))
-            .onFailure(err -> logger.error("Could not subscribe to {}", topic, err));
+        kafkaConsumer.resume();
+        logger.info("Consumer resumed");
       } else if (STOP_ACTION.equals(action)) {
-        kafkaConsumer.pause(topicPartition)
-          .onFailure(err -> logger.error("Cannot pause consumer", err));
+        kafkaConsumer.pause();
+        logger.info("Consumer paused");
       }
     });
 
