@@ -75,14 +75,12 @@ public class WebSocketServer extends AbstractVerticle {
 
       data.put("config", props);
 
-      engine.render(data, "webroot/index.html", res -> {
-        if (res.succeeded()) {
-          ctx.response().end(res.result());
-        } else {
-          logger.error(res.cause().getMessage());
-          ctx.fail(res.cause());
-        }
-      });
+      engine.render(data, "webroot/index.html")
+        .onSuccess(buffer -> ctx.response().end(buffer))
+        .onFailure(err -> {
+          logger.error(err.getMessage());
+          ctx.fail(err);
+        });
     });
 
     return startWebSocket(router);
@@ -106,7 +104,7 @@ public class WebSocketServer extends AbstractVerticle {
         handleConsumeSocket(webSocket);
         break;
       default:
-        webSocket.reject();
+        webSocket.close();
     }
   }
 

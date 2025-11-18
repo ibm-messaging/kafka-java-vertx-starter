@@ -25,9 +25,8 @@ public class WebSocketServerTest {
 
   @BeforeEach
   void setup(Vertx vertx, VertxTestContext testContext) {
-    vertx.deployVerticle(new WebSocketServer(), res -> {
-      testContext.completeNow();
-    });
+    vertx.deployVerticle(new WebSocketServer())
+      .onComplete(testContext.succeeding(id -> testContext.completeNow()));
   }
 
   @Test
@@ -44,7 +43,8 @@ public class WebSocketServerTest {
 
     client.get(8080, "localhost", "/")
       .as(BodyCodec.string())
-      .send(testContext.succeeding(response -> testContext.verify(() -> {
+      .send()
+      .onComplete(testContext.succeeding(response -> testContext.verify(() -> {
         assertThat(response.body(), CoreMatchers.containsString(EXPECTED));
         testContext.completeNow();
       })));
