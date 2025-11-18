@@ -11,7 +11,6 @@ import io.vertx.config.ConfigStoreOptions;
 import io.vertx.core.*;
 import io.vertx.core.file.FileSystem;
 import io.vertx.core.json.JsonObject;
-import io.vertx.core.spi.resolver.ResolverProvider;
 import org.apache.kafka.common.config.SslConfigs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +39,7 @@ public class Main {
     long startTime = currentTimeMillis();
 
     // Set vertx timeout to deal with slow DNS connections
-    System.setProperty(ResolverProvider.DISABLE_DNS_RESOLVER_PROP_NAME, "true");
+    System.setProperty("vertx.disableDnsResolver", "true");
     Vertx vertx = Vertx.vertx(
       new VertxOptions()
         .setWarningExceptionTime(10).setWarningExceptionTimeUnit(TimeUnit.SECONDS)
@@ -58,7 +57,7 @@ public class Main {
     Future<String> periodicProducerDeployment = vertx.deployVerticle(new PeriodicProducer());
     Future<String> webSocketServerDeployment = vertx.deployVerticle(new WebSocketServer());
 
-    CompositeFuture.join(periodicProducerDeployment, webSocketServerDeployment)
+    Future.all(periodicProducerDeployment, webSocketServerDeployment)
       .onSuccess(ok -> logger.info("✅ Application started in {}ms", currentTimeMillis() - startTime))
       .onFailure(err -> logger.error("❌ Application failed to start", err));
   }
