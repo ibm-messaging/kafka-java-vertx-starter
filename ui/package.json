@@ -86,14 +86,18 @@
     "carbon-components-react": "^7.43.0",
     "carbon-icons": "^7.0.7",
     "clsx": "^1.1.1",
-    "lodash-es": "^4.17.21",
+    "lodash-es": "^4.17.23",
     "react": "^16.14.0",
     "react-dom": "^16.14.0"
   },
   "overrides": {
     "color-string": "1.5.5",
     "braces": "^3.0.3",
-    "ansi-regex": "5.0.1"
+    "ansi-regex": "5.0.1",
+    "async": "3.2.2",
+    "got": "11.8.5",
+    "micromatch@4.0.2": "^4.0.8",
+    "@babel/runtime": "^7.26.10"
   },
   "devDependencies": {
     "@babel/core": "^7.28.0",
