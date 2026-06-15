@@ -153,6 +153,8 @@ public class WebSocketServer extends AbstractVerticle {
     kafkaConsumer.subscribe(topic)
         .onSuccess(v -> {
           logger.info("Subscribed to {}", topic);
+          kafkaConsumer.pause();
+          logger.info("Consumer paused, waiting for start command");
         })
         .onFailure(err -> logger.error("Could not subscribe to {}", topic, err));
 
