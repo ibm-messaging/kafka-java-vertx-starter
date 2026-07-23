@@ -98,7 +98,8 @@
     "got": "11.8.5",
     "micromatch@4.0.2": "^4.0.8",
     "@babel/runtime": "^7.26.10",
-    "semver":"7.5.2"
+    "semver":"7.5.2",
+    "picomatch": "2.3.2"
   },
   "devDependencies": {
     "@babel/core": "^7.28.0",
